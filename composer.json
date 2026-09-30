@@ -19,7 +19,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/neenerai/framework"
+            "url": "https://github.com/PixelFixFramework/framework"
         },
         {
             "type": "composer",
