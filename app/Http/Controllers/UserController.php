@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Requests\StoreUserRequest;
-use App\Requests\UpdateUserRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use PixelFix\Framework\Http\Controllers\Controller;
 
 class UserController extends Controller
