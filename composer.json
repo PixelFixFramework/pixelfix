@@ -5,7 +5,7 @@
     "license": "proprietary",
     "require": {
         "php": "^8.2",
-        "pixelfix/framework": "^0.1",
+        "pixelfix/framework": "^0.1.2",
         "npm-asset/bootstrap": "^5.3.8",
         "npm-asset/bootstrap-icons": "^1.13.1",
         "npm-asset/jquery": "^3.7.1",
