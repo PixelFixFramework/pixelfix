@@ -2,16 +2,59 @@
    CHECKBOX COMPONENT
    ===================================================== #}
 
-{% set checkboxName = name %}
-{% set checkboxLabel = label|default('') %}
-{% set checkboxValue = value|default('1') %}
-{% set checkboxRequired = required|default(false) %}
-{% set checkboxChecked = checked|default(false) %}
-{% set checkboxClass = class|default('') %}
-{% set checkboxDisabled = disabled|default(false) %}
+{% set checkboxName =
+    name
+%}
 
-{% set fieldErrors = errors()[checkboxName] ?? [] %}
-{% set hasError = has_error(checkboxName) %}
+{% set checkboxLabel =
+    label|default('')
+%}
+
+{% set checkboxLabelHtml =
+    label_html|default(null)
+%}
+
+{% set checkboxValue =
+    value|default('1')
+%}
+
+{% set checkboxRequired =
+    required|default(false)
+%}
+
+{% set checkboxChecked =
+    checked|default(false)
+%}
+
+{% set checkboxClass =
+    class|default('')
+%}
+
+{% set checkboxDisabled =
+    disabled|default(false)
+%}
+
+{% set validationMessage =
+    validation_message|default(null)
+%}
+
+
+{# =====================================================
+   VALIDATION
+   ===================================================== #}
+
+{% set fieldErrors =
+    errors()[checkboxName] ?? []
+%}
+
+{% set hasError =
+    has_error(checkboxName)
+%}
+
+
+{# =====================================================
+   RESOLVE CHECKED STATE
+   ===================================================== #}
 
 {% set oldValue =
     old(
@@ -26,13 +69,23 @@
     oldValue == true
 %}
 
+
+{# =====================================================
+   INVALID MESSAGE
+   ===================================================== #}
+
 {% set invalidMessage =
-    validation_message|default(
+    validationMessage|default(
         checkboxLabel
             ? 'Please confirm ' ~ checkboxLabel|lower ~ '.'
             : 'This field is required.'
     )
 %}
+
+
+{# =====================================================
+   CHECKBOX
+   ===================================================== #}
 
 <div class="mb-3">
 
@@ -61,23 +114,47 @@
             {% endif %}
         >
 
+
+        {# =================================================
+           LABEL
+           ================================================= #}
+
         <label
             class="form-check-label"
             for="{{ checkboxName }}"
         >
-            {{ checkboxLabel }}
+
+            {% if checkboxLabelHtml is not null %}
+
+                {{ checkboxLabelHtml|raw }}
+
+            {% else %}
+
+                {{ checkboxLabel }}
+
+            {% endif %}
+
         </label>
+
+
+        {# =================================================
+           VALIDATION
+           ================================================= #}
 
         {% if hasError %}
 
             <div class="invalid-feedback d-block">
+
                 {{ error(checkboxName) }}
+
             </div>
 
         {% else %}
 
             <div class="invalid-feedback">
+
                 {{ invalidMessage }}
+
             </div>
 
         {% endif %}

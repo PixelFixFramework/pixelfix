@@ -1,0 +1,452 @@
+{# =====================================================
+   PIXELFIX AUTH LOGIN
+   ===================================================== #}
+
+{% set loginLogoUrl =
+    logo_url|default('#')
+%}
+
+{% set loginLogoBold =
+    logo_bold|default('')
+%}
+
+{% set loginLogoText =
+    logo_text|default('')
+%}
+
+{% set loginMessage =
+    message|default('Sign in to start your session')
+%}
+
+{% set loginAction =
+    action|default('#')
+%}
+
+{% set loginMethod =
+    method|default('post')
+%}
+
+{% set loginCsrf =
+    csrf|default('')
+%}
+
+
+{# =====================================================
+   EMAIL
+   ===================================================== #}
+
+{% set loginEmailName =
+    email_name|default('email')
+%}
+
+{% set loginEmailLabel =
+    email_label|default('Email')
+%}
+
+{% set loginEmailPlaceholder =
+    email_placeholder|default('Email')
+%}
+
+{% set loginEmailValue =
+    email_value|default('')
+%}
+
+{% set loginEmailAutofocus =
+    autofocus|default(false)
+%}
+
+
+{# =====================================================
+   PASSWORD
+   ===================================================== #}
+
+{% set loginPasswordName =
+    password_name|default('password')
+%}
+
+{% set loginPasswordLabel =
+    password_label|default('Password')
+%}
+
+{% set loginPasswordPlaceholder =
+    password_placeholder|default('Password')
+%}
+
+
+{# =====================================================
+   REMEMBER
+   ===================================================== #}
+
+{% set loginRememberName =
+    remember_name|default('remember')
+%}
+
+{% set loginRememberValue =
+    remember_value|default('1')
+%}
+
+{% set loginRememberLabel =
+    remember_text|default('Remember Me')
+%}
+
+{% set loginRememberChecked =
+    remember_checked|default(false)
+%}
+
+
+{# =====================================================
+   SUBMIT
+   ===================================================== #}
+
+{% set loginSubmitText =
+    submit_text|default('Sign In')
+%}
+
+
+{# =====================================================
+   SOCIAL AUTHENTICATION
+   ===================================================== #}
+
+{% set loginFacebookUrl =
+    facebook_url|default('#')
+%}
+
+{% set loginFacebookText =
+    facebook_text|default('Sign in using Facebook')
+%}
+
+{% set loginGoogleUrl =
+    google_url|default('#')
+%}
+
+{% set loginGoogleText =
+    google_text|default('Sign in using Google')
+%}
+
+
+{# =====================================================
+   FORGOT PASSWORD
+   ===================================================== #}
+
+{% set loginForgotPasswordUrl =
+    forgot_password_url|default('#')
+%}
+
+{% set loginForgotPasswordText =
+    forgot_password_text|default('I forgot my password')
+%}
+
+
+{# =====================================================
+   REGISTRATION
+   ===================================================== #}
+
+{% set loginRegisterUrl =
+    register_url|default('#')
+%}
+
+{% set loginRegisterText =
+    register_text|default('Create a new account')
+%}
+
+
+{# =====================================================
+   LOGIN
+   ===================================================== #}
+
+<main class="login-box">
+
+
+    {# =================================================
+       LOGO
+       ================================================= #}
+
+    <h1 class="login-logo">
+
+        <a href="{{ loginLogoUrl }}">
+
+            {% if loginLogoBold %}
+
+                <b>
+                    {{ loginLogoBold }}
+                </b>
+
+            {% endif %}
+
+            {{ loginLogoText }}
+
+        </a>
+
+    </h1>
+
+
+    {# =================================================
+       LOGIN CARD
+       ================================================= #}
+
+    <div class="card">
+
+        <div class="card-body login-card-body">
+
+
+            {# =================================================
+               MESSAGE
+               ================================================= #}
+
+            <p class="login-box-msg">
+
+                {{ loginMessage }}
+
+            </p>
+
+
+            {# =================================================
+               FORM
+               ================================================= #}
+
+            <form
+                action="{{ loginAction }}"
+                method="{{ loginMethod }}"
+            >
+
+                {{ loginCsrf|raw }}
+
+
+                {# =================================================
+                   EMAIL
+                   ================================================= #}
+
+                {% include 'components/forms/input-group.twig' with {
+
+                    type:
+                        'email',
+
+                    name:
+                        loginEmailName,
+
+                    label:
+                        '',
+
+                    placeholder:
+                        loginEmailPlaceholder,
+
+                    value:
+                        loginEmailValue,
+
+                    icon:
+                        '<i class="bi bi-envelope"></i>',
+                   
+                    autofocus:
+                        loginEmailAutofocus,
+
+                    autocomplete:
+                        'email',
+
+                    required:
+                        true
+
+                } %}
+
+
+                {# =================================================
+                   PASSWORD
+                   ================================================= #}
+
+                {% include 'components/forms/input-group.twig' with {
+
+                    type:
+                        'password',
+
+                    name:
+                        loginPasswordName,
+
+                    label:
+                        '',
+
+                    placeholder:
+                        loginPasswordPlaceholder,
+
+                    icon:
+                        '<i class="bi bi-lock-fill"></i>',
+                    
+                    autocomplete:
+                        'current-password',
+
+                    required:
+                        true
+
+                } %}
+
+
+                {# =================================================
+                   REMEMBER / SUBMIT
+                   ================================================= #}
+
+                <div class="row">
+
+
+                    {# =================================================
+                       REMEMBER ME
+                       ================================================= #}
+
+                    <div class="col-8">
+
+                        {% include 'components/forms/checkbox.twig' with {
+
+                            name:
+                                loginRememberName,
+
+                            label:
+                                loginRememberLabel,
+
+                            value:
+                                loginRememberValue,
+
+                            checked:
+                                loginRememberChecked
+
+                        } %}
+
+                    </div>
+
+
+                    {# /.col #}
+
+
+                    {# =================================================
+                       SIGN IN
+                       ================================================= #}
+
+                    <div class="col-4">
+
+                        <div class="d-grid gap-2">
+
+                            {% include 'components/forms/button.twig' with {
+
+                                type:
+                                    'submit',
+
+                                content:
+                                    loginSubmitText,
+
+                                class:
+                                    'btn btn-primary'
+
+                            } %}
+
+                        </div>
+
+                    </div>
+
+
+                    {# /.col #}
+
+                </div>
+
+            </form>
+
+
+            {# =================================================
+               SOCIAL AUTHENTICATION
+               ================================================= #}
+
+            <div class="social-auth-links text-center mb-3 d-grid gap-2">
+
+                <p>
+                    - OR -
+                </p>
+
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        loginFacebookUrl,
+
+                    class:
+                        'btn btn-primary',
+
+                    icon:
+                        'bi bi-facebook',
+
+                    content:
+                        loginFacebookText
+
+                } %}
+
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        loginGoogleUrl,
+
+                    class:
+                        'btn btn-danger',
+
+                    icon:
+                        'bi bi-google',
+
+                    content:
+                        loginGoogleText
+
+                } %}
+
+            </div>
+
+
+            {# /.social-auth-links #}
+
+
+            {# =================================================
+               FORGOT PASSWORD
+               ================================================= #}
+
+            <p class="mb-1">
+
+                <a
+                    href="{{ loginForgotPasswordUrl }}"
+                >
+
+                    {{ loginForgotPasswordText }}
+
+                </a>
+
+            </p>
+
+
+            {# =================================================
+               REGISTRATION
+               ================================================= #}
+
+            <p class="mb-0">
+
+                <a
+                    href="{{ loginRegisterUrl }}"
+                    class="text-center"
+                >
+
+                    {{ loginRegisterText }}
+
+                </a>
+
+            </p>
+
+
+        </div>
+
+
+        {# /.login-card-body #}
+
+
+    </div>
+
+
+</main>
+
+
+{# /.login-box #}

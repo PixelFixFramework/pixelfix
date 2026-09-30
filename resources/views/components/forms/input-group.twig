@@ -2,25 +2,75 @@
    INPUT-GROUP COMPONENT
    ===================================================== #}
 
-{% set inputType = type|default('text') %}
-{% set inputName = name %}
-{% set inputLabel = label|default('') %}
-{% set inputPlaceholder = placeholder|default('') %}
-{% set inputRequired = required|default(false) %}
-{% set inputIcon = icon|default(null) %}
-{% set inputValue = value|default('') %}
-{% set inputClass = class|default('') %}
-{% set inputMaxlength = maxlength|default(null) %}
-{% set inputAutofocus = autofocus|default(false) %}
-{% set inputDisabled = disabled|default(false) %}
-{% set inputReadonly = readonly|default(false) %}
-{% set validationMessage = validation_message|default(null) %}
+{% set inputType =
+    type|default('text')
+%}
+
+{% set inputName =
+    name
+%}
+
+{% set inputLabel =
+    label|default('')
+%}
+
+{% set inputLabelClass =
+    label_class|default('form-label')
+%}
+
+{% set inputPlaceholder =
+    placeholder|default('')
+%}
+
+{% set inputRequired =
+    required|default(false)
+%}
+
+{% set inputIcon =
+    icon|default(null)
+%}
+
+{% set inputIconPosition =
+    icon_position|default('start')
+%}
+
+{% set inputValue =
+    value|default('')
+%}
+
+{% set inputClass =
+    class|default('')
+%}
+
+{% set inputMaxlength =
+    maxlength|default(null)
+%}
+
+{% set inputAutofocus =
+    autofocus|default(false)
+%}
+
+{% set inputDisabled =
+    disabled|default(false)
+%}
+
+{% set inputReadonly =
+    readonly|default(false)
+%}
+
+{% set validationMessage =
+    validation_message|default(null)
+%}
+
 
 {# =====================================================
    VALIDATION
    ===================================================== #}
 
-{% set fieldErrors = errors()[inputName] ?? [] %}
+{% set fieldErrors =
+    errors()[inputName] ?? []
+%}
+
 
 {# =====================================================
    RESOLVE VALUE
@@ -33,11 +83,14 @@
     )
 %}
 
+
 {# =====================================================
    AUTOCOMPLETE
    ===================================================== #}
 
-{% set autocomplete = autocomplete|default(null) %}
+{% set autocomplete =
+    autocomplete|default(null)
+%}
 
 {% if autocomplete is null %}
 
@@ -61,6 +114,7 @@
 
 {% endif %}
 
+
 {# =====================================================
    INVALID MESSAGE
    ===================================================== #}
@@ -74,7 +128,13 @@
         )
 %}
 
+
+{# =====================================================
+   FIELD
+   ===================================================== #}
+
 <div class="mb-3">
+
 
     {# =================================================
        LABEL
@@ -84,7 +144,7 @@
 
         <label
             for="{{ inputName }}"
-            class="form-label"
+            class="{{ inputLabelClass }}"
         >
 
             {{ inputLabel }}
@@ -99,17 +159,22 @@
 
     {% endif %}
 
+
     {# =================================================
        INPUT GROUP
        ================================================= #}
 
     <div class="input-group has-validation">
 
+
         {# =================================================
-           ICON
+           ICON - START
            ================================================= #}
 
-        {% if inputIcon %}
+        {% if
+            inputIcon
+            and inputIconPosition == 'start'
+        %}
 
             <span class="input-group-text">
 
@@ -118,6 +183,7 @@
             </span>
 
         {% endif %}
+
 
         {# =================================================
            INPUT
@@ -132,7 +198,9 @@
             class="
                 form-control
                 {{ inputClass }}
-                {% if fieldErrors %} is-invalid {% endif %}
+                {% if fieldErrors %}
+                    is-invalid
+                {% endif %}
             "
             {% if autocomplete %}
                 autocomplete="{{ autocomplete }}"
@@ -153,6 +221,29 @@
                 readonly
             {% endif %}
         >
+
+
+        {# =================================================
+           ICON - END
+           ================================================= #}
+
+        {% if
+            inputIcon
+            and inputIconPosition == 'end'
+        %}
+
+            <span class="input-group-text">
+
+                {{ inputIcon|raw }}
+
+            </span>
+
+        {% endif %}
+
+
+        {# =================================================
+           VALIDATION
+           ================================================= #}
 
         <div class="invalid-feedback">
 

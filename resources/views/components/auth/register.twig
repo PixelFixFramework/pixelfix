@@ -1,0 +1,515 @@
+{# =====================================================
+   PIXELFIX AUTH REGISTER
+   ===================================================== #}
+
+{% set registerLogoUrl =
+    logo_url|default('#')
+%}
+
+{% set registerLogoBold =
+    logo_bold|default('')
+%}
+
+{% set registerLogoText =
+    logo_text|default('')
+%}
+
+{% set registerMessage =
+    message|default('Register a new membership')
+%}
+
+{% set registerAction =
+    action|default('#')
+%}
+
+{% set registerMethod =
+    method|default('post')
+%}
+
+{% set registerCsrf =
+    csrf|default('')
+%}
+
+
+{# =====================================================
+   FULL NAME
+   ===================================================== #}
+
+{% set registerNameName =
+    name_name|default('name')
+%}
+
+{% set registerNameLabel =
+    name_label|default('Full Name')
+%}
+
+{% set registerNamePlaceholder =
+    name_placeholder|default('Full Name')
+%}
+
+{% set registerNameValue =
+    name_value|default('')
+%}
+
+
+{# =====================================================
+   EMAIL
+   ===================================================== #}
+
+{% set registerEmailName =
+    email_name|default('email')
+%}
+
+{% set registerEmailLabel =
+    email_label|default('Email')
+%}
+
+{% set registerEmailPlaceholder =
+    email_placeholder|default('Email')
+%}
+
+{% set registerEmailValue =
+    email_value|default('')
+%}
+
+
+{# =====================================================
+   PASSWORD
+   ===================================================== #}
+
+{% set registerPasswordName =
+    password_name|default('password')
+%}
+
+{% set registerPasswordLabel =
+    password_label|default('Password')
+%}
+
+{% set registerPasswordPlaceholder =
+    password_placeholder|default('Password')
+%}
+
+
+{# =====================================================
+   CONFIRM PASSWORD
+   ===================================================== #}
+
+{% set registerConfirmPasswordName =
+    confirm_password_name|default('password_confirmation')
+%}
+
+{% set registerConfirmPasswordLabel =
+    confirm_password_label|default('Confirm Password')
+%}
+
+{% set registerConfirmPasswordPlaceholder =
+    confirm_password_placeholder|default('Confirm Password')
+%}
+
+
+{# =====================================================
+   TERMS
+   ===================================================== #}
+
+{% set registerTermsName =
+    terms_name|default('terms')
+%}
+
+{% set registerTermsValue =
+    terms_value|default('1')
+%}
+
+{% set registerTermsChecked =
+    terms_checked|default(false)
+%}
+
+{% set registerTermsUrl =
+    terms_url|default('#')
+%}
+
+{% set registerTermsText =
+    terms_text|default('terms')
+%}
+
+
+{# =====================================================
+   SUBMIT
+   ===================================================== #}
+
+{% set registerSubmitText =
+    submit_text|default('Register')
+%}
+
+
+{# =====================================================
+   SOCIAL AUTHENTICATION
+   ===================================================== #}
+
+{% set registerFacebookUrl =
+    facebook_url|default('#')
+%}
+
+{% set registerFacebookText =
+    facebook_text|default('Sign up using Facebook')
+%}
+
+{% set registerGoogleUrl =
+    google_url|default('#')
+%}
+
+{% set registerGoogleText =
+    google_text|default('Sign up using Google')
+%}
+
+
+{# =====================================================
+   LOGIN LINK
+   ===================================================== #}
+
+{% set registerLoginUrl =
+    login_url|default('#')
+%}
+
+{% set registerLoginText =
+    login_text|default('I already have an account')
+%}
+
+
+{# =====================================================
+   REGISTER
+   ===================================================== #}
+
+<main class="register-box">
+
+
+    {# =================================================
+       LOGO
+       ================================================= #}
+
+    <h1 class="register-logo">
+
+        <a href="{{ registerLogoUrl }}">
+
+            {% if registerLogoBold %}
+
+                <b>
+                    {{ registerLogoBold }}
+                </b>
+
+            {% endif %}
+
+            {{ registerLogoText }}
+
+        </a>
+
+    </h1>
+
+
+    {# =================================================
+       REGISTER CARD
+       ================================================= #}
+
+    <div class="card">
+
+        <div class="card-body register-card-body">
+
+
+            {# =================================================
+               MESSAGE
+               ================================================= #}
+
+            <p class="register-box-msg">
+
+                {{ registerMessage }}
+
+            </p>
+
+
+            {# =================================================
+               FORM
+               ================================================= #}
+
+            <form
+                action="{{ registerAction }}"
+                method="{{ registerMethod }}"
+            >
+
+                {{ registerCsrf|raw }}
+
+
+                {# =================================================
+                   FULL NAME
+                   ================================================= #}
+
+                {% include 'components/forms/input-group.twig' with {
+
+                    type:
+                        'text',
+
+                    name:
+                        registerNameName,
+
+                    label:
+                        registerNameLabel,
+
+                    label_class:
+                        'visually-hidden',
+
+                    placeholder:
+                        registerNamePlaceholder,
+
+                    value:
+                        registerNameValue,
+
+                    icon:
+                        '<i class="bi bi-person"></i>',
+                   
+                    autocomplete:
+                        'name',
+
+                    required:
+                        true
+
+                } %}
+
+
+                {# =================================================
+                   EMAIL
+                   ================================================= #}
+
+                {% include 'components/forms/input-group.twig' with {
+
+                    type:
+                        'email',
+
+                    name:
+                        registerEmailName,
+
+                    label:
+                        registerEmailLabel,
+
+                    label_class:
+                        'visually-hidden',
+
+                    placeholder:
+                        registerEmailPlaceholder,
+
+                    value:
+                        registerEmailValue,
+
+                    icon:
+                        '<i class="bi bi-envelope"></i>',
+                    
+                    autocomplete:
+                        'email',
+
+                    required:
+                        true
+
+                } %}
+
+
+                {# =================================================
+                   PASSWORD
+                   ================================================= #}
+
+                {% include 'components/forms/input-group.twig' with {
+
+                    type:
+                        'password',
+
+                    name:
+                        registerPasswordName,
+
+                    label:
+                        registerPasswordLabel,
+
+                    label_class:
+                        'visually-hidden',
+
+                    placeholder:
+                        registerPasswordPlaceholder,
+
+                    icon:
+                        '<i class="bi bi-lock-fill"></i>',
+                    
+                    autocomplete:
+                        'new-password',
+
+                    required:
+                        true
+
+                } %}
+
+               
+                {# =================================================
+                   ROW
+                   ================================================= #}
+
+                <div class="row">
+
+
+                    {# =================================================
+                       TERMS
+                       ================================================= #}
+
+                    <div class="col-8">
+
+                        {% include 'components/forms/checkbox.twig' with {
+
+                            name:
+                                registerTermsName,
+
+                            label:
+                                registerTermsText,
+
+                            label_html:
+                                'I agree to the <a href="' ~
+                                registerTermsUrl ~
+                                '">' ~
+                                registerTermsText ~
+                                '</a>',
+
+                            value:
+                                registerTermsValue,
+
+                            checked:
+                                registerTermsChecked
+
+                        } %}
+
+                    </div>
+
+
+                    {# /.col #}
+
+
+                    {# =================================================
+                       REGISTER BUTTON
+                       ================================================= #}
+
+                    <div class="col-4">
+
+                        <div class="d-grid gap-2">
+
+                            {% include 'components/forms/button.twig' with {
+
+                                type:
+                                    'submit',
+
+                                content:
+                                    registerSubmitText,
+
+                                class:
+                                    'btn btn-primary'
+
+                            } %}
+
+                        </div>
+
+                    </div>
+
+
+                    {# /.col #}
+
+                </div>
+
+
+                {# end::Row #}
+
+            </form>
+
+
+            {# =================================================
+               SOCIAL AUTHENTICATION
+               ================================================= #}
+
+            <div class="social-auth-links text-center mb-3 d-grid gap-2">
+
+                <p>
+                    - OR -
+                </p>
+
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        registerFacebookUrl,
+
+                    class:
+                        'btn btn-primary',
+
+                    icon:
+                        'bi bi-facebook',
+
+                    icon_class:
+                        'me-2',
+
+                    content:
+                        registerFacebookText
+
+                } %}
+
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        registerGoogleUrl,
+
+                    class:
+                        'btn btn-danger',
+
+                    icon:
+                        'bi bi-google',
+
+                    icon_class:
+                        'me-2',
+
+                    content:
+                        registerGoogleText
+
+                } %}
+
+            </div>
+
+
+            {# /.social-auth-links #}
+
+
+            {# =================================================
+               LOGIN LINK
+               ================================================= #}
+
+            <p class="mb-0">
+
+                <a
+                    href="{{ registerLoginUrl }}"
+                    class="text-center"
+                >
+
+                    {{ registerLoginText }}
+
+                </a>
+
+            </p>
+
+
+        </div>
+
+
+        {# /.register-card-body #}
+
+
+    </div>
+
+
+</main>
+
+
+{# /.register-box #}
