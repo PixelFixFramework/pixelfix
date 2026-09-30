@@ -1,0 +1,76 @@
+{# =====================================================
+   PIXELFIX APPLICATION FOOTER
+   ===================================================== #}
+
+{% set footerCurrentYear =
+    "now"|date('Y')
+%}
+
+{% set footerCompanyName =
+    footer_company_name|default(config('app.name'))
+%}
+
+{% set footerCompanyUrl =
+    footer_company_url|default('#')
+%}
+
+{% set footerRight =
+    footer_right|default(null)
+%}
+
+
+{# =====================================================
+   FOOTER
+   ===================================================== #}
+
+<footer class="pixelfix-footer">
+
+
+    {# =================================================
+       COPYRIGHT
+       ================================================= #}
+
+    <div class="pixelfix-footer-copyright">
+
+        <strong>
+
+            Copyright &copy;
+
+            {{ footerCurrentYear }}
+
+            <a
+                href="{{ footerCompanyUrl }}"
+                class="text-decoration-none"
+            >{{ footerCompanyName }}</a>.
+
+        </strong>
+
+        <span>
+            All rights reserved.
+        </span>
+
+    </div>
+
+
+    {# =================================================
+       RIGHT CONTENT
+       ================================================= #}
+
+    {% if footerRight %}
+
+        <div
+            class="
+                pixelfix-footer-right
+                d-none
+                d-sm-inline
+            "
+        >
+
+            {{ footerRight }}
+
+        </div>
+
+    {% endif %}
+
+
+</footer>

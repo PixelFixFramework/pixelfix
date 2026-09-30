@@ -1,0 +1,76 @@
+{# =====================================================
+   PIXELFIX HEADER - SEARCH
+   ===================================================== #}
+
+{% set searchUrl =
+    search_url|default('#')
+%}
+
+
+{# =====================================================
+   DESKTOP SEARCH
+   ===================================================== #}
+
+<li
+    class="
+        pixelfix-nav-item
+        d-none
+        d-md-flex
+    "
+>
+
+    <form
+        class="pixelfix-header-search"
+        action="{{ searchUrl }}"
+        method="get"
+        role="search"
+    >
+
+        <i
+            class="
+                bi
+                bi-search
+                pixelfix-header-search-icon
+            "
+            aria-hidden="true"
+        ></i>
+
+        <input
+            type="search"
+            name="query"
+            class="pixelfix-header-search-input"
+            placeholder="Search..."
+            aria-label="Search"
+        >
+
+    </form>
+
+</li>
+
+
+{# =====================================================
+   SMALL-SCREEN SEARCH
+   ===================================================== #}
+
+<li
+    class="
+        pixelfix-nav-item
+        d-md-none
+    "
+>
+
+    <a
+        href="{{ searchUrl }}"
+        class="pixelfix-nav-link"
+        aria-label="Search"
+        title="Search"
+    >
+
+        <i
+            class="bi bi-search"
+            aria-hidden="true"
+        ></i>
+
+    </a>
+
+</li>

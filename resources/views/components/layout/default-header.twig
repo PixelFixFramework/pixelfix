@@ -1,0 +1,125 @@
+{# =====================================================
+   PIXELFIX DEFAULT APPLICATION HEADER
+   ===================================================== #}
+
+{% set headerUser =
+    user|default(null)
+%}
+
+{% set headerUserName =
+    headerUser
+        ? headerUser.name|default('User')
+        : 'User'
+%}
+
+{% set headerUserEmail =
+    headerUser
+        ? headerUser.email|default('')
+        : ''
+%}
+
+{% set headerUserAvatar =
+    avatar_url|default(null)
+%}
+
+{% set headerUserCreatedAt =
+    user_created_at|default(
+        headerUser
+            ? headerUser.created_at|default(null)
+            : null
+    )
+%}
+
+{% set headerUserRole =
+    user_role_text|default('User')
+%}
+
+{% set headerProfileUrl =
+    profile_url|default('#')
+%}
+
+{% set headerLogoutUrl =
+    logout_url|default('#')
+%}
+
+
+{% embed 'components/layout/header.twig' %}
+
+
+    {# =================================================
+       START HEADER COMPONENTS
+       ================================================= #}
+
+    {% block header_start %}
+
+        {% include
+            'components/layout/header/live-preview.twig'
+        %}
+
+        {% include
+            'components/layout/header/documentation.twig'
+        %}
+
+    {% endblock %}
+
+
+    {# =================================================
+       END HEADER COMPONENTS
+       ================================================= #}
+
+    {% block header_end %}
+
+        {% include
+            'components/layout/header/search.twig'
+        %}
+
+        {% include
+            'components/layout/header/messages.twig'
+        %}
+
+        {% include
+            'components/layout/header/notifications.twig'
+        %}
+
+        {% include
+            'components/layout/header/language.twig'
+        %}
+
+        {% include
+            'components/layout/header/fullscreen.twig'
+        %}
+
+        {% include
+            'components/layout/header/theme.twig'
+        %}
+
+        {% include
+            'components/layout/header/user-menu.twig'
+            with {
+                user_name:
+                    headerUserName,
+
+                user_email:
+                    headerUserEmail,
+
+                avatar_url:
+                    headerUserAvatar,
+
+                user_created_at:
+                    headerUserCreatedAt,
+
+                user_role_text:
+                    headerUserRole,
+
+                profile_url:
+                    headerProfileUrl,
+
+                logout_url:
+                    headerLogoutUrl
+            }
+        %}
+
+    {% endblock %}
+
+
+{% endembed %}

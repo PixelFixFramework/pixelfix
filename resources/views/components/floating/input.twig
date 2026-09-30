@@ -1,0 +1,100 @@
+{# =====================================================
+   FLOATING INPUT COMPONENT
+   ===================================================== #}
+
+{% set inputType = type|default('text') %}
+{% set inputName = name %}
+{% set inputLabel = label|default('') %}
+{% set inputRequired = required|default(false) %}
+
+{% set hasError = has_error(inputName) %}
+{% set hasValue = old(inputName) is not empty %}
+
+{% set invalidMessage =
+    validation_message|default(
+        inputLabel
+            ? 'Please enter ' ~ inputLabel|lower ~ '.'
+            : 'This field is required.'
+    )
+%}
+
+{# =====================================================
+   AUTOCOMPLETE
+   ===================================================== #}
+
+{% set autocomplete = autocomplete|default(null) %}
+
+{% if autocomplete is null %}
+
+    {% if inputType == 'email' %}
+
+        {% set autocomplete = 'email' %}
+
+    {% elseif inputType == 'password' %}
+
+        {% set autocomplete = 'current-password' %}
+
+    {% elseif inputName in ['name', 'full_name'] %}
+
+        {% set autocomplete = 'name' %}
+
+    {% elseif inputName == 'username' %}
+
+        {% set autocomplete = 'username' %}
+
+    {% endif %}
+
+{% endif %}
+
+{# =====================================================
+   VALIDATION STATE
+   ===================================================== #}
+
+{% set stateClass =
+    hasError
+        ? 'is-invalid'
+        : (hasValue ? 'is-valid' : '')
+%}
+
+<div class="form-floating mb-3">
+
+    <input
+        id="{{ inputName }}"
+        type="{{ inputType }}"
+        name="{{ inputName }}"
+        value="{{ inputType != 'password' ? old(inputName) : '' }}"
+        class="form-control {{ stateClass }}"
+        placeholder="{{ inputLabel }}"
+        {% if autocomplete %}
+            autocomplete="{{ autocomplete }}"
+        {% endif %}
+        {% if inputRequired %}
+            required
+        {% endif %}
+    >
+
+    <label for="{{ inputName }}">
+
+        {{ inputLabel }}
+
+        {% if inputRequired %}
+            <span class="text-danger"></span>
+        {% endif %}
+
+    </label>
+
+    {% if hasError %}
+
+        <div class="invalid-feedback">
+            {{ error(inputName) }}
+        </div>
+
+    {% else %}
+
+        <div class="invalid-feedback">
+            {{ invalidMessage }}
+        </div>
+
+    {% endif %}
+
+</div>

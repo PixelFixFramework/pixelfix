@@ -1,0 +1,44 @@
+{# =====================================================
+   ALERT COMPONENT
+   ===================================================== #}
+
+{% set alertType = type|default('primary') %}
+{% set alertTitle = title|default(null) %}
+{% set alertDismissible = dismissible|default(false) %}
+{% set alertContent = content|default('') %}
+
+<div
+    class="
+        alert
+        alert-{{ alertType }}
+        {% if alertDismissible %}
+            alert-dismissible fade show
+        {% endif %}
+    "
+    role="alert"
+>
+
+    {% if alertTitle %}
+
+        <h6 class="alert-heading mb-2">
+
+            {{ alertTitle }}
+
+        </h6>
+
+    {% endif %}
+
+    {{ alertContent|raw }}
+
+    {% if alertDismissible %}
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+        ></button>
+
+    {% endif %}
+
+</div>

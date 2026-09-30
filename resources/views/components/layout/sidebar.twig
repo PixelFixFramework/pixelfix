@@ -1,0 +1,403 @@
+{% macro renderItems(items) %}
+
+    {% for item in items %}
+
+        {% set children = item.children|default([]) %}
+        {% set hasChildren = children|length > 0 %}
+        {% set itemActive = item.active|default(false) %}
+        {% set itemOpen = item.open|default(false) %}
+
+        {% if item.header|default(false) %}
+
+            <li class="pixelfix-sidebar-nav-header">
+
+                {{ item.label|default('') }}
+
+            </li>
+
+        {% else %}
+
+            <li
+                class="
+                    pixelfix-sidebar-nav-item
+                    {% if itemOpen %}
+                        menu-open
+                    {% endif %}
+                "
+            >
+
+                <div class="pixelfix-sidebar-nav-entry">
+
+                    <a
+                        href="{{ item.url|default('#') }}"
+                        class="
+                            pixelfix-sidebar-nav-link
+                            {% if itemActive %}
+                                active
+                            {% endif %}
+                            {% if item.disabled|default(false) %}
+                                disabled
+                            {% endif %}
+                        "
+                        {% if itemActive %}
+                            aria-current="page"
+                        {% endif %}
+                        {% if item.disabled|default(false) %}
+                            aria-disabled="true"
+                            tabindex="-1"
+                        {% endif %}
+                    >
+
+                        <span class="pixelfix-sidebar-nav-icon">
+
+                            {{ item.icon|default('•') }}
+
+                        </span>
+
+                        <span class="pixelfix-sidebar-nav-label">
+
+                            {{ item.label|default('') }}
+
+                        </span>
+
+                        {% if item.badge|default(null) %}
+
+                            <span
+                                class="
+                                    pixelfix-sidebar-nav-badge
+                                    {{ item.badge_class|default('') }}
+                                "
+                            >
+
+                                {{ item.badge }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+
+                    {% if hasChildren %}
+
+                        <button
+                            type="button"
+                            class="pixelfix-sidebar-nav-toggle"
+                            aria-label="Toggle {{ item.label|default('menu') }}"
+                            aria-expanded="{{ itemOpen ? 'true' : 'false' }}"
+                        >
+
+                            <span
+                                class="pixelfix-sidebar-nav-arrow"
+                                aria-hidden="true"
+                            >
+                                ›
+                            </span>
+
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+
+                {% if hasChildren %}
+
+                    <ul class="pixelfix-sidebar-nav-tree">
+
+                        {{ _self.renderItems(children) }}
+
+                    </ul>
+
+                {% endif %}
+
+            </li>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endmacro %}
+
+
+{# =====================================================
+   SIDEBAR CONFIGURATION
+   ===================================================== #}
+
+{% set sidebarBrand = brand|default('PixelFix') %}
+{% set sidebarLogo = logo|default('P') %}
+{% set sidebarItems = items|default([]) %}
+
+{% set sidebarUser = user|default(null) %}
+
+{% set sidebarLogoutUrl = logout_url|default(null) %}
+{% set sidebarLogoutText = logout_text|default('Logout') %}
+
+{% set sidebarClass = class|default('') %}
+{% set sidebarId = id|default('pixelfix-sidebar') %}
+
+{% set sidebarBrandUrl = brand_url|default('/') %}
+
+{% set sidebarSearch = search|default(true) %}
+{% set sidebarSearchPlaceholder =
+    search_placeholder|default('Filter menu…')
+%}
+
+{% set sidebarSearchEmptyText =
+    search_empty_text|default('No matching pages.')
+%}
+
+{% set sidebarBreakpoint =
+    breakpoint|default(991.98)
+%}
+
+{% set sidebarPersistence =
+    persistence|default(false)
+%}
+
+{% set sidebarMini =
+    mini|default(false)
+%}
+
+{% set sidebarCollapsed =
+    collapsed|default(false)
+%}
+
+{% set sidebarWithoutHover =
+    without_hover|default(false)
+%}
+
+{% set sidebarAccordion =
+    accordion|default(true)
+%}
+
+{% set sidebarAnimationSpeed =
+    animation_speed|default(300)
+%}
+
+
+{# =====================================================
+   SIDEBAR
+   ===================================================== #}
+
+    <aside
+        id="{{ sidebarId }}"
+        class="
+            pixelfix-sidebar
+
+            {% if sidebarMini %}
+                pixelfix-sidebar-mini
+            {% endif %}
+
+            {% if sidebarCollapsed %}
+                pixelfix-sidebar-collapse
+            {% endif %}
+
+            {% if sidebarWithoutHover %}
+                pixelfix-sidebar-without-hover
+            {% endif %}
+
+            {{ sidebarClass }}
+        "
+        data-sidebar-breakpoint="{{ sidebarBreakpoint }}"
+        data-enable-persistence="{{ sidebarPersistence ? 'true' : 'false' }}"
+        data-sidebar-mini="{{ sidebarMini ? 'true' : 'false' }}"
+        data-sidebar-accordion="{{ sidebarAccordion ? 'true' : 'false' }}"
+        data-sidebar-animation-speed="{{ sidebarAnimationSpeed }}"
+    >
+
+
+    {# =====================================================
+       BRAND
+       ===================================================== #}
+
+    <div class="pixelfix-sidebar-brand">
+
+        <a
+            href="{{ sidebarBrandUrl }}"
+            class="pixelfix-sidebar-brand-link"
+        >
+
+            <span class="pixelfix-sidebar-brand-logo">
+
+                <span class="pixelfix-sidebar-logo-xl">
+
+                    {{ sidebarLogo }}
+
+                </span>
+
+                <span
+                    class="pixelfix-sidebar-logo-xs"
+                    aria-hidden="true"
+                >
+
+                    {{ sidebarLogo|slice(0, 1) }}
+
+                </span>
+
+            </span>
+
+
+            <span class="pixelfix-sidebar-brand-text">
+
+                {{ sidebarBrand }}
+
+            </span>
+
+        </a>
+
+    </div>
+
+
+    {# =====================================================
+       SEARCH
+       ===================================================== #}
+
+    {% if sidebarSearch %}
+
+        <div
+            class="pixelfix-sidebar-search"
+            role="search"
+        >
+
+            <label
+                for="{{ sidebarId }}-search"
+                class="pixelfix-sidebar-visually-hidden"
+            >
+                Filter menu
+            </label>
+
+
+            <input
+                type="search"
+                id="{{ sidebarId }}-search"
+                class="pixelfix-sidebar-search-input"
+                placeholder="{{ sidebarSearchPlaceholder }}"
+                autocomplete="off"
+                data-pixelfix-sidebar-search
+                data-pixelfix-target="#{{ sidebarId }}-navigation"
+            >
+
+
+            <p
+                class="pixelfix-sidebar-search-empty"
+                data-pixelfix-search-empty
+                role="status"
+                hidden
+            >
+
+                {{ sidebarSearchEmptyText }}
+
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    {# =====================================================
+       NAVIGATION
+       ===================================================== #}
+
+    <div class="pixelfix-sidebar-wrapper">
+
+        <nav
+            class="pixelfix-sidebar-navigation"
+            aria-label="Main navigation"
+        >
+
+            <ul
+                id="{{ sidebarId }}-navigation"
+                class="pixelfix-sidebar-menu"
+                data-pixelfix-sidebar-menu
+            >
+
+                {{ _self.renderItems(sidebarItems) }}
+
+            </ul>
+
+        </nav>
+
+    </div>
+
+
+    {# =====================================================
+       FOOTER
+       ===================================================== #}
+
+    <div class="pixelfix-sidebar-footer">
+
+
+        {% if sidebarUser %}
+
+            <div class="pixelfix-sidebar-user">
+
+                <div class="pixelfix-sidebar-avatar">
+
+                    {{
+                        sidebarUser.name
+                        |default('U')
+                        |slice(0, 1)
+                        |upper
+                    }}
+
+                </div>
+
+
+                <div class="pixelfix-sidebar-user-info">
+
+                    <div class="pixelfix-sidebar-user-name">
+
+                        {{ sidebarUser.name|default('User') }}
+
+                    </div>
+
+
+                    <div class="pixelfix-sidebar-user-email">
+
+                        {{ sidebarUser.email|default('') }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        {% if sidebarLogoutUrl %}
+
+            <form
+                method="POST"
+                action="{{ sidebarLogoutUrl }}"
+                class="pixelfix-sidebar-logout-form"
+            >
+
+                {{ csrf|raw }}
+
+
+                <button
+                    type="submit"
+                    class="pixelfix-sidebar-logout-button"
+                >
+
+                    <span class="pixelfix-sidebar-nav-icon">
+                        ↪
+                    </span>
+
+                    <span class="pixelfix-sidebar-nav-label">
+
+                        {{ sidebarLogoutText }}
+
+                    </span>
+
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    </div>
+
+</aside>

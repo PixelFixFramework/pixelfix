@@ -1,0 +1,32 @@
+{# =====================================================
+   PIXELFIX FLASH MESSAGES
+   ===================================================== #}
+
+{% set flashMessages =
+    flash_messages()
+%}
+
+
+{% if flashMessages %}
+
+    {% for type, messages in flashMessages %}
+
+        {% for message in messages %}
+
+            {% include 'components/feedback/alert.twig' with {
+
+                type:
+                    type == 'error'
+                        ? 'danger'
+                        : type,
+
+                content:
+                    message
+
+            } %}
+
+        {% endfor %}
+
+    {% endfor %}
+
+{% endif %}

@@ -1,0 +1,95 @@
+{# =====================================================
+   PIXELFIX APPLICATION HEADER
+   ===================================================== #}
+
+<header
+    class="pixelfix-header"
+>
+
+    <nav
+        class="pixelfix-navbar"
+        aria-label="Main navigation"
+    >
+
+        <div class="pixelfix-navbar-container">
+
+
+            {# =================================================
+               START NAVBAR
+               ================================================= #}
+
+            <ul
+                class="
+                    pixelfix-navbar-nav
+                    pixelfix-navbar-start
+                "
+            >
+
+
+                {# =================================================
+                   SIDEBAR TOGGLE
+
+                   This is the only default header component.
+                   ================================================= #}
+
+                <li class="pixelfix-nav-item">
+
+                    <a
+                        class="pixelfix-nav-link"
+                        data-pixelfix-toggle="sidebar"
+                        href="#"
+                        role="button"
+                        aria-label="Toggle sidebar"
+                    >
+
+                        <i
+                            class="bi bi-list"
+                            aria-hidden="true"
+                        ></i>
+
+                    </a>
+
+                </li>
+
+
+                {# =================================================
+                   CUSTOM START COMPONENTS
+                   ================================================= #}
+
+                {% block header_start %}{% endblock %}
+
+            </ul>
+
+
+            {# =================================================
+               CUSTOM CENTER COMPONENTS
+               ================================================= #}
+
+            {% block header_center %}{% endblock %}
+
+
+            {# =================================================
+               END NAVBAR
+               ================================================= #}
+
+            <ul
+                class="
+                    pixelfix-navbar-nav
+                    pixelfix-navbar-end
+                    ms-auto
+                "
+            >
+
+                {# =================================================
+                   CUSTOM END COMPONENTS
+                   ================================================= #}
+
+                {% block header_end %}{% endblock %}
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+</header>

@@ -1,0 +1,183 @@
+{# =====================================================
+   TABLE COMPONENT
+   ===================================================== #}
+
+{% set headers = headers|default([]) %}
+{% set rows = rows|default([]) %}
+
+{% set caption = caption|default(null) %}
+{% set footer = footer|default(null) %}
+
+{% set responsive = responsive|default(true) %}
+{% set striped = striped|default(true) %}
+{% set hover = hover|default(true) %}
+{% set bordered = bordered|default(false) %}
+{% set compact = compact|default(false) %}
+{% set dark = dark|default(false) %}
+{% set numbered = numbered|default(false) %}
+
+{% set emptyMessage =
+    emptyMessage|default(
+        'No records found.'
+    )
+%}
+
+{# =====================================================
+   TABLE CLASSES
+   ===================================================== #}
+
+{% set tableClasses = [
+
+    'table',
+
+    striped ? 'table-striped' : '',
+
+    hover ? 'table-hover' : '',
+
+    bordered ? 'table-bordered' : '',
+
+    compact ? 'table-sm' : '',
+
+    dark ? 'table-dark' : ''
+
+]|join(' ') %}
+
+{# =====================================================
+   RESPONSIVE WRAPPER
+   ===================================================== #}
+
+{% if responsive %}
+
+<div class="table-responsive">
+
+{% endif %}
+
+<table class="{{ tableClasses|trim }}">
+
+    {# =================================================
+       CAPTION
+       ================================================= #}
+
+    {% if caption %}
+
+        <caption>
+
+            {{ caption }}
+
+        </caption>
+
+    {% endif %}
+
+    {# =================================================
+       HEADER
+       ================================================= #}
+
+    <thead>
+
+        <tr>
+
+            {% if numbered %}
+
+                <th
+                    style="width:1%;"
+                >
+                    #
+                </th>
+
+            {% endif %}
+
+            {% for header in headers %}
+
+                <th>
+
+                    {{ header }}
+
+                </th>
+
+            {% endfor %}
+
+        </tr>
+
+    </thead>
+
+    {# =================================================
+       BODY
+       ================================================= #}
+
+    <tbody>
+
+        {% for row in rows %}
+
+            <tr>
+
+                {% if numbered %}
+
+                    <td>
+
+                        {{ loop.index }}
+
+                    </td>
+
+                {% endif %}
+
+                {% for cell in row %}
+
+                    <td>
+
+                        {{ cell|raw }}
+
+                    </td>
+
+                {% endfor %}
+
+            </tr>
+
+        {% else %}
+
+            <tr>
+
+                <td
+                    colspan="
+                        {{
+                            headers|length
+                            +
+                            (numbered ? 1 : 0)
+                        }}
+                    "
+                    class="
+                        text-center
+                        text-muted
+                    "
+                >
+
+                    {{ emptyMessage }}
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+    {# =================================================
+       FOOTER
+       ================================================= #}
+
+    {% if footer %}
+
+        <tfoot>
+
+            {{ footer|raw }}
+
+        </tfoot>
+
+    {% endif %}
+
+</table>
+
+{% if responsive %}
+
+</div>
+
+{% endif %}

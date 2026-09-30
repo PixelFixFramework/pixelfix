@@ -1,0 +1,31 @@
+{# =====================================================
+   PIXELFIX HEADER - DOCUMENTATION
+   ===================================================== #}
+
+{% set documentationUrl =
+    documentation_url|default('#')
+%}
+
+<li
+    class="
+        pixelfix-nav-item
+        d-none
+        d-md-block
+    "
+>
+
+    <a
+        href="{{ documentationUrl }}"
+        class="pixelfix-nav-link"
+    >
+
+        <i
+            class="bi bi-book me-1"
+            aria-hidden="true"
+        ></i>
+
+        Documentation
+
+    </a>
+
+</li>

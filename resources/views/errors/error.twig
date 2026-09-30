@@ -1,0 +1,27 @@
+{% extends "errors/errors.twig" %}
+
+{% block title %}
+    {{ code }} - {{ title }}
+{% endblock %}
+
+{% block code %}
+    {{ code }}
+{% endblock %}
+
+{% block heading %}
+    {{ title }}
+{% endblock %}
+
+{% block message %}
+
+    {% if debug|default(false) %}
+
+        {{ message }}
+
+    {% else %}
+
+        An unexpected error occurred.
+
+    {% endif %}
+
+{% endblock %}

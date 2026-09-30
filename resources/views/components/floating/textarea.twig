@@ -1,0 +1,64 @@
+{# =====================================================
+   FLOATING TEXTAREA COMPONENT
+   ===================================================== #}
+
+{% set textareaName = name %}
+{% set textareaLabel = label|default('') %}
+{% set textareaRequired = required|default(false) %}
+{% set textareaRows = rows|default(5) %}
+
+{% set hasError = has_error(textareaName) %}
+{% set hasValue = old(textareaName) is not empty %}
+
+{% set invalidMessage =
+    validation_message|default(
+        textareaLabel
+            ? 'Please enter ' ~ textareaLabel|lower ~ '.'
+            : 'This field is required.'
+    )
+%}
+
+{% set stateClass =
+    hasError
+        ? 'is-invalid'
+        : (hasValue ? 'is-valid' : '')
+%}
+
+<div class="form-floating mb-3">
+
+    <textarea
+        id="{{ textareaName }}"
+        name="{{ textareaName }}"
+        class="form-control {{ stateClass }}"
+        placeholder="{{ textareaLabel }}"
+        style="height: {{ textareaRows * 30 }}px"
+        {% if textareaRequired %}
+            required
+        {% endif %}
+    >{{ old(textareaName) }}</textarea>
+
+    <label for="{{ textareaName }}">
+
+        {{ textareaLabel }}
+
+        {% if textareaRequired %}
+            <span class="text-danger">*</span>
+        {% endif %}
+
+    </label>
+
+    {% if hasError %}
+
+        <div class="invalid-feedback">
+            {{ error(textareaName) }}
+        </div>
+
+    {% else %}
+
+        <div class="invalid-feedback">
+            {{ invalidMessage }}
+        </div>
+
+    {% endif %}
+
+</div>

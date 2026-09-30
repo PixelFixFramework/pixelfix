@@ -1,0 +1,82 @@
+{# =====================================================
+   PIXELFIX DASHBOARD TILE
+   ===================================================== #}
+
+{% set tileValue =
+    value|default('')
+%}
+
+{% set tileLabel =
+    label|default('')
+%}
+
+{% set tileIcon =
+    icon|default(null)
+%}
+
+{% set tileClass =
+    class|default('')
+%}
+
+{% set tileUrl =
+    url|default('#')
+%}
+
+{% set tileFooterText =
+    footer_text|default('More info')
+%}
+
+
+<div
+    class="
+        pixelfix-dashboard-tile
+        {{ tileClass }}
+    "
+>
+
+    <div class="pixelfix-dashboard-tile-body">
+
+        <div class="pixelfix-dashboard-tile-content">
+
+            <div class="pixelfix-dashboard-tile-value">
+                {{ tileValue }}
+            </div>
+
+            <div class="pixelfix-dashboard-tile-label">
+                {{ tileLabel }}
+            </div>
+
+        </div>
+
+
+        {% if tileIcon %}
+
+            <div
+                class="pixelfix-dashboard-tile-icon"
+                aria-hidden="true"
+            >
+                <i class="bi {{ tileIcon }}"></i>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <a
+        href="{{ tileUrl }}"
+        class="pixelfix-dashboard-tile-footer"
+    >
+
+        <span>
+            {{ tileFooterText }}
+        </span>
+
+        <i
+            class="bi bi-link-45deg"
+            aria-hidden="true"
+        ></i>
+
+    </a>
+
+</div>

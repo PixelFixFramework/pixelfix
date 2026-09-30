@@ -1,0 +1,132 @@
+{# =====================================================
+   MODAL COMPONENT
+   ===================================================== #}
+
+{% set modalId = id %}
+{% set modalTitle = title|default('Modal') %}
+{% set modalContent = content|default('') %}
+{% set modalFooter = footer|default(null) %}
+{% set modalSize = size|default(null) %}
+{% set modalScrollable = scrollable|default(false) %}
+{% set modalCentered = centered|default(false) %}
+{% set modalStatic = static|default(false) %}
+
+{# =====================================================
+   SIZE
+   ===================================================== #}
+
+{% set sizeClass = {
+
+    'sm':
+        'modal-sm',
+
+    'lg':
+        'modal-lg',
+
+    'xl':
+        'modal-xl',
+
+    'fullscreen':
+        'modal-fullscreen',
+
+    'fullscreen-sm-down':
+        'modal-fullscreen-sm-down',
+
+    'fullscreen-md-down':
+        'modal-fullscreen-md-down',
+
+    'fullscreen-lg-down':
+        'modal-fullscreen-lg-down',
+
+    'fullscreen-xl-down':
+        'modal-fullscreen-xl-down',
+
+    'fullscreen-xxl-down':
+        'modal-fullscreen-xxl-down'
+
+}[modalSize]|default('') %}
+
+{# =====================================================
+   MODAL
+   ===================================================== #}
+
+<div
+    class="modal fade"
+    id="{{ modalId }}"
+    tabindex="-1"
+    aria-labelledby="{{ modalId }}Label"
+    aria-hidden="true"
+    {% if modalStatic %}
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+    {% endif %}
+>
+
+    <div
+        class="
+            modal-dialog
+            {{ sizeClass }}
+            {% if modalScrollable %}
+                modal-dialog-scrollable
+            {% endif %}
+            {% if modalCentered %}
+                modal-dialog-centered
+            {% endif %}
+        "
+    >
+
+        <div class="modal-content">
+
+            {# =========================================
+               HEADER
+               ========================================= #}
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="{{ modalId }}Label"
+                >
+
+                    {{ modalTitle }}
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+            {# =========================================
+               BODY
+               ========================================= #}
+
+            <div class="modal-body">
+
+                {{ modalContent|raw }}
+
+            </div>
+
+            {# =========================================
+               FOOTER
+               ========================================= #}
+
+            {% if modalFooter %}
+
+                <div class="modal-footer">
+
+                    {{ modalFooter|raw }}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

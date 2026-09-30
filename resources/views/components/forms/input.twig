@@ -1,0 +1,107 @@
+{# =====================================================
+   SIMPLE INPUT COMPONENT
+   ===================================================== #}
+
+{% set inputType = type|default('text') %}
+{% set inputName = name|default('') %}
+{% set inputLabel = label|default(null) %}
+{% set inputPlaceholder = placeholder|default('') %}
+{% set inputRequired = required|default(false) %}
+{% set inputClass = class|default('') %}
+{% set inputMaxlength = maxlength|default(null) %}
+{% set inputAutofocus = autofocus|default(false) %}
+{% set inputValue = value|default('') %}
+{% set validationMessage = validationMessage|default(null) %}
+{% set fieldErrors = errors()[inputName] ?? [] %}
+
+{# =====================================================
+   RESOLVE VALUE
+   ===================================================== #}
+
+{% set resolvedValue =
+    old(
+        inputName,
+        inputValue
+    )
+%}
+
+<div class="mb-3">
+
+    {# =================================================
+       LABEL
+       ================================================= #}
+
+    {% if inputLabel %}
+
+        <label
+            for="{{ inputName }}"
+            class="form-label"
+        >
+
+            {{ inputLabel }}
+
+            {% if inputRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    {# =================================================
+       INPUT
+       ================================================= #}
+
+    <input
+        id="{{ inputName }}"
+        type="{{ inputType }}"
+        name="{{ inputName }}"
+        value="{{ inputType != 'password' ? resolvedValue : '' }}"
+        placeholder="{{ inputPlaceholder }}"
+        class="
+            form-control
+            {{ inputClass }}
+            {% if fieldErrors %}
+                is-invalid
+            {% endif %}
+        "
+        {% if inputRequired %}
+            required
+        {% endif %}
+        {% if inputMaxlength is not null %}
+            maxlength="{{ inputMaxlength }}"
+        {% endif %}
+        {% if inputAutofocus %}
+            autofocus
+        {% endif %}
+    >
+
+    {# =================================================
+       VALIDATION
+       ================================================= #}
+
+    <div class="invalid-feedback">
+
+        {% if fieldErrors %}
+
+            {{ fieldErrors[0] }}
+
+        {% else %}
+
+            {{
+                validationMessage
+                ??
+                (
+                    'Please enter a valid '
+                    ~ inputName|replace({'_':' '})
+                    ~ '.'
+                )
+            }}
+
+        {% endif %}
+
+    </div>
+
+</div>

@@ -1,0 +1,173 @@
+{# =====================================================
+   INPUT-GROUP COMPONENT
+   ===================================================== #}
+
+{% set inputType = type|default('text') %}
+{% set inputName = name %}
+{% set inputLabel = label|default('') %}
+{% set inputPlaceholder = placeholder|default('') %}
+{% set inputRequired = required|default(false) %}
+{% set inputIcon = icon|default(null) %}
+{% set inputValue = value|default('') %}
+{% set inputClass = class|default('') %}
+{% set inputMaxlength = maxlength|default(null) %}
+{% set inputAutofocus = autofocus|default(false) %}
+{% set inputDisabled = disabled|default(false) %}
+{% set inputReadonly = readonly|default(false) %}
+{% set validationMessage = validation_message|default(null) %}
+
+{# =====================================================
+   VALIDATION
+   ===================================================== #}
+
+{% set fieldErrors = errors()[inputName] ?? [] %}
+
+{# =====================================================
+   RESOLVE VALUE
+   ===================================================== #}
+
+{% set resolvedValue =
+    old(
+        inputName,
+        inputValue
+    )
+%}
+
+{# =====================================================
+   AUTOCOMPLETE
+   ===================================================== #}
+
+{% set autocomplete = autocomplete|default(null) %}
+
+{% if autocomplete is null %}
+
+    {% if inputType == 'email' %}
+
+        {% set autocomplete = 'email' %}
+
+    {% elseif inputType == 'password' %}
+
+        {% set autocomplete = 'current-password' %}
+
+    {% elseif inputName in ['name', 'full_name'] %}
+
+        {% set autocomplete = 'name' %}
+
+    {% elseif inputName == 'username' %}
+
+        {% set autocomplete = 'username' %}
+
+    {% endif %}
+
+{% endif %}
+
+{# =====================================================
+   INVALID MESSAGE
+   ===================================================== #}
+
+{% set invalidMessage =
+    validationMessage
+        ?? (
+            inputLabel
+                ? 'Please enter ' ~ inputLabel|lower ~ '.'
+                : 'This field is required.'
+        )
+%}
+
+<div class="mb-3">
+
+    {# =================================================
+       LABEL
+       ================================================= #}
+
+    {% if inputLabel %}
+
+        <label
+            for="{{ inputName }}"
+            class="form-label"
+        >
+
+            {{ inputLabel }}
+
+            {% if inputRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    {# =================================================
+       INPUT GROUP
+       ================================================= #}
+
+    <div class="input-group has-validation">
+
+        {# =================================================
+           ICON
+           ================================================= #}
+
+        {% if inputIcon %}
+
+            <span class="input-group-text">
+
+                {{ inputIcon|raw }}
+
+            </span>
+
+        {% endif %}
+
+        {# =================================================
+           INPUT
+           ================================================= #}
+
+        <input
+            id="{{ inputName }}"
+            type="{{ inputType }}"
+            name="{{ inputName }}"
+            value="{{ inputType != 'password' ? resolvedValue : '' }}"
+            placeholder="{{ inputPlaceholder }}"
+            class="
+                form-control
+                {{ inputClass }}
+                {% if fieldErrors %} is-invalid {% endif %}
+            "
+            {% if autocomplete %}
+                autocomplete="{{ autocomplete }}"
+            {% endif %}
+            {% if inputRequired %}
+                required
+            {% endif %}
+            {% if inputMaxlength is not null %}
+                maxlength="{{ inputMaxlength }}"
+            {% endif %}
+            {% if inputAutofocus %}
+                autofocus
+            {% endif %}
+            {% if inputDisabled %}
+                disabled
+            {% endif %}
+            {% if inputReadonly %}
+                readonly
+            {% endif %}
+        >
+
+        <div class="invalid-feedback">
+
+            {% if fieldErrors %}
+
+                {{ fieldErrors[0] }}
+
+            {% else %}
+
+                {{ invalidMessage }}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,214 @@
+{# =====================================================
+   TOAST COMPONENT
+   ===================================================== #}
+
+{% set toastId = id|default('toast') %}
+{% set toastTitle = title|default('Notification') %}
+{% set toastMessage = message|default('Operation completed successfully.') %}
+{% set toastType = type|default('primary') %}
+{% set toastTime = time|default('Just now') %}
+{% set toastAutohide = autohide|default(true) %}
+{% set toastDelay = delay|default(5000) %}
+{% set toastPosition = position|default('bottom-end') %}
+{% set showOnLoad = showOnLoad|default(false) %}
+{% set theme = theme|default('light') %}
+
+{# =====================================================
+   POSITION
+   ===================================================== #}
+
+{% set positionClass = {
+
+    'top-start':
+        'top-0 start-0',
+
+    'top-center':
+        'top-0 start-50 translate-middle-x',
+
+    'top-end':
+        'top-0 end-0',
+
+    'middle-start':
+        'top-50 start-0 translate-middle-y',
+
+    'middle-center':
+        'top-50 start-50 translate-middle',
+
+    'middle-end':
+        'top-50 end-0 translate-middle-y',
+
+    'bottom-start':
+        'bottom-0 start-0',
+
+    'bottom-center':
+        'bottom-0 start-50 translate-middle-x',
+
+    'bottom-end':
+        'bottom-0 end-0'
+
+}[toastPosition]|default('bottom-0 end-0') %}
+
+{# =====================================================
+   THEME
+   ===================================================== #}
+
+{% set themeClasses = {
+
+    'light': {
+
+        header:
+            'bg-white text-dark',
+
+        body:
+            'bg-white text-dark'
+
+    },
+
+    'dark': {
+
+        header:
+            'bg-dark text-white',
+
+        body:
+            'bg-dark text-white'
+
+    }
+
+}[theme]|default({
+
+    header:
+        'bg-white text-dark',
+
+    body:
+        'bg-white text-dark'
+
+}) %}
+
+{# =====================================================
+   CONTAINER
+   ===================================================== #}
+
+<div
+    class="
+        toast-container
+        position-fixed
+        {{ positionClass }}
+        p-3
+    "
+>
+
+    {# =================================================
+       TOAST
+       ================================================= #}
+
+    <div
+        id="{{ toastId }}"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-autohide="{{ toastAutohide ? 'true' : 'false' }}"
+        data-bs-delay="{{ toastDelay }}"
+    >
+
+        {# =============================================
+           HEADER
+           ============================================= #}
+
+        <div
+            class="
+                toast-header
+                {{ themeClasses.header }}
+            "
+        >
+
+            <span
+                class="
+                    rounded-circle
+                    bg-{{ toastType }}
+                    me-2
+                "
+                style="
+                    width: 10px;
+                    height: 10px;
+                    display: inline-block;
+                "
+            ></span>
+
+            <strong class="me-auto">
+
+                {{ toastTitle }}
+
+            </strong>
+
+            <small
+                class="
+                    {% if theme == 'dark' %}
+                        text-light
+                    {% else %}
+                        text-muted
+                    {% endif %}
+                "
+            >
+
+                {{ toastTime }}
+
+            </small>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+            ></button>
+
+        </div>
+
+        {# =============================================
+           BODY
+           ============================================= #}
+
+        <div
+            class="
+                toast-body
+                {{ themeClasses.body }}
+            "
+        >
+
+            {{ toastMessage }}
+
+        </div>
+
+    </div>
+
+</div>
+
+{# =====================================================
+   AUTO SHOW
+   ===================================================== #}
+
+{% if showOnLoad %}
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+
+        const toastElement =
+            document.getElementById(
+                '{{ toastId }}'
+            );
+
+        if (toastElement) {
+
+            new bootstrap.Toast(
+                toastElement
+            ).show();
+        }
+    }
+);
+
+</script>
+
+{% endif %}

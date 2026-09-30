@@ -1,0 +1,17 @@
+{# =====================================================
+   BADGE COMPONENT
+   ===================================================== #}
+
+{% set badgeType = type|default('primary') %}
+{% set badgeText = text|default('Badge') %}
+
+<span
+    class="
+        badge
+        text-bg-{{ badgeType }}
+    "
+>
+
+    {{ badgeText }}
+
+</span>

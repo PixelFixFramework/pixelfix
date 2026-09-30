@@ -1,0 +1,2672 @@
+/* =====================================================
+   GLOBAL CSS RESET
+   ===================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+}
+
+/* =====================================================
+   DEFAULT FORM CONTROL TEXT
+   ===================================================== */
+
+input,
+textarea,
+select {
+
+    font-size: 1rem !important;
+
+}
+
+/* =====================================================
+   DEFAULT PLACEHOLDER TEXT
+   ===================================================== */
+
+input::placeholder,
+textarea::placeholder {
+
+    font-size: 1rem !important;
+
+}
+
+/* =====================================================
+   PIXELFIX VARIABLES
+   ===================================================== */
+
+:root {
+
+    --pixelfix-header-height: 56px;
+    --pixelfix-footer-height: 56px;
+
+    --pixelfix-sidebar-width: 240px;
+    --pixelfix-sidebar-mini-width: 72px;
+
+    --pixelfix-sidebar-bg: #111827;
+    --pixelfix-sidebar-color: #9ca3af;
+
+    --pixelfix-sidebar-hover-bg: #1f2937;
+    --pixelfix-sidebar-hover-color: #ffffff;
+
+    --pixelfix-sidebar-active-bg: #2563eb;
+    --pixelfix-sidebar-active-color: #ffffff;
+
+    --pixelfix-sidebar-border: #1f2937;
+    --pixelfix-sidebar-submenu-color: #9ca3af;
+
+    --pixelfix-sidebar-radius: 8px;
+    --pixelfix-sidebar-transition: 0.3s ease-in-out;
+
+}
+
+/* =====================================================
+   PIXELFIX APPLICATION SHELL
+   ===================================================== */
+
+.pixelfix-app-wrapper {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-areas: "pixelfix-sidebar pixelfix-header"
+        "pixelfix-sidebar pixelfix-main"
+        "pixelfix-sidebar pixelfix-footer";
+
+    grid-template-rows: min-content
+        minmax(0, 1fr)
+        min-content;
+
+    grid-template-columns: auto minmax(0, 1fr);
+
+    align-content: stretch;
+
+    align-items: stretch;
+
+    gap: 0;
+
+    min-height: 100vh;
+
+    max-width: 100vw;
+
+}
+
+.pixelfix-app-wrapper > * {
+
+    min-width: 0;
+
+}
+
+/* =====================================================
+   PIXELFIX HEADER
+   ===================================================== */
+
+.pixelfix-header {
+
+    grid-area: pixelfix-header;
+
+    min-width: 0;
+
+    max-width: 100vw;
+
+    z-index: 1030;
+
+    background: var(--bs-body-bg);
+
+    color: var(--bs-body-color);
+
+    border-bottom: 1px solid var(--bs-border-color);
+
+}
+
+
+/* =====================================================
+   HEADER NAVBAR
+   ===================================================== */
+
+.pixelfix-navbar {
+
+    width: 100%;
+
+    min-height: var(--pixelfix-header-height);
+
+}
+
+.pixelfix-navbar-container {
+
+    width: 100%;
+
+    min-height: var(--pixelfix-header-height);
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 .5rem;
+
+    overflow: visible;
+
+}
+
+.pixelfix-navbar-nav {
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    list-style: none;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+.pixelfix-nav-item {
+
+    position: relative;
+
+}
+
+.pixelfix-nav-link {
+
+    position: relative;
+
+    min-height: var(--pixelfix-header-height);
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: .15rem;
+
+    padding: .75rem .75rem;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--bs-body-color);
+
+    font-size: .95rem;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+}
+
+.pixelfix-nav-link:hover,
+.pixelfix-nav-link:focus-visible {
+
+    color: var(--bs-emphasis-color);
+
+    background: var(--bs-tertiary-bg);
+
+}
+
+.pixelfix-nav-link i {
+
+    font-size: 1rem;
+
+}
+
+
+/* =====================================================
+   HEADER SEARCH
+   ===================================================== */
+
+.pixelfix-header-search {
+
+    position: relative;
+
+    width: 225px;
+
+    flex: 0 1 225px;
+
+    margin-left: 1rem;
+
+}
+
+.pixelfix-header-search-icon {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: .75rem;
+
+    z-index: 1;
+
+    transform: translateY(-50%);
+
+    color: var(--bs-secondary-color);
+
+    font-size: .9rem;
+
+    pointer-events: none;
+
+}
+
+.pixelfix-header-search-input {
+
+    width: 100%;
+
+    height: 34px;
+
+    padding: .375rem .75rem .375rem 2.25rem;
+
+    border: 1px solid var(--bs-border-color);
+
+    border-radius: 999px;
+
+    background: var(--bs-secondary-bg);
+
+    color: var(--bs-body-color);
+
+    outline: 0;
+
+    font-size: .9rem;
+
+}
+
+.pixelfix-header-search-input::placeholder {
+
+    color: var(--bs-secondary-color);
+
+}
+
+.pixelfix-header-search-input:focus {
+
+    border-color: var(--bs-primary);
+
+    background: var(--bs-body-bg);
+
+    box-shadow:
+        0 0 0 .2rem
+        rgba(13, 110, 253, .15);
+
+}
+
+
+/* =====================================================
+   HEADER NAVIGATION BADGES
+   ===================================================== */
+
+.pixelfix-navbar-badge {
+
+    position: absolute;
+
+    top: 7px;
+
+    right: 4px;
+
+    min-width: 16px;
+
+    min-height: 16px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 0 .25rem;
+
+    border-radius: 999px;
+
+    font-size: .65rem;
+
+    font-weight: 600;
+
+    line-height: 16px;
+
+}
+
+
+/* =====================================================
+   HEADER DROPDOWN DEFAULTS
+   ===================================================== */
+
+.pixelfix-nav-item.dropdown
+.dropdown-menu-lg {
+
+    width: 280px;
+
+    min-width: 280px;
+
+}
+
+.pixelfix-nav-item.dropdown
+.dropdown-header {
+
+    padding: .5rem 1rem;
+
+    text-align: center;
+
+    font-size: .875rem;
+
+}
+
+.pixelfix-nav-item.dropdown
+.dropdown-item {
+
+    padding: .5rem 1rem;
+
+    font-size: .875rem;
+
+}
+
+.pixelfix-nav-item.dropdown
+.dropdown-item .fs-7 {
+
+    font-size: .75rem;
+
+}
+
+.pixelfix-nav-item.dropdown
+.dropdown-footer {
+
+    padding: .5rem 1rem;
+
+    text-align: center;
+
+}
+
+.pixelfix-nav-item.dropdown
+.dropdown-divider {
+
+    margin: 0;
+
+}
+
+
+/* =====================================================
+   HEADER MESSAGES
+   ===================================================== */
+
+.pixelfix-messages-menu {
+
+    width: 280px;
+
+    min-width: 280px;
+
+    padding: 0;
+
+    overflow: hidden;
+
+}
+
+.pixelfix-message-item {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    width: 100%;
+
+    min-height: 82px;
+
+    padding: .75rem 1rem;
+
+    border: 0;
+
+    border-bottom: 1px solid var(--bs-border-color);
+
+    background: transparent;
+
+    color: var(--bs-body-color);
+
+    text-decoration: none;
+
+    white-space: normal;
+
+}
+
+.pixelfix-message-item:hover,
+.pixelfix-message-item:focus-visible,
+.pixelfix-message-item:active {
+
+    background: var(--bs-tertiary-bg);
+
+    color: var(--bs-body-color);
+
+}
+
+.pixelfix-message-avatar {
+
+    width: 48px;
+
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    margin-right: .75rem;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: var(--bs-secondary-bg);
+
+}
+
+.pixelfix-message-avatar-image {
+
+    display: block;
+
+}
+
+.pixelfix-message-avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+}
+
+.pixelfix-message-content {
+
+    min-width: 0;
+
+    flex: 1 1 auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding-right: 1.25rem;
+
+}
+
+.pixelfix-message-name {
+
+    overflow: hidden;
+
+    color: var(--bs-body-color);
+
+    font-size: .875rem;
+
+    font-weight: 600;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+.pixelfix-message-preview {
+
+    margin-top: .2rem;
+
+    overflow: hidden;
+
+    color: var(--bs-body-color);
+
+    font-size: .8rem;
+
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+.pixelfix-message-time {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .25rem;
+
+    margin-top: .3rem;
+
+    color: var(--bs-secondary-color);
+
+    font-size: .75rem;
+
+    line-height: 1;
+
+}
+
+.pixelfix-message-time i {
+
+    font-size: .7rem;
+
+}
+
+.pixelfix-message-star {
+
+    position: absolute;
+
+    top: .8rem;
+
+    right: 1rem;
+
+    font-size: .9rem;
+
+}
+
+.pixelfix-messages-footer {
+
+    display: block;
+
+    width: 100%;
+
+    padding: .65rem 1rem;
+
+    border-top: 1px solid var(--bs-border-color);
+
+    color: var(--bs-body-color);
+
+    text-align: center;
+
+    text-decoration: none;
+
+    font-size: .8rem;
+
+}
+
+.pixelfix-messages-footer:hover,
+.pixelfix-messages-footer:focus-visible {
+
+    background: var(--bs-tertiary-bg);
+
+    color: var(--bs-primary);
+
+}
+
+
+/* =====================================================
+   HEADER THEME
+   ===================================================== */
+
+.pixelfix-theme-menu {
+
+    --bs-dropdown-min-width: 8rem;
+
+}
+
+.pixelfix-theme-menu .dropdown-item.active,
+.pixelfix-theme-menu .dropdown-item:active {
+
+    background: var(--bs-primary);
+
+    color: #fff;
+
+}
+
+
+/* =====================================================
+   HEADER USER MENU
+   ===================================================== */
+
+.pixelfix-user-menu {
+
+    flex: 0 0 auto;
+
+    margin-right: .5rem;
+
+}
+
+.pixelfix-user-menu .pixelfix-nav-link {
+
+    gap: .4rem;
+
+}
+
+
+/* =====================================================
+   USER AVATAR
+   ===================================================== */
+
+.pixelfix-user-image,
+.pixelfix-user-avatar {
+
+    width: 32px;
+
+    height: 32px;
+
+    flex: 0 0 32px;
+
+    border-radius: 50%;
+
+}
+
+.pixelfix-user-image {
+
+    object-fit: cover;
+
+    box-shadow:
+        0 .1rem .2rem
+        rgba(0, 0, 0, .15);
+
+}
+
+.pixelfix-user-avatar {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--bs-primary);
+
+    color: #fff;
+
+    font-size: .8rem;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   USER DROPDOWN
+   ===================================================== */
+
+.pixelfix-user-menu
+.dropdown-menu {
+
+    width: 280px;
+
+    min-width: 280px;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    border: 1px solid var(--bs-border-color);
+
+    border-radius: .375rem;
+
+    box-shadow:
+        0 .5rem 1rem
+        rgba(0, 0, 0, .15);
+
+}
+
+
+/* =====================================================
+   USER HEADER
+   ===================================================== */
+
+.pixelfix-user-header {
+
+    min-height: 145px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: .5rem;
+
+    padding: 1rem;
+
+    background: var(--bs-primary);
+
+    color: #fff;
+
+    text-align: center;
+
+}
+
+.pixelfix-user-header-image,
+.pixelfix-user-header-avatar {
+
+    width: 80px;
+
+    height: 80px;
+
+    flex: 0 0 80px;
+
+    border-radius: 50%;
+
+}
+
+.pixelfix-user-header-image {
+
+    object-fit: cover;
+
+    box-shadow:
+        0 .2rem .5rem
+        rgba(0, 0, 0, .2);
+
+}
+
+.pixelfix-user-header-avatar {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255, 255, 255, .2);
+
+    color: #fff;
+
+    font-size: 1.8rem;
+
+    font-weight: 700;
+
+}
+
+.pixelfix-user-header p {
+
+    margin: 0;
+
+    line-height: 1.4;
+
+}
+
+.pixelfix-user-header small {
+
+    display: block;
+
+    margin-top: .25rem;
+
+    opacity: .9;
+
+}
+
+
+/* =====================================================
+   USER BODY
+   ===================================================== */
+
+.pixelfix-user-body {
+
+    padding: .75rem 1rem;
+
+    background: var(--bs-body-bg);
+
+}
+
+.pixelfix-user-body .row {
+
+    margin: 0;
+
+}
+
+.pixelfix-user-body
+[class*="col-"] {
+
+    padding: 0 .25rem;
+
+}
+
+.pixelfix-user-body a {
+
+    display: block;
+
+    padding: .35rem .25rem;
+
+    color: var(--bs-body-color);
+
+    text-decoration: none;
+
+}
+
+.pixelfix-user-body a:hover,
+.pixelfix-user-body a:focus-visible {
+
+    color: var(--bs-primary);
+
+    text-decoration: underline;
+
+}
+
+
+/* =====================================================
+   USER FOOTER
+   ===================================================== */
+
+.pixelfix-user-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: .75rem;
+
+    padding: .75rem 1rem;
+
+    border-top: 1px solid var(--bs-border-color);
+
+    background: var(--bs-tertiary-bg);
+
+}
+
+.pixelfix-user-footer .btn {
+
+    margin: 0;
+
+}
+
+/* =====================================================
+   PIXELFIX SIDEBAR
+   ===================================================== */
+
+.pixelfix-sidebar {
+
+    position: sticky;
+
+    top: 0;
+
+    width: var(--pixelfix-sidebar-width);
+
+    min-width: var(--pixelfix-sidebar-width);
+
+    max-width: var(--pixelfix-sidebar-width);
+
+    height: 100vh;
+
+    max-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    grid-area: pixelfix-sidebar;
+
+    background: var(--pixelfix-sidebar-bg);
+
+    color: #fff;
+
+    z-index: 1040;
+
+    overflow: hidden;
+
+    transition: width var(--pixelfix-sidebar-transition),
+        min-width var(--pixelfix-sidebar-transition),
+        max-width var(--pixelfix-sidebar-transition),
+        margin-left var(--pixelfix-sidebar-transition);
+
+}
+
+/* =====================================================
+   SIDEBAR BRAND
+   ===================================================== */
+
+.pixelfix-sidebar-brand {
+
+    flex: 0 0 auto;
+
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 14px;
+
+    border-bottom: 1px solid var(--pixelfix-sidebar-border);
+
+}
+
+.pixelfix-sidebar-brand-link {
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+}
+
+.pixelfix-sidebar-brand-logo {
+
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #2563eb;
+
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+}
+
+.pixelfix-sidebar-brand-text {
+
+    min-width: 0;
+
+    margin-left: 10px;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    transition: opacity var(--pixelfix-sidebar-transition),
+        visibility var(--pixelfix-sidebar-transition);
+
+}
+
+.pixelfix-sidebar-logo-xs {
+
+    display: none;
+
+}
+
+/* =====================================================
+   SIDEBAR SEARCH
+   ===================================================== */
+
+.pixelfix-sidebar-search {
+
+    flex: 0 0 auto;
+
+    padding: 10px 12px;
+
+}
+
+.pixelfix-sidebar-search-input {
+
+    width: 100%;
+
+    padding: 8px 12px;
+
+    border: 1px solid rgba(255, 255, 255, .10);
+
+    border-radius: 50rem;
+
+    outline: none;
+
+    background: rgba(255, 255, 255, .06);
+
+    color: #fff;
+
+    font-size: 14px !important;
+
+    transition: background-color .15s ease-in-out,
+        border-color .15s ease-in-out,
+        box-shadow .15s ease-in-out;
+
+}
+
+.pixelfix-sidebar-search-input::placeholder {
+
+    color: #9ca3af;
+
+    opacity: 1;
+
+}
+
+.pixelfix-sidebar-search-input:hover {
+
+    background: rgba(255, 255, 255, .09);
+
+}
+
+.pixelfix-sidebar-search-input:focus {
+
+    background: rgba(255, 255, 255, .10);
+
+    border-color: rgba(255, 255, 255, .35);
+
+    box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .18);
+
+}
+
+.pixelfix-sidebar-search-empty {
+
+    margin: 8px 4px 0;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+
+}
+
+/* =====================================================
+   SIDEBAR NAVIGATION WRAPPER
+   ===================================================== */
+
+.pixelfix-sidebar-wrapper {
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    overflow-x: hidden;
+
+    overflow-y: auto;
+
+    padding:
+        8px;
+
+    scrollbar-width:
+        thin;
+
+    overscroll-behavior:
+        contain;
+
+}
+
+
+/* =====================================================
+   SIDEBAR OVERLAYSCROLLBARS
+   ===================================================== */
+
+.pixelfix-sidebar-wrapper.os-host {
+
+    min-width:
+        0;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar {
+
+    --os-size:
+        7px;
+
+    --os-padding-perpendicular:
+        0;
+
+    --os-padding-axis:
+        0;
+
+    --os-track-border-radius:
+        999px;
+
+    --os-handle-border-radius:
+        999px;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar-vertical {
+
+    width:
+        7px;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar-track {
+
+    background:
+        var(--pixelfix-sidebar-bg);
+
+    border-radius:
+        999px;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar-handle {
+
+    background:
+        #374151;
+
+    border-radius:
+        999px;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar-handle:hover {
+
+    background:
+        #4b5563;
+
+}
+
+.pixelfix-sidebar-wrapper .os-scrollbar-handle:active {
+
+    background:
+        #6b7280;
+
+}
+
+/* =====================================================
+   SIDEBAR MENU
+   ===================================================== */
+
+.pixelfix-sidebar-menu {
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+}
+
+.pixelfix-sidebar-nav-item {
+
+    position: relative;
+
+    width: 100%;
+
+}
+
+.pixelfix-sidebar-nav-entry {
+
+    width: 100%;
+
+    display: flex;
+
+    margin-bottom: .2rem;
+
+}
+
+.pixelfix-sidebar-nav-link {
+
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+
+    flex: 1 1 auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 42px;
+
+    padding: 10px 12px;
+
+    border-radius: var(--pixelfix-sidebar-radius);
+
+    color: var(--pixelfix-sidebar-color);
+
+    background: transparent;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    transition: background-color .2s ease,
+        color .2s ease,
+        width .3s ease;
+
+}
+
+.pixelfix-sidebar-nav-link:hover,
+.pixelfix-sidebar-nav-link:focus-visible {
+
+    background: var(--pixelfix-sidebar-hover-bg);
+
+    color: var(--pixelfix-sidebar-hover-color);
+
+}
+
+.pixelfix-sidebar-nav-link.active {
+
+    background:
+        var(--pixelfix-sidebar-active-bg);
+
+    color:
+        var(--pixelfix-sidebar-active-color);
+
+}
+
+.pixelfix-sidebar-nav-link.active
+.pixelfix-sidebar-nav-icon,
+
+.pixelfix-sidebar-nav-link.active
+.pixelfix-sidebar-nav-label {
+
+    color:
+        var(--pixelfix-sidebar-active-color);
+
+}
+
+.pixelfix-sidebar-nav-link.disabled {
+
+    opacity: .5;
+
+    pointer-events: none;
+
+}
+
+/* =====================================================
+   SIDEBAR MENU ICON
+   ===================================================== */
+
+.pixelfix-sidebar-nav-icon {
+
+    width: 20px;
+    min-width: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    font-size: 16px;
+
+}
+
+/* =====================================================
+   SIDEBAR MENU LABEL
+   ===================================================== */
+
+.pixelfix-sidebar-nav-label {
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+/* =====================================================
+   SIDEBAR MENU BADGE
+   ===================================================== */
+
+.pixelfix-sidebar-nav-badge {
+
+    flex: 0 0 auto;
+
+    margin-left: auto;
+
+    padding: 2px 7px;
+
+    border-radius: 50rem;
+
+    background: #374151;
+
+    color: #fff;
+
+    font-size: 10px;
+
+    line-height: 1.4;
+
+}
+
+.pixelfix-sidebar-nav-badge.info {
+
+    background: #0ea5e9;
+
+}
+
+.pixelfix-sidebar-nav-badge.success {
+
+    background: #16a34a;
+
+}
+
+.pixelfix-sidebar-nav-badge.warning {
+
+    background: #d97706;
+
+}
+
+.pixelfix-sidebar-nav-badge.danger {
+
+    background: #dc2626;
+
+}
+
+/* =====================================================
+   SIDEBAR TREE TOGGLE
+   ===================================================== */
+
+.pixelfix-sidebar-nav-toggle {
+
+    width: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: var(--pixelfix-sidebar-radius);
+
+    background: transparent;
+
+    color: var(--pixelfix-sidebar-color);
+
+    cursor: pointer;
+
+}
+
+.pixelfix-sidebar-nav-toggle:hover,
+.pixelfix-sidebar-nav-toggle:focus-visible {
+
+    background: var(--pixelfix-sidebar-hover-bg);
+
+    color: #fff;
+
+}
+
+.pixelfix-sidebar-nav-arrow {
+
+    display: block;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    transform: rotate(0deg);
+
+    transition: transform .3s ease;
+
+}
+
+.pixelfix-sidebar-nav-item.menu-open
+> .pixelfix-sidebar-nav-entry
+.pixelfix-sidebar-nav-arrow {
+
+    transform: rotate(90deg);
+
+}
+
+/* =====================================================
+   SIDEBAR TREEVIEW
+   ===================================================== */
+
+.pixelfix-sidebar-nav-tree {
+
+    display: none;
+
+    margin: 0;
+
+    padding: 0 0 0 12px;
+
+    list-style: none;
+
+}
+
+.pixelfix-sidebar-nav-item.menu-open
+> .pixelfix-sidebar-nav-tree {
+
+    display: block;
+
+}
+
+.pixelfix-sidebar-nav-tree
+.pixelfix-sidebar-nav-link {
+
+    min-height: 38px;
+
+    color: var(--pixelfix-sidebar-submenu-color);
+
+    font-size: 13px;
+
+}
+
+.pixelfix-sidebar-nav-tree
+.pixelfix-sidebar-nav-icon {
+
+    font-size: 13px;
+
+}
+
+/* =====================================================
+   SIDEBAR NAVIGATION HEADERS
+   ===================================================== */
+
+.pixelfix-sidebar-nav-header {
+
+    width: 100%;
+
+    padding: .5rem .75rem;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    white-space: nowrap;
+
+}
+
+/* =====================================================
+   SIDEBAR FOOTER
+   ===================================================== */
+
+.pixelfix-sidebar-footer {
+
+    flex: 0 0 auto;
+
+    padding: 12px;
+
+    border-top: 1px solid var(--pixelfix-sidebar-border);
+
+}
+
+.pixelfix-sidebar-user {
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px 4px 12px;
+
+}
+
+.pixelfix-sidebar-avatar {
+
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+}
+
+.pixelfix-sidebar-user-info {
+
+    min-width: 0;
+
+}
+
+.pixelfix-sidebar-user-name {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+.pixelfix-sidebar-user-email {
+
+    margin-top: 2px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+.pixelfix-sidebar-logout-form {
+
+    margin: 0;
+
+}
+
+.pixelfix-sidebar-logout-button {
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 0;
+
+    border-radius: var(--pixelfix-sidebar-radius);
+
+    background: transparent;
+
+    color: var(--pixelfix-sidebar-color);
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    text-align: left;
+
+}
+
+.pixelfix-sidebar-logout-button:hover,
+.pixelfix-sidebar-logout-button:focus-visible {
+
+    background: var(--pixelfix-sidebar-hover-bg);
+
+    color: #fff;
+
+}
+
+/* =====================================================
+   SIDEBAR COLLAPSED STATE
+   ===================================================== */
+
+body.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-mobile
+)
+.pixelfix-sidebar:not(
+    .pixelfix-sidebar-mobile
+) {
+
+    margin-left: calc(
+            -1 *
+            var(--pixelfix-sidebar-width)
+        );
+
+}
+
+/* =====================================================
+   SIDEBAR MINI STATE
+   ===================================================== */
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar {
+
+    width: var(--pixelfix-sidebar-mini-width);
+
+    min-width: var(--pixelfix-sidebar-mini-width);
+
+    max-width: var(--pixelfix-sidebar-mini-width);
+
+}
+
+/* =====================================================
+   SIDEBAR MINI CONTENT
+   ===================================================== */
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-brand-text,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-search,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-user-info,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-label,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-badge,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-toggle {
+
+    visibility: hidden;
+
+    opacity: 0;
+
+}
+
+/* =====================================================
+   SIDEBAR MINI LOGO
+   ===================================================== */
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-logo-xl {
+
+    display: none;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-logo-xs {
+
+    display: inline;
+
+}
+
+/* =====================================================
+   SIDEBAR MINI NAVIGATION
+   ===================================================== */
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-entry {
+
+    justify-content: center;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-link {
+
+    width: 3.6rem;
+
+    flex: 0 0 3.6rem;
+
+    justify-content: center;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-icon {
+
+    margin: 0;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse
+.pixelfix-sidebar-nav-header {
+
+    display: none;
+
+}
+
+/* =====================================================
+   SIDEBAR MINI HOVER EXPANSION
+   ===================================================== */
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover {
+
+    width: var(--pixelfix-sidebar-width);
+
+    min-width: var(--pixelfix-sidebar-width);
+
+    max-width: var(--pixelfix-sidebar-width);
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-brand-text,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-nav-label,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-nav-toggle,
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-user-info {
+
+    visibility: visible;
+
+    opacity: 1;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-search {
+
+    display: block;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-logo-xl {
+
+    display: inline;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-logo-xs {
+
+    display: none;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-nav-link {
+
+    width: 100%;
+
+    flex: 1 1 auto;
+
+    justify-content: flex-start;
+
+}
+
+body.pixelfix-sidebar-mini.pixelfix-sidebar-collapse:not(
+    .pixelfix-sidebar-without-hover
+)
+.pixelfix-sidebar:hover
+.pixelfix-sidebar-nav-badge {
+
+    visibility: visible;
+
+    opacity: 1;
+
+}
+
+/* =====================================================
+   SIDEBAR OVERLAY
+   ===================================================== */
+
+.pixelfix-sidebar-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1039;
+
+    background: rgba(0, 0, 0, .20);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    cursor: pointer;
+
+    transition: opacity .25s ease,
+        visibility .25s ease;
+
+}
+
+body.pixelfix-sidebar-open
+.pixelfix-sidebar-overlay {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+/* =====================================================
+   SIDEBAR VISUALLY HIDDEN
+   ===================================================== */
+
+.pixelfix-sidebar-visually-hidden {
+
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+
+}
+
+/* =====================================================
+   TILES
+   ===================================================== */
+
+.pixelfix-dashboard-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: .375rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    color: #fff;
+}
+
+
+/* =====================================================
+   TILE BODY
+   ===================================================== */
+
+.pixelfix-dashboard-tile-body {
+    position: relative;
+    min-height: 110px;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+
+.pixelfix-dashboard-tile-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =====================================================
+   TILE VALUE
+   ===================================================== */
+
+.pixelfix-dashboard-tile-value {
+    margin-bottom: .25rem;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+
+/* =====================================================
+   TILE LABEL
+   ===================================================== */
+
+.pixelfix-dashboard-tile-label {
+    font-size: .9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   TILE ICON
+   ===================================================== */
+
+.pixelfix-dashboard-tile-icon {
+    position: absolute;
+    top: .5rem;
+    right: .75rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    line-height: 1;
+    opacity: .15;
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   TILE FOOTER
+   ===================================================== */
+
+.pixelfix-dashboard-tile-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    min-height: 31px;
+    padding: .35rem .75rem;
+    background: rgba(0, 0, 0, .1);
+    color: inherit;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-decoration: none;
+}
+
+
+.pixelfix-dashboard-tile-footer:hover,
+.pixelfix-dashboard-tile-footer:focus {
+    background: rgba(0, 0, 0, .15);
+    color: inherit;
+    text-decoration: none;
+}
+
+
+.pixelfix-dashboard-tile-footer .bi {
+    font-size: .875rem;
+}
+
+
+/* =====================================================
+   TILE GRID
+   ===================================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 991.98px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 575.98px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =====================================================
+   MAIN CONTENT HEADER
+   ===================================================== */
+
+.pixelfix-main-header {
+
+    flex: 0 0 auto;
+
+    padding: 1rem .5rem;
+
+    background: var(--bs-tertiary-bg);
+
+}
+
+.pixelfix-main-container {
+
+    width: 100%;
+
+    padding-right: .75rem;
+
+    padding-left: .75rem;
+
+    margin-right: auto;
+
+    margin-left: auto;
+
+}
+
+.pixelfix-main-header-row {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    margin-right: -.5rem;
+
+    margin-left: -.5rem;
+
+}
+
+.pixelfix-main-header-title,
+.pixelfix-main-header-breadcrumb {
+
+    position: relative;
+
+    width: 100%;
+
+    padding-right: .5rem;
+
+    padding-left: .5rem;
+
+}
+
+/* =====================================================
+   MAIN PAGE TITLE
+   ===================================================== */
+
+.pixelfix-main-header-title h1 {
+
+    margin: 0;
+
+    color: var(--bs-emphasis-color);
+
+    font-size: 1.75rem;
+
+    font-weight: 400;
+
+    line-height: 1.2;
+
+}
+
+/* =====================================================
+   MAIN BREADCRUMB
+   ===================================================== */
+
+.pixelfix-main-header-breadcrumb {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+}
+
+.pixelfix-main-header-breadcrumb nav {
+
+    width: 100%;
+
+}
+
+.pixelfix-breadcrumb {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    margin: 0;
+
+    padding: 0;
+
+    list-style: none;
+
+    font-size: .95rem;
+
+}
+
+.pixelfix-breadcrumb-item {
+
+    color: var(--bs-secondary-color);
+
+}
+
+.pixelfix-breadcrumb-item +
+.pixelfix-breadcrumb-item::before {
+
+    float: left;
+
+    padding-right: .5rem;
+
+    padding-left: .5rem;
+
+    color: var(--bs-secondary-color);
+
+    content: "/";
+
+}
+
+.pixelfix-breadcrumb-item a {
+
+    color: var(--bs-primary);
+
+    text-decoration: none;
+
+}
+
+.pixelfix-breadcrumb-item a:hover,
+.pixelfix-breadcrumb-item a:focus-visible {
+
+    text-decoration: underline;
+
+}
+
+.pixelfix-breadcrumb-item.active {
+
+    color: var(--bs-secondary-color);
+
+}
+
+/* =====================================================
+   MAIN CONTENT
+   ===================================================== */
+
+.pixelfix-main {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width:
+        0;
+
+    min-height:
+        100%;
+
+    max-width:
+        100%;
+
+    padding-bottom:
+        4rem;
+
+    grid-area:
+        pixelfix-main;
+
+    background:
+        var(--bs-tertiary-bg);
+
+}
+
+.pixelfix-main-content {
+
+    flex:
+        1 1 auto;
+
+    min-width:
+        0;
+
+    padding:
+        0 .5rem;
+
+}
+
+
+.pixelfix-main-content
+> .pixelfix-main-container {
+
+    padding-top:
+        0;
+
+    padding-bottom:
+        0;
+
+}
+
+/* =====================================================
+   PIXELFIX FOOTER
+   ===================================================== */
+
+.pixelfix-footer {
+
+    grid-area:
+        pixelfix-footer;
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    min-height:
+        var(--pixelfix-footer-height);
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    flex:
+        0 0 auto;
+
+    gap:
+        1rem;
+
+    padding:
+        .75rem 1rem;
+
+    border-top:
+        1px solid var(--bs-border-color);
+
+    background:
+        var(--bs-body-bg);
+
+    color:
+        var(--bs-body-color);
+
+    font-size:
+        .875rem;
+
+}
+
+.pixelfix-footer-copyright {
+
+    min-width: 0;
+
+    line-height: 1.5;
+
+}
+
+.pixelfix-footer-copyright strong {
+
+    font-weight: 600;
+
+}
+
+.pixelfix-footer-copyright a {
+
+    color: var(--bs-primary);
+
+    text-decoration: none;
+
+}
+
+.pixelfix-footer-copyright a:hover,
+.pixelfix-footer-copyright a:focus-visible {
+
+    text-decoration: underline;
+
+}
+
+.pixelfix-footer-right {
+
+    flex: 0 0 auto;
+
+    margin-left: auto;
+
+    text-align: right;
+
+}
+
+/* =====================================================
+   RESPONSIVE CONTENT HEADER
+   ===================================================== */
+
+@media (min-width: 576px) {
+
+    .pixelfix-main-header-title,
+    .pixelfix-main-header-breadcrumb {
+
+        width: 50%;
+
+    }
+
+    .pixelfix-main-header-breadcrumb {
+
+        justify-content: flex-end;
+
+    }
+
+    .pixelfix-main-header-breadcrumb nav {
+
+        width: auto;
+
+    }
+
+    .pixelfix-breadcrumb {
+
+        justify-content: flex-end;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE SIDEBAR
+   ===================================================== */
+
+@media (max-width: 991.98px) {
+
+    .pixelfix-sidebar {
+
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
+        bottom: 0;
+
+        width: var(--pixelfix-sidebar-width);
+
+        min-width: var(--pixelfix-sidebar-width);
+
+        max-width: var(--pixelfix-sidebar-width);
+
+        height: 100dvh;
+
+        max-height: 100dvh;
+
+        margin-left: calc(
+                -1 *
+                var(--pixelfix-sidebar-width)
+            );
+
+        z-index: 1040;
+
+    }
+
+    body.pixelfix-sidebar-open
+    .pixelfix-sidebar {
+
+        margin-left: 0;
+
+    }
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar {
+
+        width: var(--pixelfix-sidebar-width);
+
+        min-width: var(--pixelfix-sidebar-width);
+
+        max-width: var(--pixelfix-sidebar-width);
+
+    }
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar .pixelfix-sidebar-brand-text,
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar .pixelfix-sidebar-nav-label,
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar .pixelfix-sidebar-nav-toggle,
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar .pixelfix-sidebar-search {
+
+        visibility: visible;
+
+        opacity: 1;
+
+    }
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar-logo-xl {
+
+        display: inline;
+
+    }
+
+    body.pixelfix-sidebar-mini
+    body.pixelfix-sidebar-collapse
+    .pixelfix-sidebar-logo-xs {
+
+        display: none;
+
+    }
+
+    /* =====================================================
+       MOBILE SIDEBAR SCROLLING
+       ===================================================== */
+
+    .pixelfix-sidebar-wrapper {
+
+        flex: 1 1 auto;
+
+        min-height: 0;
+
+        height: auto;
+
+        max-height: none;
+
+        overflow-x: hidden;
+
+        overflow-y: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+        touch-action: pan-y;
+
+        overscroll-behavior: contain;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE APPLICATION SHELL
+   ===================================================== */
+
+@media (max-width: 991.98px) {
+
+    .pixelfix-app-wrapper {
+
+        display: block;
+
+        min-height: 100vh;
+
+    }
+
+    .pixelfix-header,
+    .pixelfix-main,
+    .pixelfix-footer {
+
+        width: 100%;
+
+        max-width: 100%;
+
+    }
+
+    .pixelfix-main {
+
+        min-height: calc(
+                100vh -
+                var(--pixelfix-header-height) -
+                var(--pixelfix-footer-height)
+            );
+
+    }
+
+    .pixelfix-navbar-container {
+
+        padding: 0 .25rem;
+
+    }
+
+    .pixelfix-nav-link {
+
+        padding-left: .5rem;
+
+        padding-right: .5rem;
+
+    }
+
+    .pixelfix-navbar-end {
+
+        min-width: 0;
+
+        flex-shrink: 1;
+
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .pixelfix-main-header-title h1 {
+
+        font-size: 1.5rem;
+
+    }
+
+    .pixelfix-navbar-badge {
+
+        top: 5px;
+
+        right: 0;
+
+    }
+
+    .pixelfix-user-menu .dropdown-menu {
+
+        width: min(280px, calc(100vw - 1rem));
+
+    }
+
+}
+
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pixelfix-sidebar,
+    .pixelfix-main,
+    .pixelfix-sidebar-nav-arrow,
+    .pixelfix-sidebar-nav-link,
+    .pixelfix-sidebar-nav-toggle,
+    .pixelfix-sidebar-overlay,
+    .pixelfix-sidebar-search-input {
+
+        transition: none;
+
+    }
+
+}
+
+/* =====================================================
+   FOOTER RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 575.98px) {
+
+    .pixelfix-footer {
+
+        flex-wrap: wrap;
+        row-gap: .5rem;
+        text-align: center;
+
+    }
+
+    .pixelfix-footer-right {
+
+        width: 100%;
+        margin-left: 0;
+        text-align: center;
+
+    }
+
+}
+
+/* =====================================================
+   PRINT
+   ===================================================== */
+
+@media print {
+
+    .pixelfix-header,
+    .pixelfix-sidebar,
+    .pixelfix-footer,
+    .pixelfix-sidebar-overlay {
+
+        display: none !important;
+
+    }
+
+    .pixelfix-app-wrapper {
+
+        display: block;
+
+        min-height: 0;
+
+        max-width: none;
+
+    }
+
+    .pixelfix-main {
+
+        width: 100%;
+
+        max-width: none;
+
+        min-height: 0;
+
+        padding-bottom: 0;
+
+        background: #fff;
+
+    }
+
+    .pixelfix-main-header {
+
+        background: #fff;
+
+        border-bottom: 0;
+
+    }
+
+    .pixelfix-main-content {
+
+        overflow: visible;
+
+        padding: 0;
+
+    }
+
+}

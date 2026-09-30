@@ -1,0 +1,319 @@
+{# =====================================================
+   NAVBAR COMPONENT
+   ===================================================== #}
+
+{% set brand = brand|default('PixelFix') %}
+{% set brandUrl = brand_url|default('#') %}
+{% set brandRoute = brand_route|default(null) %}
+{% set brandRouteParams = brand_route_params|default([]) %}
+
+{% set items = items|default([]) %}
+{% set expand = expand|default('lg') %}
+{% set theme = theme|default('light') %}
+{% set background = background|default('light') %}
+{% set fixed = fixed|default(null) %}
+{% set container = container|default('container') %}
+{% set navbarId = id|default('navbar') %}
+{% set search = search|default(null) %}
+
+{# =====================================================
+   BRAND URL
+   ===================================================== #}
+
+{% if brandRoute %}
+    {% set resolvedBrandUrl = route(
+        brandRoute,
+        brandRouteParams
+    ) %}
+{% else %}
+    {% set resolvedBrandUrl = brandUrl %}
+{% endif %}
+
+{# =====================================================
+   FIXED POSITION
+   ===================================================== #}
+
+{% set fixedClass = {
+    'top': 'fixed-top',
+    'bottom': 'fixed-bottom'
+}[fixed]|default('') %}
+
+{# =====================================================
+   NAVBAR
+   ===================================================== #}
+
+<nav
+    class="
+        navbar
+        navbar-expand-{{ expand }}
+        navbar-{{ theme }}
+        bg-{{ background }}
+        {{ fixedClass }}
+    "
+>
+
+    <div class="{{ container }}">
+
+        {# =============================================
+           BRAND
+           ============================================= #}
+
+        <a
+            class="navbar-brand"
+            href="{{ resolvedBrandUrl }}"
+        >
+            {{ brand }}
+        </a>
+
+        {# =============================================
+           TOGGLER
+           ============================================= #}
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#{{ navbarId }}"
+            aria-controls="{{ navbarId }}"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        {# =============================================
+           COLLAPSE
+           ============================================= #}
+
+        <div
+            class="collapse navbar-collapse"
+            id="{{ navbarId }}"
+        >
+
+            {# =========================================
+               NAVIGATION ITEMS
+               ========================================= #}
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                {% for item in items %}
+
+                    {# =================================
+                       RESOLVE ITEM URL
+                       ================================= #}
+
+                    {% if item.route is defined and item.route %}
+
+                        {% set itemUrl = route(
+                            item.route,
+                            item.route_params|default([])
+                        ) %}
+
+                    {% else %}
+
+                        {% set itemUrl = item.url|default('#') %}
+
+                    {% endif %}
+
+                    {# =================================
+                       DROPDOWN
+                       ================================= #}
+
+                    {% if item.children is defined %}
+
+                        <li class="nav-item dropdown">
+
+                            <a
+                                href="#"
+                                class="
+                                    nav-link
+                                    dropdown-toggle
+                                    {% if item.active|default(false) %}
+                                        active
+                                    {% endif %}
+                                "
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+
+                                {{ item.label }}
+
+                            </a>
+
+                            <ul class="dropdown-menu">
+
+                                {% for child in item.children %}
+
+                                    {# =====================
+                                       HEADER
+                                       ===================== #}
+
+                                    {% if child.header is defined %}
+
+                                        <li>
+
+                                            <h6 class="dropdown-header">
+                                                {{ child.header }}
+                                            </h6>
+
+                                        </li>
+
+                                    {# =====================
+                                       DIVIDER
+                                       ===================== #}
+
+                                    {% elseif child.divider|default(false) %}
+
+                                        <li>
+
+                                            <hr class="dropdown-divider">
+
+                                        </li>
+
+                                    {# =====================
+                                       LINK
+                                       ===================== #}
+
+                                    {% else %}
+
+                                        {# =================
+                                           RESOLVE CHILD URL
+                                           ================= #}
+
+                                        {% if child.route is defined and child.route %}
+
+                                            {% set childUrl = route(
+                                                child.route,
+                                                child.route_params|default([])
+                                            ) %}
+
+                                        {% else %}
+
+                                            {% set childUrl = child.url|default('#') %}
+
+                                        {% endif %}
+
+                                        <li>
+
+                                            <a
+                                                class="
+                                                    dropdown-item
+                                                    {% if child.active|default(false) %}
+                                                        active
+                                                    {% endif %}
+                                                "
+                                                href="{{ childUrl }}"
+                                            >
+
+                                                {{ child.label }}
+
+                                            </a>
+
+                                        </li>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </ul>
+
+                        </li>
+
+                    {# =================================
+                       STANDARD LINK
+                       ================================= #}
+
+                    {% else %}
+
+                        <li class="nav-item">
+
+                            <a
+                                class="
+                                    nav-link
+                                    {% if item.active|default(false) %}
+                                        active
+                                    {% endif %}
+                                "
+                                {% if item.active|default(false) %}
+                                    aria-current="page"
+                                {% endif %}
+                                href="{{ itemUrl }}"
+                            >
+
+                                {{ item.label }}
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </ul>
+
+            {# =========================================
+               SEARCH
+               ========================================= #}
+
+            {% if search %}
+
+                {# =====================================
+                   RESOLVE SEARCH ACTION
+                   ===================================== #}
+
+                {% if search.route is defined and search.route %}
+
+                    {% set searchAction = route(
+                        search.route,
+                        search.route_params|default([])
+                    ) %}
+
+                {% else %}
+
+                    {% set searchAction = search.action|default(null) %}
+
+                {% endif %}
+
+                <form
+                    class="d-flex"
+                    role="{{ search.role|default('search') }}"
+                    {% if searchAction %}
+                        action="{{ searchAction }}"
+                    {% endif %}
+                    {% if search.method is defined %}
+                        method="{{ search.method }}"
+                    {% endif %}
+                >
+
+                    <input
+                        class="form-control me-2"
+                        type="{{ search.type|default('search') }}"
+                        {% if search.name is defined %}
+                            name="{{ search.name }}"
+                        {% endif %}
+                        placeholder="{{ search.placeholder|default('Search') }}"
+                        aria-label="{{ search.aria_label|default('Search') }}"
+                    >
+
+                    <button
+                        class="btn {{ search.button_class|default('btn-outline-success') }}"
+                        type="submit"
+                    >
+
+                        {{ search.button_label|default('Search') }}
+
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>

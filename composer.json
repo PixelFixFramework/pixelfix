@@ -1,0 +1,65 @@
+{
+    "name": "pixelfix/pixelfix",
+    "description": "PixelFix application starter",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "pixelfix/framework": "^0.1",
+        "mongodb/mongodb": "^2.4",
+        "npm-asset/bootstrap": "^5.3.8",
+        "npm-asset/bootstrap-icons": "^1.13.1",
+        "npm-asset/jquery": "^3.7.1",
+        "npm-asset/toastr": "^2.1.4",
+        "npm-asset/zebra_dialog": "^3.1.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.24"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/neenerai/framework"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app\\",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests\\"
+        }
+    },
+    "scripts": {
+        "serve": [
+            "@php pixel serve"
+        ],
+        "test": [
+            "@php tests/run.php"
+        ],
+        "environment:setup": "@php scripts/setup-environment.php",
+        "assets:publish": "@php scripts/publish-assets.php",
+        "post-install-cmd": [
+            "@environment:setup",
+            "@assets:publish"
+        ],
+        "post-update-cmd": [
+            "@environment:setup",
+            "@assets:publish"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            {{ config('app.name') }}
+        {% endblock %}
+    </title>
+
+    {# =====================================================
+       BOOTSTRAP
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/bootstrap.min.css') }}"
+    >
+
+    {# =====================================================
+       BOOTSTRAP ICONS
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/bootstrap-icons.min.css') }}"
+    >
+
+    {# =====================================================
+       TOASTR
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/toastr.min.css') }}"
+    >
+
+    {# =====================================================
+       ZEBRA DIALOG
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/zebra/flat/zebra_dialog.min.css') }}"
+    >
+
+    {# =====================================================
+       OVERLAYSCROLLBARS
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/overlayscrollbars.min.css') }}"
+    >
+
+    {# =====================================================
+       APPLICATION
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/app.css') }}"
+    >
+
+</head>
+
+<body>
+
+    {# =====================================================
+       PAGE CONTENT
+       ===================================================== #}
+
+    {% block content %}{% endblock %}
+
+    {# =====================================================
+       DEBUG
+       ===================================================== #}
+
+    {% if app_debug %}
+
+        <pre>{{ flash_messages()|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+
+    {% endif %}
+
+    {# =====================================================
+       JQUERY
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/jquery.min.js') }}"
+    ></script>
+
+    {# =====================================================
+       BOOTSTRAP
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/bootstrap.bundle.min.js') }}"
+    ></script>
+
+    {# =====================================================
+       TOASTR
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/toastr.min.js') }}"
+    ></script>
+
+    {# =====================================================
+       ZEBRA DIALOG
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/zebra_dialog.min.js') }}"
+    ></script>
+
+    {# =====================================================
+       OVERLAYSCROLLBARS
+       ===================================================== #}
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+    ></script>
+
+    {# =====================================================
+       CLIENT CONFIG
+       ===================================================== #}
+
+    <script>
+
+        window.uiDriver = "{{ ui }}";
+
+        window.flashMessages = [
+
+            {% for type, messages in flash_messages() %}
+
+                {% for message in messages %}
+
+                    {
+                        type: "{{ type }}",
+                        message: "{{ message|e('js') }}"
+                    },
+
+                {% endfor %}
+
+            {% endfor %}
+
+        ];
+
+    </script>
+
+    {# =====================================================
+       TOASTR CONFIG
+       ===================================================== #}
+
+    <script>
+
+        if (typeof toastr !== 'undefined') {
+
+            toastr.options = {
+
+                closeButton: true,
+
+                progressBar: true,
+
+                positionClass: "toast-top-right",
+
+                timeOut: 3000
+
+            };
+
+        }
+
+    </script>
+
+    {# =====================================================
+       OVERLAYSCROLLBARS CONFIG
+       ===================================================== #}
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const sidebarWrapper =
+                document.querySelector('.pixelfix-sidebar-wrapper');
+
+            const isMobile =
+                window.innerWidth <= 992;
+
+            if (
+                sidebarWrapper &&
+                !isMobile &&
+                typeof OverlayScrollbarsGlobal !== 'undefined' &&
+                typeof OverlayScrollbarsGlobal.OverlayScrollbars !== 'undefined'
+            ) {
+
+                OverlayScrollbarsGlobal.OverlayScrollbars(
+                    sidebarWrapper,
+                    {
+                        scrollbars: {
+                            theme: 'os-theme-light',
+                            autoHide: 'leave',
+                            clickScroll: true
+                        }
+                    }
+                );
+
+            }
+
+        });
+
+    </script>
+
+    {# =====================================================
+       APPLICATION
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/app.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/sidebar.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/header.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/theme.js') }}"
+    ></script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+{# =====================================================
+   PIXELFIX HEADER - USER MENU
+   ===================================================== #}
+
+{% set headerUserName =
+    user_name|default('User')
+%}
+
+{% set headerUserEmail =
+    user_email|default('')
+%}
+
+{% set headerUserAvatar =
+    avatar_url|default(null)
+%}
+
+{% set headerUserInitial =
+    headerUserName|slice(0, 1)|upper
+%}
+
+{% set headerUserCreatedAt =
+    user_created_at|default(null)
+%}
+
+{% set headerFooterMessage =
+    user_role_text|default('')
+%}
+
+{% set headerProfileUrl =
+    profile_url|default('#')
+%}
+
+{% set headerLogoutUrl =
+    logout_url|default('#')
+%}
+
+<li
+    class="
+        pixelfix-nav-item
+        dropdown
+        pixelfix-user-menu
+    "
+>
+
+    <a
+        href="#"
+        class="
+            pixelfix-nav-link
+            dropdown-toggle
+        "
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+    >
+
+        {% if headerUserAvatar %}
+
+            <img
+                src="{{ headerUserAvatar }}"
+                class="pixelfix-user-image"
+                alt="{{ headerUserName }}"
+            >
+
+        {% else %}
+
+            <span
+                class="pixelfix-user-avatar"
+                aria-hidden="true"
+            >
+                {{ headerUserInitial }}
+            </span>
+
+        {% endif %}
+
+
+        <span class="d-none d-md-inline">
+            {{ headerUserName }}
+        </span>
+
+    </a>
+
+
+    <ul
+        class="
+            dropdown-menu
+            dropdown-menu-lg
+            dropdown-menu-end
+        "
+    >
+
+
+        {# =========================================
+           USER HEADER
+           ========================================= #}
+
+        <li
+            class="
+                pixelfix-user-header
+                text-bg-primary
+            "
+        >
+
+            {% if headerUserAvatar %}
+
+                <img
+                    src="{{ headerUserAvatar }}"
+                    class="
+                        pixelfix-user-header-image
+                    "
+                    alt="{{ headerUserName }}"
+                >
+
+            {% else %}
+
+                <span
+                    class="
+                        pixelfix-user-header-avatar
+                    "
+                    aria-hidden="true"
+                >
+                    {{ headerUserInitial }}
+                </span>
+
+            {% endif %}
+
+
+            <p>
+
+                {{ headerUserName }}
+
+                {% if headerFooterMessage %}
+
+                    -
+                    {{ headerFooterMessage }}
+
+                {% endif %}
+
+
+                {% if headerUserCreatedAt %}
+
+                    <small>
+
+                        Member since
+
+                        {{ headerUserCreatedAt|date(
+                            'M. Y'
+                        ) }}
+
+                    </small>
+
+                {% endif %}
+
+            </p>
+
+        </li>
+
+
+        {# =========================================
+           USER BODY
+           ========================================= #}
+
+        <li class="pixelfix-user-body">
+
+            <div class="row">
+
+                <div class="col-4 text-center">
+
+                    <a href="{{ headerProfileUrl }}">
+                        Profile
+                    </a>
+
+                </div>
+
+
+                <div class="col-4 text-center">
+
+                    <a href="#">
+                        Tasks
+                    </a>
+
+                </div>
+
+
+                <div class="col-4 text-center">
+
+                    <a href="#">
+                        Settings
+                    </a>
+
+                </div>
+
+            </div>
+
+        </li>
+
+
+        {# =========================================
+        USER FOOTER
+        ========================================= #}
+
+        <li class="pixelfix-user-footer">
+
+            <a
+                href="{{ headerProfileUrl }}"
+                class="
+                    btn
+                    btn-outline-secondary
+                "
+            >
+                Profile
+            </a>
+
+
+            {% if headerLogoutUrl %}
+
+                <form
+                    method="POST"
+                    action="{{ headerLogoutUrl }}"
+                    class="pixelfix-user-logout-form"
+                >
+
+                    {{ csrf|raw }}
+
+
+                    <button
+                        type="submit"
+                        class="
+                            btn
+                            btn-outline-danger
+                        "
+                    >
+                        Sign out
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </li>
+
+    </ul>
+
+</li>

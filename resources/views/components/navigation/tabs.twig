@@ -1,0 +1,103 @@
+{# =====================================================
+   TABS COMPONENT
+   ===================================================== #}
+
+{% set tabsId = id|default('tabs') %}
+{% set tabs = tabs|default([]) %}
+{% set style = style|default('tabs') %}
+
+{# =====================================================
+   NAV STYLE
+   ===================================================== #}
+
+{% set navClass = {
+
+    'tabs': 'nav-tabs',
+
+    'pills': 'nav-pills'
+
+}[style]|default('nav-tabs') %}
+
+{# =====================================================
+   TAB NAVIGATION
+   ===================================================== #}
+
+<ul
+    class="
+        nav
+        {{ navClass }}
+    "
+    id="{{ tabsId }}"
+    role="tablist"
+>
+
+    {% for tab in tabs %}
+
+        <li
+            class="nav-item"
+            role="presentation"
+        >
+
+            <button
+                class="
+                    nav-link
+                    {% if tab.active|default(false) %}
+                        active
+                    {% endif %}
+                "
+                id="{{ tabsId }}-{{ tab.id }}-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#{{ tabsId }}-{{ tab.id }}"
+                type="button"
+                role="tab"
+                aria-controls="{{ tabsId }}-{{ tab.id }}"
+                aria-selected="{{ tab.active|default(false) ? 'true' : 'false' }}"
+            >
+
+                {% if tab.icon is defined %}
+
+                    {{ tab.icon|raw }}
+
+                {% endif %}
+
+                {{ tab.label }}
+
+            </button>
+
+        </li>
+
+    {% endfor %}
+
+</ul>
+
+{# =====================================================
+   TAB CONTENT
+   ===================================================== #}
+
+<div
+    class="tab-content border border-top-0 p-3"
+    id="{{ tabsId }}Content"
+>
+
+    {% for tab in tabs %}
+
+        <div
+            class="
+                tab-pane
+                fade
+                {% if tab.active|default(false) %}
+                    show active
+                {% endif %}
+            "
+            id="{{ tabsId }}-{{ tab.id }}"
+            role="tabpanel"
+            aria-labelledby="{{ tabsId }}-{{ tab.id }}-tab"
+        >
+
+            {{ tab.content|raw }}
+
+        </div>
+
+    {% endfor %}
+
+</div>

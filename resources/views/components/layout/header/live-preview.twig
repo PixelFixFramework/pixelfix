@@ -1,0 +1,31 @@
+{# =====================================================
+   PIXELFIX HEADER - LIVE PREVIEW
+   ===================================================== #}
+
+{% set livePreviewUrl =
+    live_preview_url|default('#')
+%}
+
+<li
+    class="
+        pixelfix-nav-item
+        d-none
+        d-md-block
+    "
+>
+
+    <a
+        href="{{ livePreviewUrl }}"
+        class="pixelfix-nav-link"
+    >
+
+        <i
+            class="bi bi-grid-1x2 me-1"
+            aria-hidden="true"
+        ></i>
+
+        Live preview
+
+    </a>
+
+</li>

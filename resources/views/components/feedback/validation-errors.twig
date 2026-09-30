@@ -1,0 +1,55 @@
+{# =====================================================
+   PIXELFIX VALIDATION ERRORS
+   ===================================================== #}
+
+{% set validationErrors =
+    errors()
+%}
+
+
+{% if validationErrors %}
+
+    {% set validationContent %}
+
+        <ul class="mb-0">
+
+            {% for field, messages
+                in validationErrors
+            %}
+
+                <li>
+
+                    <strong>
+                        {{ field }}:
+                    </strong>
+
+                    {% if messages is iterable %}
+
+                        {{ messages|join(', ') }}
+
+                    {% else %}
+
+                        {{ messages }}
+
+                    {% endif %}
+
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% endset %}
+
+
+    {% include 'components/feedback/alert.twig' with {
+
+        type:
+            'danger',
+
+        content:
+            validationContent
+
+    } %}
+
+{% endif %}

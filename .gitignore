@@ -1,0 +1,6 @@
+/vendor/
+/auth.json
+/.env
+/storage/cache/*
+/storage/logs/*
+/storage/sessions/*

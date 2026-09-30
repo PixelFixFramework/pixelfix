@@ -1,0 +1,27 @@
+{% extends "errors/errors.twig" %}
+
+{% block title %}
+    404 - Not Found
+{% endblock %}
+
+{% block code %}
+    404
+{% endblock %}
+
+{% block heading %}
+    Page Not Found
+{% endblock %}
+
+{% block message %}
+
+    {% if debug|default(false) %}
+
+        {{ message }}
+
+    {% else %}
+
+        The page you are looking for does not exist.
+
+    {% endif %}
+
+{% endblock %}

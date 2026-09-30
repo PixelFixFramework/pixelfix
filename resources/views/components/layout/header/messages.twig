@@ -1,0 +1,264 @@
+{# =====================================================
+   PIXELFIX HEADER - MESSAGES
+   ===================================================== #}
+
+{% set messageCount =
+    message_count|default(3)
+%}
+
+
+<li
+    class="
+        pixelfix-nav-item
+        dropdown
+    "
+>
+
+    <a
+        href="#"
+        class="pixelfix-nav-link"
+        data-bs-toggle="dropdown"
+        role="button"
+        aria-expanded="false"
+        aria-label="Messages: {{ messageCount }} unread"
+    >
+
+        <i
+            class="
+                bi
+                bi-chat-left-text
+            "
+            aria-hidden="true"
+        ></i>
+
+
+        {% if messageCount > 0 %}
+
+            <span
+                class="
+                    pixelfix-navbar-badge
+                    badge
+                    text-bg-danger
+                "
+            >
+
+                {{ messageCount }}
+
+            </span>
+
+        {% endif %}
+
+    </a>
+
+
+    <div
+        class="
+            dropdown-menu
+            dropdown-menu-end
+            pixelfix-messages-menu
+        "
+    >
+
+        {# =================================================
+           MESSAGE 1
+           ================================================= #}
+
+        <a
+            href="#"
+            class="pixelfix-message-item dropdown-item"
+        >
+
+            <span
+                class="
+                    pixelfix-message-avatar
+                    pixelfix-message-avatar-image
+                "
+            >
+
+                <img
+                    src="https://i.pravatar.cc/96?img=12"
+                    alt="Brad Diesel"
+                >
+
+            </span>
+
+
+            <span class="pixelfix-message-content">
+
+                <span class="pixelfix-message-name">
+                    Brad Diesel
+                </span>
+
+                <span class="pixelfix-message-preview">
+                    Call me whenever you can...
+                </span>
+
+                <span class="pixelfix-message-time">
+
+                    <i
+                        class="bi bi-clock-fill"
+                        aria-hidden="true"
+                    ></i>
+
+                    4 Hours Ago
+
+                </span>
+
+            </span>
+
+
+            <i
+                class="
+                    bi
+                    bi-star-fill
+                    pixelfix-message-star
+                    text-danger
+                "
+                aria-hidden="true"
+            ></i>
+
+        </a>
+
+
+        {# =================================================
+           MESSAGE 2
+           ================================================= #}
+
+        <a
+            href="#"
+            class="pixelfix-message-item dropdown-item"
+        >
+
+            <span
+                class="
+                    pixelfix-message-avatar
+                    pixelfix-message-avatar-image
+                "
+            >
+
+                <img
+                    src="https://i.pravatar.cc/96?img=11"
+                    alt="John Pierce"
+                >
+
+            </span>
+
+
+            <span class="pixelfix-message-content">
+
+                <span class="pixelfix-message-name">
+                    John Pierce
+                </span>
+
+                <span class="pixelfix-message-preview">
+                    I got your message bro
+                </span>
+
+                <span class="pixelfix-message-time">
+
+                    <i
+                        class="bi bi-clock-fill"
+                        aria-hidden="true"
+                    ></i>
+
+                    4 Hours Ago
+
+                </span>
+
+            </span>
+
+
+            <i
+                class="
+                    bi
+                    bi-star-fill
+                    pixelfix-message-star
+                    text-secondary
+                "
+                aria-hidden="true"
+            ></i>
+
+        </a>
+
+
+        {# =================================================
+           MESSAGE 3
+           ================================================= #}
+
+        <a
+            href="#"
+            class="pixelfix-message-item dropdown-item"
+        >
+
+            <span
+                class="
+                    pixelfix-message-avatar
+                    pixelfix-message-avatar-image
+                "
+            >
+
+                <img
+                    src="https://i.pravatar.cc/96?img=47"
+                    alt="Nora Silvester"
+                >
+
+            </span>
+
+
+            <span class="pixelfix-message-content">
+
+                <span class="pixelfix-message-name">
+                    Nora Silvester
+                </span>
+
+                <span class="pixelfix-message-preview">
+                    The subject goes here
+                </span>
+
+                <span class="pixelfix-message-time">
+
+                    <i
+                        class="bi bi-clock-fill"
+                        aria-hidden="true"
+                    ></i>
+
+                    4 Hours Ago
+
+                </span>
+
+            </span>
+
+
+            <i
+                class="
+                    bi
+                    bi-star-fill
+                    pixelfix-message-star
+                    text-warning
+                "
+                aria-hidden="true"
+            ></i>
+
+        </a>
+
+
+        {# =================================================
+           FOOTER
+           ================================================= #}
+
+        <a
+            href="#"
+            class="
+                pixelfix-messages-footer
+                dropdown-item
+            "
+        >
+
+            See All Messages
+
+        </a>
+
+
+    </div>
+
+</li>

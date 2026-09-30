@@ -1,0 +1,185 @@
+{# =====================================================
+   PIXELFIX MAIN CONTENT
+   ===================================================== #}
+
+{% set mainClass =
+    class|default('')
+%}
+
+{% set mainId =
+    id|default('pixelfix-main')
+%}
+
+{% set mainTitle =
+    title|default(null)
+%}
+
+{% set mainBreadcrumbs =
+    breadcrumbs|default([])
+%}
+
+{% set mainContent =
+    content|default('')
+%}
+
+{% set mainContainerClass =
+    container_class|default('')
+%}
+
+{% set mainContentClass =
+    content_class|default('')
+%}
+
+
+{# =====================================================
+   MAIN
+   ===================================================== #}
+
+<main
+    id="{{ mainId }}"
+    class="
+        pixelfix-main
+        {{ mainClass }}
+    "
+>
+
+
+    {# =================================================
+       CONTENT HEADER
+       ================================================= #}
+
+    {% if
+        mainTitle
+        or mainBreadcrumbs|length > 0
+    %}
+
+        <div class="pixelfix-main-header">
+
+            <div
+                class="
+                    pixelfix-main-container
+                    {{ mainContainerClass }}
+                "
+            >
+
+                <div class="pixelfix-main-header-row">
+
+
+                    {# =====================================
+                       PAGE TITLE
+                       ===================================== #}
+
+                    <div class="pixelfix-main-header-title">
+
+                        {% if mainTitle %}
+
+                            <h1>
+
+                                {{ mainTitle }}
+
+                            </h1>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {# =====================================
+                       BREADCRUMB
+                       ===================================== #}
+
+                    <div class="pixelfix-main-header-breadcrumb">
+
+                        {% if
+                            mainBreadcrumbs|length > 0
+                        %}
+
+                            <nav
+                                aria-label="breadcrumb"
+                            >
+
+                                <ol class="pixelfix-breadcrumb">
+
+                                    {% for breadcrumb
+                                        in mainBreadcrumbs
+                                    %}
+
+                                        <li
+                                            class="
+                                                pixelfix-breadcrumb-item
+
+                                                {% if loop.last %}
+                                                    active
+                                                {% endif %}
+                                            "
+                                            {% if loop.last %}
+                                                aria-current="page"
+                                            {% endif %}
+                                        >
+
+                                            {% if
+                                                breadcrumb.url|default(null)
+                                                and not loop.last
+                                            %}
+
+                                                <a
+                                                    href="{{ breadcrumb.url }}"
+                                                >
+
+                                                    {{ breadcrumb.label|default('') }}
+
+                                                </a>
+
+                                            {% else %}
+
+                                                {{ breadcrumb.label|default('') }}
+
+                                            {% endif %}
+
+                                        </li>
+
+                                    {% endfor %}
+
+                                </ol>
+
+                            </nav>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    {# =================================================
+       CONTENT
+       ================================================= #}
+
+    <div
+        class="
+            pixelfix-main-content
+            {{ mainContentClass }}
+        "
+    >
+
+        <div
+            class="
+                pixelfix-main-container
+                {{ mainContainerClass }}
+            "
+        >
+
+            {{ mainContent|raw }}
+
+        </div>
+
+    </div>
+
+
+</main>

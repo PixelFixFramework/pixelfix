@@ -1,0 +1,94 @@
+{# =====================================================
+   TEXTAREA COMPONENT
+   ===================================================== #}
+
+{% set textareaName = name %}
+{% set textareaLabel = label|default('') %}
+{% set textareaRows = rows|default(4) %}
+{% set textareaPlaceholder = placeholder|default('') %}
+{% set textareaRequired = required|default(false) %}
+{% set textareaClass = class|default('') %}
+{% set textareaValue = value|default('') %}
+{% set validationMessage = validation_message|default(null) %}
+
+{# =====================================================
+   VALIDATION
+   ===================================================== #}
+
+{% set fieldErrors = errors()[textareaName] ?? [] %}
+
+{# =====================================================
+   RESOLVE VALUE
+   ===================================================== #}
+
+{% set resolvedValue =
+    old(
+        textareaName,
+        textareaValue
+    )
+%}
+
+{# =====================================================
+   INVALID MESSAGE
+   ===================================================== #}
+
+{% set invalidMessage =
+    validationMessage
+        ?? (
+            textareaLabel
+                ? 'Please enter ' ~ textareaLabel|lower ~ '.'
+                : 'This field is required.'
+        )
+%}
+
+<div class="mb-3">
+
+    {% if textareaLabel %}
+
+        <label
+            for="{{ textareaName }}"
+            class="form-label"
+        >
+
+            {{ textareaLabel }}
+
+            {% if textareaRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    <textarea
+        id="{{ textareaName }}"
+        name="{{ textareaName }}"
+        rows="{{ textareaRows }}"
+        placeholder="{{ textareaPlaceholder }}"
+        class="
+            form-control
+            {{ textareaClass }}
+            {% if fieldErrors %} is-invalid {% endif %}
+        "
+        {% if textareaRequired %}
+            required
+        {% endif %}
+    >{{ resolvedValue }}</textarea>
+
+    <div class="invalid-feedback">
+
+        {% if fieldErrors %}
+
+            {{ fieldErrors[0] }}
+
+        {% else %}
+
+            {{ invalidMessage }}
+
+        {% endif %}
+
+    </div>
+
+</div>

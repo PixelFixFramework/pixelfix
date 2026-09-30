@@ -1,0 +1,177 @@
+{# =====================================================
+   PIXELFIX HEADER - NOTIFICATIONS
+   ===================================================== #}
+
+{% set notificationCount =
+    notification_count|default(15)
+%}
+
+<li class="pixelfix-nav-item dropdown">
+
+    <a
+        class="pixelfix-nav-link"
+        data-bs-toggle="dropdown"
+        href="#"
+        role="button"
+        aria-expanded="false"
+        aria-label="Notifications: {{ notificationCount }} unread"
+    >
+
+        <i
+            class="bi bi-bell-fill"
+            aria-hidden="true"
+        ></i>
+
+
+        {% if notificationCount > 0 %}
+
+            <span
+                class="
+                    pixelfix-navbar-badge
+                    badge
+                    text-bg-warning
+                "
+            >
+
+                {{ notificationCount }}
+
+            </span>
+
+        {% endif %}
+
+    </a>
+
+
+    <div
+        class="
+            dropdown-menu
+            dropdown-menu-lg
+            dropdown-menu-end
+        "
+    >
+
+        <span
+            class="
+                dropdown-item
+                dropdown-header
+            "
+        >
+
+            {{ notificationCount }}
+            Notifications
+
+        </span>
+
+
+        <div class="dropdown-divider"></div>
+
+
+        <a
+            href="#"
+            class="dropdown-item"
+        >
+
+            <i
+                class="
+                    bi
+                    bi-envelope
+                    me-2
+                "
+                aria-hidden="true"
+            ></i>
+
+            4 new messages
+
+            <span
+                class="
+                    float-end
+                    text-secondary
+                    fs-7
+                "
+            >
+                3 mins
+            </span>
+
+        </a>
+
+
+        <div class="dropdown-divider"></div>
+
+
+        <a
+            href="#"
+            class="dropdown-item"
+        >
+
+            <i
+                class="
+                    bi
+                    bi-people-fill
+                    me-2
+                "
+                aria-hidden="true"
+            ></i>
+
+            8 friend requests
+
+            <span
+                class="
+                    float-end
+                    text-secondary
+                    fs-7
+                "
+            >
+                12 hours
+            </span>
+
+        </a>
+
+
+        <div class="dropdown-divider"></div>
+
+
+        <a
+            href="#"
+            class="dropdown-item"
+        >
+
+            <i
+                class="
+                    bi
+                    bi-file-earmark-fill
+                    me-2
+                "
+                aria-hidden="true"
+            ></i>
+
+            3 new reports
+
+            <span
+                class="
+                    float-end
+                    text-secondary
+                    fs-7
+                "
+            >
+                2 days
+            </span>
+
+        </a>
+
+
+        <div class="dropdown-divider"></div>
+
+
+        <a
+            href="#"
+            class="dropdown-item dropdown-footer"
+        >
+
+            See All Notifications
+
+        </a>
+
+
+    </div>
+
+</li>

@@ -1,0 +1,269 @@
+{# =====================================================
+   PAGINATION COMPONENT
+   ===================================================== #}
+
+{% if paginator.hasPages() %}
+
+{% set alignment = alignment|default('center') %}
+{% set size = size|default(null) %}
+{% set showSummary = showSummary|default(true) %}
+{% set showFirstLast = showFirstLast|default(true) %}
+
+{# =====================================================
+   ALIGNMENT
+   ===================================================== #}
+
+{% set alignmentClass = {
+
+    'start': 'justify-content-start',
+
+    'center': 'justify-content-center',
+
+    'end': 'justify-content-end'
+
+}[alignment]|default('justify-content-center') %}
+
+{# =====================================================
+   SIZE
+   ===================================================== #}
+
+{% set sizeClass = {
+
+    'sm': 'pagination-sm',
+
+    'lg': 'pagination-lg'
+
+}[size]|default('') %}
+
+<nav
+    aria-label="Pagination"
+    class="mt-4"
+>
+
+    <ul
+        class="
+            pagination
+            {{ alignmentClass }}
+            {{ sizeClass }}
+        "
+    >
+
+        {# =========================================
+           FIRST
+           ========================================= #}
+
+        {% if showFirstLast %}
+
+            <li
+                class="
+                    page-item
+                    {{ paginator.onFirstPage() ? 'disabled' : '' }}
+                "
+            >
+
+                {% if not paginator.onFirstPage() %}
+
+                    <a
+                        href="{{ paginator.pageLinks()[1]|default('#') }}"
+                        class="page-link"
+                    >
+
+                        First
+
+                    </a>
+
+                {% else %}
+
+                    <span class="page-link">
+
+                        First
+
+                    </span>
+
+                {% endif %}
+
+            </li>
+
+        {% endif %}
+
+        {# =========================================
+           PREVIOUS
+           ========================================= #}
+
+        <li
+            class="
+                page-item
+                {{ paginator.onFirstPage() ? 'disabled' : '' }}
+            "
+        >
+
+            {% if paginator.links().prev %}
+
+                <a
+                    href="{{ paginator.links().prev }}"
+                    class="page-link"
+                    aria-label="Previous"
+                >
+
+                    &laquo;
+
+                </a>
+
+            {% else %}
+
+                <span class="page-link">
+
+                    &laquo;
+
+                </span>
+
+            {% endif %}
+
+        </li>
+
+        {# =========================================
+           PAGE WINDOW
+           ========================================= #}
+
+        {% for page in paginator.pages() %}
+
+            {% if page == '...' %}
+
+                <li class="page-item disabled">
+
+                    <span class="page-link">
+
+                        ...
+
+                    </span>
+
+                </li>
+
+            {% else %}
+
+                <li
+                    class="
+                        page-item
+                        {{ page == paginator.currentPage() ? 'active' : '' }}
+                    "
+                >
+
+                    <a
+                        href="{{ paginator.pageLinks()[page]|default('#') }}"
+                        class="page-link"
+                    >
+
+                        {{ page }}
+
+                    </a>
+
+                </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+        {# =========================================
+           NEXT
+           ========================================= #}
+
+        <li
+            class="
+                page-item
+                {{ paginator.onLastPage() ? 'disabled' : '' }}
+            "
+        >
+
+            {% if paginator.links().next %}
+
+                <a
+                    href="{{ paginator.links().next }}"
+                    class="page-link"
+                    aria-label="Next"
+                >
+
+                    &raquo;
+
+                </a>
+
+            {% else %}
+
+                <span class="page-link">
+
+                    &raquo;
+
+                </span>
+
+            {% endif %}
+
+        </li>
+
+        {# =========================================
+           LAST
+           ========================================= #}
+
+        {% if showFirstLast %}
+
+            <li
+                class="
+                    page-item
+                    {{ paginator.onLastPage() ? 'disabled' : '' }}
+                "
+            >
+
+                {% if not paginator.onLastPage() %}
+
+                    <a
+                        href="{{ paginator.pageLinks()[paginator.lastPage()]|default('#') }}"
+                        class="page-link"
+                    >
+
+                        Last
+
+                    </a>
+
+                {% else %}
+
+                    <span class="page-link">
+
+                        Last
+
+                    </span>
+
+                {% endif %}
+
+            </li>
+
+        {% endif %}
+
+    </ul>
+
+    {# =============================================
+       SUMMARY
+       ============================================= #}
+
+    {% if showSummary %}
+
+        <div class="text-center text-muted small">
+
+            Showing
+
+            {{ paginator.from() }}
+
+            to
+
+            {{ paginator.to() }}
+
+            of
+
+            {{ paginator.total() }}
+
+            results
+
+        </div>
+
+    {% endif %}
+
+</nav>
+
+{% endif %}

@@ -1,0 +1,27 @@
+{% extends "errors/errors.twig" %}
+
+{% block title %}
+    403 - Forbidden
+{% endblock %}
+
+{% block code %}
+    403
+{% endblock %}
+
+{% block heading %}
+    Access Denied
+{% endblock %}
+
+{% block message %}
+
+    {% if debug|default(false) %}
+
+        {{ message }}
+
+    {% else %}
+
+        You do not have permission to access this page.
+
+    {% endif %}
+
+{% endblock %}

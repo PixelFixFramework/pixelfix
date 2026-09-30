@@ -1,0 +1,84 @@
+{# =====================================================
+   FLOATING SELECT COMPONENT
+   ===================================================== #}
+
+{% set selectName = name %}
+{% set selectLabel = label|default('') %}
+{% set selectRequired = required|default(false) %}
+{% set selectOptions = options|default({}) %}
+{% set selectPlaceholder = placeholder|default('Select') %}
+
+{% set hasError = has_error(selectName) %}
+{% set hasValue = old(selectName) is not empty %}
+
+{% set invalidMessage =
+    validation_message|default(
+        selectLabel
+            ? 'Please select ' ~ selectLabel|lower ~ '.'
+            : 'Please make a selection.'
+    )
+%}
+
+{% set stateClass =
+    hasError
+        ? 'is-invalid'
+        : (hasValue ? 'is-valid' : '')
+%}
+
+<div class="form-floating mb-3">
+
+    <select
+        id="{{ selectName }}"
+        name="{{ selectName }}"
+        class="form-select {{ stateClass }}"
+        {% if selectRequired %}
+            required
+        {% endif %}
+    >
+
+        <option value="">
+            {{ selectPlaceholder }}
+        </option>
+
+        {% for value, text in selectOptions %}
+
+            <option
+                value="{{ value }}"
+                {% if old(selectName) == value %}
+                    selected
+                {% endif %}
+            >
+
+                {{ text }}
+
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <label for="{{ selectName }}">
+
+        {{ selectLabel }}
+
+        {% if selectRequired %}
+            <span class="text-danger">*</span>
+        {% endif %}
+
+    </label>
+
+    {% if hasError %}
+
+        <div class="invalid-feedback">
+            {{ error(selectName) }}
+        </div>
+
+    {% else %}
+
+        <div class="invalid-feedback">
+            {{ invalidMessage }}
+        </div>
+
+    {% endif %}
+
+</div>

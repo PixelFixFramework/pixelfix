@@ -1,0 +1,95 @@
+{# =====================================================
+   RANGE COMPONENT
+   ===================================================== #}
+
+{% set rangeName = name %}
+{% set rangeLabel = label|default('') %}
+{% set rangeMin = min|default(0) %}
+{% set rangeMax = max|default(100) %}
+{% set rangeStep = step|default(1) %}
+{% set rangeValue = value|default(rangeMin) %}
+{% set rangeClass = class|default('') %}
+{% set rangeRequired = required|default(false) %}
+{% set rangeDisabled = disabled|default(false) %}
+{% set validationMessage = validation_message|default(null) %}
+
+{# =====================================================
+   VALIDATION
+   ===================================================== #}
+
+{% set fieldErrors = errors()[rangeName] ?? [] %}
+
+{# =====================================================
+   RESOLVE VALUE
+   ===================================================== #}
+
+{% set resolvedValue =
+    old(
+        rangeName,
+        rangeValue
+    )
+%}
+
+<div class="mb-3">
+
+    {% if rangeLabel %}
+
+        <label
+            for="{{ rangeName }}"
+            class="form-label"
+        >
+
+            {{ rangeLabel }}
+
+            {% if rangeRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    <input
+        id="{{ rangeName }}"
+        type="range"
+        name="{{ rangeName }}"
+        min="{{ rangeMin }}"
+        max="{{ rangeMax }}"
+        step="{{ rangeStep }}"
+        value="{{ resolvedValue }}"
+        class="
+            form-range
+            {{ rangeClass }}
+            {% if fieldErrors %} is-invalid {% endif %}
+        "
+        {% if rangeRequired %}
+            required
+        {% endif %}
+        {% if rangeDisabled %}
+            disabled
+        {% endif %}
+    >
+
+    <div class="invalid-feedback">
+
+        {% if fieldErrors %}
+
+            {{ fieldErrors[0] }}
+
+        {% else %}
+
+            {{ validationMessage
+                ?? (
+                    rangeLabel
+                        ? 'Please enter ' ~ rangeLabel|lower ~ '.'
+                        : 'This field is required.'
+                )
+            }}
+
+        {% endif %}
+
+    </div>
+
+</div>

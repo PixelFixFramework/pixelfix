@@ -1,0 +1,54 @@
+{# =====================================================
+   CARD COMPONENT
+   ===================================================== #}
+
+{% set cardTitle = title|default(null) %}
+{% set cardSubtitle = subtitle|default(null) %}
+{% set cardContent = content|default('') %}
+{% set cardFooter = footer|default(null) %}
+{% set cardClass = class|default('') %}
+
+<div
+    class="
+        card
+        {{ cardClass }}
+    "
+>
+
+    <div class="card-body">
+
+        {% if cardTitle %}
+
+            <h5 class="card-title">
+
+                {{ cardTitle }}
+
+            </h5>
+
+        {% endif %}
+
+        {% if cardSubtitle %}
+
+            <h6 class="card-subtitle mb-3 text-muted">
+
+                {{ cardSubtitle }}
+
+            </h6>
+
+        {% endif %}
+
+        {{ cardContent|raw }}
+
+    </div>
+
+    {% if cardFooter %}
+
+        <div class="card-footer">
+
+            {{ cardFooter|raw }}
+
+        </div>
+
+    {% endif %}
+
+</div>

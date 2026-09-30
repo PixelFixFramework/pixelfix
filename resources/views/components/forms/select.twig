@@ -1,0 +1,111 @@
+{# =====================================================
+   SELECT COMPONENT
+   ===================================================== #}
+
+{% set selectName = name %}
+{% set selectLabel = label|default('') %}
+{% set selectRequired = required|default(false) %}
+{% set selectOptions = options|default({}) %}
+{% set selectPlaceholder = placeholder|default('Select') %}
+{% set selectValue = value|default('') %}
+{% set validationMessage = validation_message|default(null) %}
+
+{# =====================================================
+   VALIDATION
+   ===================================================== #}
+
+{% set fieldErrors = errors()[selectName] ?? [] %}
+
+{# =====================================================
+   RESOLVE VALUE
+   ===================================================== #}
+
+{% set resolvedValue =
+    old(
+        selectName,
+        selectValue
+    )
+%}
+
+{# =====================================================
+   INVALID MESSAGE
+   ===================================================== #}
+
+{% set invalidMessage =
+    validationMessage
+        ?? (
+            selectLabel
+                ? 'Please select ' ~ selectLabel|lower ~ '.'
+                : 'Please make a selection.'
+        )
+%}
+
+<div class="mb-3">
+
+    {% if selectLabel %}
+
+        <label
+            for="{{ selectName }}"
+            class="form-label"
+        >
+
+            {{ selectLabel }}
+
+            {% if selectRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    <select
+        id="{{ selectName }}"
+        name="{{ selectName }}"
+        class="
+            form-select
+            {% if fieldErrors %} is-invalid {% endif %}
+        "
+        {% if selectRequired %}
+            required
+        {% endif %}
+    >
+
+        <option value="">
+            {{ selectPlaceholder }}
+        </option>
+
+        {% for optionValue, optionText in selectOptions %}
+
+            <option
+                value="{{ optionValue }}"
+                {% if resolvedValue == optionValue %}
+                    selected
+                {% endif %}
+            >
+
+                {{ optionText }}
+
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <div class="invalid-feedback">
+
+        {% if fieldErrors %}
+
+            {{ fieldErrors[0] }}
+
+        {% else %}
+
+            {{ invalidMessage }}
+
+        {% endif %}
+
+    </div>
+
+</div>

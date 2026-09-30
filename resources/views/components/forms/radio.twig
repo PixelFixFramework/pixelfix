@@ -1,0 +1,118 @@
+{# =====================================================
+   RADIO COMPONENT
+   ===================================================== #}
+
+{% set radioName = name %}
+{% set radioLabel = label|default('') %}
+{% set radioOptions = options|default({}) %}
+{% set radioInline = inline|default(false) %}
+{% set radioRequired = required|default(false) %}
+{% set radioValue = value|default('') %}
+{% set radioClass = class|default('') %}
+{% set radioDisabled = disabled|default(false) %}
+
+{% set hasError = has_error(radioName) %}
+
+{% set resolvedValue =
+    old(
+        radioName,
+        radioValue
+    )
+%}
+
+{% set invalidMessage =
+    validation_message|default(
+        radioLabel
+            ? 'Please select ' ~ radioLabel|lower ~ '.'
+            : 'Please select an option.'
+    )
+%}
+
+<div class="mb-3">
+
+    {% if radioLabel %}
+
+        <label class="form-label">
+
+            {{ radioLabel }}
+
+            {% if radioRequired %}
+
+                <span class="text-danger">*</span>
+
+            {% endif %}
+
+        </label>
+
+    {% endif %}
+
+    <div>
+
+        {% for optionValue, optionText in radioOptions %}
+
+            <div
+                class="
+                    form-check
+                    {% if radioInline %}
+                        form-check-inline
+                    {% endif %}
+                "
+            >
+
+                <input
+                    id="{{ radioName }}_{{ optionValue }}"
+                    type="radio"
+                    name="{{ radioName }}"
+                    value="{{ optionValue }}"
+                    class="
+                        form-check-input
+                        {{ radioClass }}
+                        {% if hasError %}
+                            is-invalid
+                        {% endif %}
+                    "
+                    {% if resolvedValue == optionValue %}
+                        checked
+                    {% endif %}
+                    {% if radioRequired %}
+                        required
+                    {% endif %}
+                    {% if radioDisabled %}
+                        disabled
+                    {% endif %}
+                >
+
+                <label
+                    class="form-check-label"
+                    for="{{ radioName }}_{{ optionValue }}"
+                >
+
+                    {{ optionText }}
+
+                </label>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% if hasError %}
+
+        <div class="invalid-feedback d-block">
+
+            {{ error(radioName) }}
+
+        </div>
+
+    {% else %}
+
+        <div class="invalid-feedback d-block">
+
+            {{ invalidMessage }}
+
+        </div>
+
+    {% endif %}
+
+</div>

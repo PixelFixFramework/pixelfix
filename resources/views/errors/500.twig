@@ -1,0 +1,27 @@
+{% extends "errors/errors.twig" %}
+
+{% block title %}
+    500 - Server Error
+{% endblock %}
+
+{% block code %}
+    500
+{% endblock %}
+
+{% block heading %}
+    Server Error
+{% endblock %}
+
+{% block message %}
+
+    {% if debug %}
+
+        {{ message }}
+
+    {% else %}
+
+        Something went wrong on our side.
+
+    {% endif %}
+
+{% endblock %}
