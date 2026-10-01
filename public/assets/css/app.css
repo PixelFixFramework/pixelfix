@@ -22,7 +22,29 @@ html {
 
 body {
     min-height: 100vh;
+     background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(13, 110, 253, .12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(111, 66, 193, .12),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f4f8ff 0%,
+            #f8f5ff 50%,
+            #ffffff 100%
+        );
+
+    background-attachment:
+        fixed;
 }
+
+
 
 /* =====================================================
    DEFAULT FORM CONTROL TEXT
@@ -53,8 +75,59 @@ textarea::placeholder {
 
 :root {
 
-    --pixelfix-header-height: 56px;
-    --pixelfix-footer-height: 56px;
+    /* =================================================
+       APPLICATION LAYOUT
+       ================================================= */
+
+    --pixelfix-header-height:
+        56px;
+
+    --pixelfix-footer-height:
+        56px;
+
+    /* =================================================
+       APPLICATION GRADIENT
+       ================================================= */
+
+    --pixelfix-gradient-primary:
+        rgba(13, 110, 253, .12);
+
+    --pixelfix-gradient-secondary:
+        rgba(111, 66, 193, .12);
+
+    --pixelfix-gradient-start:
+        #f4f8ff;
+
+    --pixelfix-gradient-middle:
+        #f8f5ff;
+
+    --pixelfix-gradient-end:
+        #ffffff;
+
+    --pixelfix-page-gradient:
+        radial-gradient(
+            circle at 15% 20%,
+            var(--pixelfix-gradient-primary),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            var(--pixelfix-gradient-secondary),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            var(--pixelfix-gradient-start) 0%,
+            var(--pixelfix-gradient-middle) 50%,
+            var(--pixelfix-gradient-end) 100%
+        );
+
+    --pixelfix-surface-border:
+        rgba(13, 110, 253, .08);
+
+    /* =================================================
+       SIDEBAR
+       ================================================= */
 
     --pixelfix-sidebar-width: 240px;
     --pixelfix-sidebar-mini-width: 72px;
@@ -139,11 +212,17 @@ textarea::placeholder {
 
     z-index: 1030;
 
-    background: var(--bs-body-bg);
+    background:
+        var(--pixelfix-page-gradient);
 
-    color: var(--bs-body-color);
+    background-attachment:
+        fixed;
 
-    border-bottom: 1px solid var(--bs-border-color);
+    color:
+        var(--bs-body-color);
+
+    border-bottom:
+        1px solid var(--pixelfix-surface-border);
 
 }
 
@@ -156,7 +235,11 @@ textarea::placeholder {
 
     width: 100%;
 
-    min-height: var(--pixelfix-header-height);
+    min-height:
+        var(--pixelfix-header-height);
+
+    background:
+        transparent !important;
 
 }
 
@@ -2052,8 +2135,6 @@ body.pixelfix-sidebar-open
 
     padding: 1rem .5rem;
 
-    background: var(--bs-tertiary-bg);
-
 }
 
 .pixelfix-main-container {
@@ -2228,7 +2309,7 @@ body.pixelfix-sidebar-open
         pixelfix-main;
 
     background:
-        var(--bs-tertiary-bg);
+        transparent;
 
 }
 
@@ -2266,6 +2347,9 @@ body.pixelfix-sidebar-open
     grid-area:
         pixelfix-footer;
 
+    position:
+        relative;
+
     width:
         100%;
 
@@ -2281,23 +2365,20 @@ body.pixelfix-sidebar-open
     align-items:
         center;
 
-    justify-content:
-        space-between;
-
     flex:
         0 0 auto;
-
-    gap:
-        1rem;
 
     padding:
         .75rem 1rem;
 
     border-top:
-        1px solid var(--bs-border-color);
+        1px solid var(--pixelfix-surface-border);
 
     background:
-        var(--bs-body-bg);
+        var(--pixelfix-page-gradient);
+
+    background-attachment:
+        fixed;
 
     color:
         var(--bs-body-color);
@@ -2307,42 +2388,160 @@ body.pixelfix-sidebar-open
 
 }
 
+
+/* =====================================================
+   FOOTER CONTAINER
+   ===================================================== */
+
+.pixelfix-footer > div {
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+}
+
+
+/* =====================================================
+   FOOTER CONTENT
+   ===================================================== */
+
+.pixelfix-footer-content {
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+}
+
+
+/* =====================================================
+   COPYRIGHT
+   ===================================================== */
+
 .pixelfix-footer-copyright {
 
-    min-width: 0;
+    min-width:
+        0;
 
-    line-height: 1.5;
+    line-height:
+        1.5;
 
 }
 
 .pixelfix-footer-copyright strong {
 
-    font-weight: 600;
+    font-weight:
+        600;
 
 }
 
 .pixelfix-footer-copyright a {
 
-    color: var(--bs-primary);
+    color:
+        var(--bs-primary);
 
-    text-decoration: none;
+    text-decoration:
+        none;
 
 }
 
 .pixelfix-footer-copyright a:hover,
 .pixelfix-footer-copyright a:focus-visible {
 
-    text-decoration: underline;
+    text-decoration:
+        underline;
 
 }
 
+
+/* =====================================================
+   RIGHT CONTENT
+   ===================================================== */
+
 .pixelfix-footer-right {
 
-    flex: 0 0 auto;
+    position:
+        absolute;
 
-    margin-left: auto;
+    right:
+        1rem;
 
-    text-align: right;
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
+
+    text-align:
+        right;
+
+    white-space:
+        nowrap;
+
+}
+
+/* =====================================================
+   SMALL SCREENS
+   ===================================================== */
+
+@media (max-width: 575.98px) {
+
+    .pixelfix-footer {
+
+        align-items:
+            center;
+
+    }
+
+    .pixelfix-footer-content {
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            center;
+
+        gap:
+            .5rem;
+
+        text-align:
+            center;
+
+    }
+
+    .pixelfix-footer-copyright {
+
+        text-align:
+            center;
+
+    }
+
+    .pixelfix-footer-right {
+
+        position:
+            static;
+
+        transform:
+            none;
+
+        width:
+            100%;
+
+        text-align:
+            center;
+
+        white-space:
+            normal;
+
+    }
 
 }
 
@@ -2602,30 +2801,6 @@ body.pixelfix-sidebar-open
 }
 
 /* =====================================================
-   FOOTER RESPONSIVE
-   ===================================================== */
-
-@media (max-width: 575.98px) {
-
-    .pixelfix-footer {
-
-        flex-wrap: wrap;
-        row-gap: .5rem;
-        text-align: center;
-
-    }
-
-    .pixelfix-footer-right {
-
-        width: 100%;
-        margin-left: 0;
-        text-align: center;
-
-    }
-
-}
-
-/* =====================================================
    PRINT
    ===================================================== */
 
@@ -2688,87 +2863,214 @@ body.pixelfix-sidebar-open
 
 .login-logo,
 .register-logo {
-    margin-bottom: 0.9rem;
-    font-size: 2.1rem;
-    font-weight: 300;
-    text-align: center;
+
+    margin-bottom:
+        0.9rem;
+
+    font-size:
+        2.1rem;
+
+    font-weight:
+        300;
+
+    text-align:
+        center;
+
 }
 
 .login-logo a,
 .register-logo a {
-    color: var(--bs-secondary-color);
-    text-decoration: none;
+
+    color:
+        var(--bs-secondary-color);
+
+    text-decoration:
+        none;
+
 }
+
+
+/* =====================================================
+   AUTHENTICATION PAGE
+   ===================================================== */
 
 .login-page,
 .register-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;    
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        100vh;
+
 }
+
+
+/* =====================================================
+   AUTHENTICATION BOX
+   ===================================================== */
 
 .login-box,
 .register-box {
-    width: 400px;
+
+    width:
+        400px;
+
 }
+
+
+/* =====================================================
+   AUTHENTICATION CARD
+   ===================================================== */
+
+.login-box .card,
+.register-box .card {
+
+    margin-bottom:
+        0;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        var(--bs-border-radius);
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION CARD BODY
+   ===================================================== */
+
+.login-card-body,
+.register-card-body {
+
+    padding:
+        20px;
+
+    color:
+        var(--bs-secondary-color);
+
+    background-color:
+        var(--bs-body-bg);
+
+    border-top:
+        0;
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION INPUT FOCUS
+   ===================================================== */
+
+.login-card-body .input-group .form-control:focus,
+.register-card-body .input-group .form-control:focus {
+
+    box-shadow:
+        none;
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION INPUT GROUP
+   ===================================================== */
+
+.login-card-body .input-group .input-group-text,
+.register-card-body .input-group .input-group-text {
+
+    color:
+        var(--bs-secondary-color);
+
+    background-color:
+        transparent;
+
+    border-top-right-radius:
+        0.375rem;
+
+    border-bottom-right-radius:
+        0.375rem;
+
+    transition:
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION MESSAGE
+   ===================================================== */
+
+.login-box-msg,
+.register-box-msg {
+
+    padding:
+        0 20px 20px;
+
+    margin:
+        0;
+
+    text-align:
+        center;
+
+}
+
+
+/* =====================================================
+   SOCIAL AUTHENTICATION
+   ===================================================== */
+
+.social-auth-links {
+
+    margin:
+        10px 0;
+
+}
+
+
+/* =====================================================
+   AUTHENTICATION RESPONSIVE
+   ===================================================== */
 
 @media (max-width: 576px) {
 
     .login-box,
     .register-box {
-        width: 90%;
-        margin-top: 0.5rem;
+
+        width:
+            90%;
+
+        margin-top:
+            0.5rem;
+
     }
 
 }
 
-.login-box .card,
-.register-box .card {
-    margin-bottom: 0;
-}
 
-.login-card-body,
-.register-card-body {
-    padding: 20px;
-    color: var(--bs-secondary-color);
-    background-color: var(--bs-body-bg);
-    border-top: 0;
-}
-
-.login-card-body .input-group .form-control:focus,
-.register-card-body .input-group .form-control:focus {
-    box-shadow: none;
-}
-
-.login-card-body .input-group .input-group-text,
-.register-card-body .input-group .input-group-text {
-    color: var(--bs-secondary-color);
-    background-color: transparent;
-    border-top-right-radius: 0.375rem;
-    border-bottom-right-radius: 0.375rem;
-    transition:
-        border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
-}
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
     .login-card-body .input-group .input-group-text,
     .register-card-body .input-group .input-group-text {
-        transition: none;
+
+        transition:
+            none;
+
     }
 
-}
-
-.login-box-msg,
-.register-box-msg {
-    padding: 0 20px 20px;
-    margin: 0;
-    text-align: center;
-}
-
-.social-auth-links {
-    margin: 10px 0;
 }

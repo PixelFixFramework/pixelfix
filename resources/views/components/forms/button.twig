@@ -11,6 +11,8 @@
 {% set buttonId = id|default(null) %}
 {% set buttonAriaLabel = aria_label|default(null) %}
 {% set buttonTitle = title|default(null) %}
+{% set buttonTarget = target|default(null) %}
+{% set buttonRel = rel|default(null) %}
 {% set buttonIcon = icon|default(null) %}
 {% set buttonIconClass = icon_class|default('me-1') %}
 {% set buttonContent = content|default('') %}
@@ -32,6 +34,8 @@
         class="{{ buttonClass }}"
         {% if buttonAriaLabel %}aria-label="{{ buttonAriaLabel }}"{% endif %}
         {% if buttonTitle %}title="{{ buttonTitle }}"{% endif %}
+        {% if buttonTarget %}target="{{ buttonTarget }}"{% endif %}
+        {% if buttonRel %}rel="{{ buttonRel }}"{% endif %}
     >
 
         {% if buttonIcon %}

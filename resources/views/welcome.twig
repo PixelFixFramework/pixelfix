@@ -34,6 +34,9 @@
         id:
             'navbarSupportedContent',
 
+        mobile_offcanvas:
+            'mobileNavigation',
+
         items: [
 
             {
@@ -69,12 +72,18 @@
                             '#'
                     },
 
-                    {
+                   {
                         label:
                             'Documentation',
 
                         url:
-                            '#'
+                            'https://github.com/PixelFixFramework/pixelfix/tree/main/docs',
+
+                        target:
+                            '_blank',
+
+                        rel:
+                            'noopener noreferrer'
                     },
 
                     {
@@ -137,6 +146,539 @@
 
 
     {# =====================================================
+       MOBILE NAVIGATION CONTENT
+       ===================================================== #}
+
+    {% set mobileNavigation %}
+
+
+        <div
+            class="
+                d-flex
+                flex-column
+                h-100
+            "
+        >
+
+
+            {# =================================================
+               MOBILE BRAND INTRO
+               ================================================= #}
+
+            <div class="mb-4">
+
+                <div
+                    class="
+                        d-flex
+                        align-items-center
+                        gap-3
+                        p-3
+                        rounded-4
+                        bg-primary
+                        bg-gradient
+                        text-white
+                        shadow-sm
+                    "
+                >
+
+                    <div
+                        class="
+                            d-flex
+                            align-items-center
+                            justify-content-center
+                            rounded-3
+                            bg-white
+                            bg-opacity-25
+                            flex-shrink-0
+                        "
+                        style="
+                            width: 3rem;
+                            height: 3rem;
+                        "
+                    >
+
+                        <i class="bi bi-boxes fs-4"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="fw-bold">
+                            {{ config('app.name') }}
+                        </div>
+
+                        <div class="small opacity-75">
+                            PHP Application Framework
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {# =================================================
+               NAVIGATION
+               ================================================= #}
+
+            <nav
+                class="nav flex-column gap-1"
+                aria-label="Mobile navigation"
+            >
+
+
+                {# =============================================
+                   HOME
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    route:
+                        'home',
+
+                    class:
+                        'btn text-start text-decoration-none px-3 py-3 rounded-3 bg-primary-subtle text-primary fw-semibold shadow-sm',
+
+                    icon:
+                        'bi bi-house-door',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Home'
+
+                } %}
+
+
+                {# =============================================
+                   ABOUT
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-info-circle',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'About'
+
+                } %}
+
+
+                {# =============================================
+                   EXPLORE
+                   ============================================= #}
+
+                <div class="mt-3 mb-1">
+
+                    <div
+                        class="
+                            px-3
+                            small
+                            text-uppercase
+                            fw-semibold
+                            text-secondary
+                            letter-spacing-1
+                        "
+                    >
+                        Explore
+                    </div>
+
+                </div>
+
+
+                {# =============================================
+                   TUTORIAL
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-mortarboard',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Tutorial'
+
+                } %}
+
+
+                {# =============================================
+                   DOCUMENTATION
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix/tree/main/docs',
+
+                    target:
+                        '_blank',
+
+                    rel:
+                        'noopener noreferrer',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-book',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Documentation'
+
+                } %}
+
+
+                {# =============================================
+                   DEMO APPLICATION
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-window-stack',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Demo Application'
+
+                } %}
+
+
+                {# =============================================
+                   PRICING
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-credit-card',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Pricing'
+
+                } %}
+
+
+                {# =============================================
+                   CONTACT
+                   ============================================= #}
+
+                {% include 'components/forms/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-envelope',
+
+                    icon_class:
+                        'me-3',
+
+                    content:
+                        'Contact Us'
+
+                } %}
+
+            </nav>
+
+
+            {# =================================================
+               SEARCH
+               ================================================= #}
+
+            <div class="mt-4 pt-4 border-top">
+
+                <form
+                    class="position-relative"
+                    role="search"
+                >
+
+                    <i
+                        class="
+                            bi
+                            bi-search
+                            position-absolute
+                            top-50
+                            start-0
+                            translate-middle-y
+                            ms-3
+                            text-secondary
+                        "
+                    ></i>
+
+                    <input
+                        class="
+                            form-control
+                            rounded-pill
+                            ps-5
+                            pe-5
+                            py-2
+                            bg-body-tertiary
+                        "
+                        type="search"
+                        placeholder="Search PixelFix..."
+                        aria-label="Search PixelFix"
+                    >
+
+                    <button
+                        class="
+                            btn
+                            btn-primary
+                            btn-sm
+                            rounded-circle
+                            position-absolute
+                            top-50
+                            end-0
+                            translate-middle-y
+                            me-1
+                        "
+                        type="submit"
+                        aria-label="Search"
+                        style="
+                            width: 2rem;
+                            height: 2rem;
+                        "
+                    >
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            {# =================================================
+               PROMOTIONAL CARD
+               ================================================= #}
+
+            <div class="mt-auto pt-4">
+
+                <div
+                    class="
+                        rounded-4
+                        bg-dark
+                        text-white
+                        p-4
+                        shadow-sm
+                        position-relative
+                        overflow-hidden
+                    "
+                >
+
+                    <div
+                        class="
+                            position-absolute
+                            top-0
+                            end-0
+                            opacity-25
+                        "
+                    >
+                        <i
+                            class="
+                                bi
+                                bi-stars
+                                display-4
+                            "
+                        ></i>
+                    </div>
+
+
+                    <div class="position-relative">
+
+                        <div
+                            class="
+                                d-inline-flex
+                                align-items-center
+                                gap-2
+                                small
+                                text-white-50
+                                mb-2
+                            "
+                        >
+
+                            <span
+                                class="
+                                    rounded-circle
+                                    bg-success
+                                "
+                                style="
+                                    width: .5rem;
+                                    height: .5rem;
+                                "
+                            ></span>
+
+                            Framework ready
+
+                        </div>
+
+
+                        <h6 class="fw-bold mb-2">
+                            Build with PixelFix
+                        </h6>
+
+
+                        <p class="small text-white-50 mb-3">
+
+                            Modern PHP applications with
+                            a clean and extensible foundation.
+
+                        </p>
+
+
+                        {% include 'components/forms/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                '#',
+
+                            class:
+                                'btn btn-light btn-sm rounded-pill px-3',
+
+                            icon:
+                                'bi bi-arrow-up-right',
+
+                            icon_class:
+                                'ms-1',
+
+                            content:
+                                'Explore'
+
+                        } %}
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="
+                        d-flex
+                        align-items-center
+                        justify-content-between
+                        mt-3
+                        px-1
+                        small
+                        text-secondary
+                    "
+                >
+
+                    <span>
+                        {{ config('app.name') }}
+                    </span>
+
+                    <span>
+                        <i class="bi bi-circle-fill text-success me-1"></i>
+                        Ready
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    {% endset %}
+
+
+    {# =====================================================
+       MOBILE OFFCANVAS
+       ===================================================== #}
+
+    {% include 'components/navigation/offcanvas.twig' with {
+
+        id:
+            'mobileNavigation',
+
+        title:
+            config('app.name'),
+
+        placement:
+            'start',
+
+        backdrop:
+            true,
+
+        scroll:
+            false,
+
+        content:
+            mobileNavigation
+
+    } %}
+
+
+    {# =====================================================
        MAIN CONTENT
        ===================================================== #}
 
@@ -144,266 +686,331 @@
 
 
         {# =================================================
-           PAGE CONTAINER
+           HERO
            ================================================= #}
 
-        <div class="container py-5">
+        <section class="py-5">
 
-            <div class="row justify-content-center">
+            <div class="container py-lg-5">
 
-                <div class="col-lg-10">
+                <div class="row align-items-center g-5">
 
 
                     {# =========================================
-                       INTRODUCTION
+                       HERO CONTENT
                        ========================================= #}
 
-                    <div class="text-center mb-5">
+                    <div class="col-lg-7">
 
-                        <h1 class="display-3 fw-bold">
-                            PixelFix
+                        <span
+                            class="
+                                badge
+                                text-bg-primary
+                                rounded-pill
+                                px-3
+                                py-2
+                                mb-4
+                            "
+                        >
+                            Modern PHP Application Framework
+                        </span>
+
+
+                        <h1 class="display-2 fw-bold mb-4">
+
+                            Build powerful
+                            <span class="text-primary">
+                                PHP applications.
+                            </span>
+
                         </h1>
 
-                        <p class="lead text-muted">
 
-                            A modern PHP framework for building
-                            web applications.
+                        <p class="lead text-secondary mb-4">
+
+                            PixelFix provides the tools and structure
+                            you need to build modern web applications
+                            with clean architecture, reusable components,
+                            and a productive development workflow.
 
                         </p>
 
+
+                        <div
+                            class="
+                                d-flex
+                                flex-wrap
+                                gap-2
+                                mb-4
+                            "
+                        >
+
+                            {% include 'components/forms/button.twig' with {
+
+                                tag:
+                                    'a',
+
+                                href:
+                                    'https://github.com/PixelFixFramework/pixelfix/tree/main/docs',
+
+                                target:
+                                    '_blank',
+
+                                rel:
+                                    'noopener noreferrer',
+
+                                class:
+                                    'btn btn-primary btn-lg px-4',
+
+                                icon:
+                                    'bi bi-book',
+
+                                content:
+                                    'Documentation'
+
+                            } %}
+
+
+                            {% include 'components/forms/button.twig' with {
+
+                                tag:
+                                    'a',
+
+                                href:
+                                    '#',
+
+                                class:
+                                    'btn btn-outline-primary btn-lg px-4',
+
+                                icon:
+                                    'bi bi-play-circle',
+
+                                content:
+                                    'Explore Demo'
+
+                            } %}
+
+                        </div>
+
+
+                        <div
+                            class="
+                                d-flex
+                                flex-wrap
+                                gap-4
+                                text-secondary
+                            "
+                        >
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-check-circle-fill
+                                        text-primary
+                                    "
+                                ></i>
+
+                                <span>
+                                    Clean architecture
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-check-circle-fill
+                                        text-primary
+                                    "
+                                ></i>
+
+                                <span>
+                                    Reusable components
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-check-circle-fill
+                                        text-primary
+                                    "
+                                ></i>
+
+                                <span>
+                                    Built for PHP
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
 
                     {# =========================================
-                       FEATURES ROW ONE
+                       HERO PREVIEW
                        ========================================= #}
 
-                    <div class="row g-4">
+                    <div class="col-lg-5">
 
+                        <div class="card border-0 shadow-lg overflow-hidden">
 
-                        {# =====================================
-                           ROUTING
-                           ===================================== #}
+                            <div
+                                class="
+                                    card-header
+                                    bg-dark
+                                    text-white
+                                    border-0
+                                    py-3
+                                "
+                            >
 
-                        <div class="col-md-4">
+                                <div
+                                    class="
+                                        d-flex
+                                        align-items-center
+                                        justify-content-between
+                                    "
+                                >
 
-                            <div class="card h-100 border-0 shadow-sm">
+                                    <div class="d-flex gap-2">
 
-                                <div class="card-body text-center">
+                                        <span
+                                            class="
+                                                rounded-circle
+                                                bg-danger
+                                            "
+                                            style="
+                                                width: .7rem;
+                                                height: .7rem;
+                                            "
+                                        ></span>
 
-                                    <i
-                                        class="
-                                            bi
-                                            bi-signpost-split
-                                            fs-1
-                                            text-primary
-                                        "
-                                    ></i>
+                                        <span
+                                            class="
+                                                rounded-circle
+                                                bg-warning
+                                            "
+                                            style="
+                                                width: .7rem;
+                                                height: .7rem;
+                                            "
+                                        ></span>
 
-                                    <h5 class="mt-3">
-                                        Routing
-                                    </h5>
+                                        <span
+                                            class="
+                                                rounded-circle
+                                                bg-success
+                                            "
+                                            style="
+                                                width: .7rem;
+                                                height: .7rem;
+                                            "
+                                        ></span>
 
-                                    <p class="text-muted mb-0">
+                                    </div>
 
-                                        Define clean and expressive
-                                        application routes.
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        {# =====================================
-                           VALIDATION
-                           ===================================== #}
-
-                        <div class="col-md-4">
-
-                            <div class="card h-100 border-0 shadow-sm">
-
-                                <div class="card-body text-center">
-
-                                    <i
-                                        class="
-                                            bi
-                                            bi-shield-check
-                                            fs-1
-                                            text-success
-                                        "
-                                    ></i>
-
-                                    <h5 class="mt-3">
-                                        Validation
-                                    </h5>
-
-                                    <p class="text-muted mb-0">
-
-                                        Validate requests with powerful
-                                        built-in rules.
-
-                                    </p>
+                                    <small class="text-white-50">
+                                        PixelFix
+                                    </small>
 
                                 </div>
 
                             </div>
 
-                        </div>
 
+                            <div class="card-body bg-dark text-white p-4">
 
-                        {# =====================================
-                           ORM
-                           ===================================== #}
+                                <div class="mb-3">
 
-                        <div class="col-md-4">
+                                    <span class="text-primary">
+                                        $
+                                    </span>
 
-                            <div class="card h-100 border-0 shadow-sm">
-
-                                <div class="card-body text-center">
-
-                                    <i
-                                        class="
-                                            bi
-                                            bi-database
-                                            fs-1
-                                            text-warning
-                                        "
-                                    ></i>
-
-                                    <h5 class="mt-3">
-                                        ORM
-                                    </h5>
-
-                                    <p class="text-muted mb-0">
-
-                                        Work with models, relationships
-                                        and queries elegantly.
-
-                                    </p>
+                                    <span class="text-white-50">
+                                        php pixelfix
+                                    </span>
 
                                 </div>
 
-                            </div>
 
-                        </div>
+                                <div class="mb-2">
 
-                    </div>
+                                    <span class="text-success">
+                                        ✓
+                                    </span>
 
-
-                    {# =========================================
-                       FEATURES ROW TWO
-                       ========================================= #}
-
-                    <div class="row g-4 mt-1">
-
-
-                        {# =====================================
-                           AUTHENTICATION
-                           ===================================== #}
-
-                        <div class="col-md-4">
-
-                            <div class="card h-100 border-0 shadow-sm">
-
-                                <div class="card-body text-center">
-
-                                    <i
-                                        class="
-                                            bi
-                                            bi-person-lock
-                                            fs-1
-                                            text-danger
-                                        "
-                                    ></i>
-
-                                    <h5 class="mt-3">
-                                        Authentication
-                                    </h5>
-
-                                    <p class="text-muted mb-0">
-
-                                        Secure authentication and
-                                        authorization support.
-
-                                    </p>
+                                    <span>
+                                        Application initialized
+                                    </span>
 
                                 </div>
 
-                            </div>
 
-                        </div>
+                                <div class="mb-2">
 
+                                    <span class="text-success">
+                                        ✓
+                                    </span>
 
-                        {# =====================================
-                           VIEWS
-                           ===================================== #}
-
-                        <div class="col-md-4">
-
-                            <div class="card h-100 border-0 shadow-sm">
-
-                                <div class="card-body text-center">
-
-                                    <i
-                                        class="
-                                            bi
-                                            bi-window-stack
-                                            fs-1
-                                            text-info
-                                        "
-                                    ></i>
-
-                                    <h5 class="mt-3">
-                                        Views
-                                    </h5>
-
-                                    <p class="text-muted mb-0">
-
-                                        Build reusable interfaces with
-                                        Twig templates.
-
-                                    </p>
+                                    <span>
+                                        Routes registered
+                                    </span>
 
                                 </div>
 
-                            </div>
 
-                        </div>
+                                <div class="mb-2">
+
+                                    <span class="text-success">
+                                        ✓
+                                    </span>
+
+                                    <span>
+                                        Services loaded
+                                    </span>
+
+                                </div>
 
 
-                        {# =====================================
-                           TESTING
-                           ===================================== #}
+                                <div class="mb-4">
 
-                        <div class="col-md-4">
+                                    <span class="text-success">
+                                        ✓
+                                    </span>
 
-                            <div class="card h-100 border-0 shadow-sm">
+                                    <span>
+                                        Application ready
+                                    </span>
 
-                                <div class="card-body text-center">
+                                </div>
 
-                                    <i
-                                        class="
-                                            bi
-                                            bi-check2-square
-                                            fs-1
-                                            text-secondary
-                                        "
-                                    ></i>
 
-                                    <h5 class="mt-3">
-                                        Testing
-                                    </h5>
+                                <div
+                                    class="
+                                        border-top
+                                        border-secondary
+                                        pt-3
+                                    "
+                                >
 
-                                    <p class="text-muted mb-0">
+                                    <small class="text-white-50">
 
-                                        Test your application with
-                                        the built-in testing framework.
+                                        Build.
+                                        Configure.
+                                        Develop.
 
-                                    </p>
+                                    </small>
 
                                 </div>
 
@@ -417,9 +1024,774 @@
 
             </div>
 
-        </div>
+        </section>
+
+
+        {# =================================================
+           INTRODUCTION
+           ================================================= #}
+
+        <section class="py-5">
+
+            <div class="container">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-lg-8 text-center">
+
+                        <span class="text-primary fw-semibold">
+                            WHY PIXELFIX
+                        </span>
+
+                        <h2 class="fw-bold mt-2 mb-3">
+                            Everything you need to build
+                        </h2>
+
+                        <p class="lead text-secondary mb-0">
+
+                            PixelFix brings the essential building
+                            blocks of a modern PHP application into
+                            a structured and developer-friendly
+                            framework.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =================================================
+           FEATURES
+           ================================================= #}
+
+        <section class="pb-5">
+
+            <div class="container">
+
+                <div class="row g-4">
+
+
+                    {# =========================================
+                       ROUTING
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-signpost-split
+                                        fs-1
+                                        text-primary
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Routing
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Define clean and expressive
+                                    application routes and connect
+                                    requests to your application logic.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {# =========================================
+                       VALIDATION
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-shield-check
+                                        fs-1
+                                        text-success
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Validation
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Validate incoming data with
+                                    reusable validation rules designed
+                                    for application development.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {# =========================================
+                       ORM
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-database
+                                        fs-1
+                                        text-warning
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    ORM
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Work with models, relationships,
+                                    queries, and database operations
+                                    through a structured ORM layer.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {# =========================================
+                       AUTHENTICATION
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-person-lock
+                                        fs-1
+                                        text-danger
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Authentication
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Build applications with
+                                    authentication and authorization
+                                    support.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {# =========================================
+                       VIEWS
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-window-stack
+                                        fs-1
+                                        text-info
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Twig Views
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Build reusable interfaces using
+                                    Twig templates and PixelFix
+                                    view components.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {# =========================================
+                       TESTING
+                       ========================================= #}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div class="card h-100 border-0 shadow-sm">
+
+                            <div class="card-body p-4">
+
+                                <i
+                                    class="
+                                        bi
+                                        bi-check2-square
+                                        fs-1
+                                        text-secondary
+                                    "
+                                ></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Testing
+                                </h5>
+
+                                <p class="text-secondary mb-0">
+
+                                    Test your application with the
+                                    framework's built-in testing
+                                    capabilities.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =================================================
+           DEVELOPMENT EXPERIENCE
+           ================================================= #}
+
+        <section class="py-5">
+
+            <div class="container">
+
+                <div class="row align-items-center g-5">
+
+
+                    <div class="col-lg-6">
+
+                        <span class="text-primary fw-semibold">
+                            DEVELOPMENT EXPERIENCE
+                        </span>
+
+                        <h2 class="fw-bold mt-2 mb-4">
+
+                            Designed to keep your
+                            application organized.
+
+                        </h2>
+
+                        <p class="text-secondary mb-4">
+
+                            PixelFix provides a structured foundation
+                            for developing applications while keeping
+                            individual responsibilities separated and
+                            reusable.
+
+                        </p>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-sm-6">
+
+                                <div class="d-flex gap-3">
+
+                                    <i
+                                        class="
+                                            bi
+                                            bi-diagram-3
+                                            text-primary
+                                            fs-4
+                                        "
+                                    ></i>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Structured
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Organized application layers.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="d-flex gap-3">
+
+                                    <i
+                                        class="
+                                            bi
+                                            bi-boxes
+                                            text-primary
+                                            fs-4
+                                        "
+                                    ></i>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Reusable
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Components built for reuse.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="d-flex gap-3">
+
+                                    <i
+                                        class="
+                                            bi
+                                            bi-terminal
+                                            text-primary
+                                            fs-4
+                                        "
+                                    ></i>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Developer Focused
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            A productive development workflow.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="d-flex gap-3">
+
+                                    <i
+                                        class="
+                                            bi
+                                            bi-layers
+                                            text-primary
+                                            fs-4
+                                        "
+                                    ></i>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Extensible
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Build on a flexible foundation.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 shadow-sm">
+
+                            <div class="card-body p-4 p-lg-5">
+
+                                <div class="mb-4">
+
+                                    <span
+                                        class="
+                                            badge
+                                            text-bg-light
+                                            border
+                                            mb-3
+                                        "
+                                    >
+                                        PixelFix Workflow
+                                    </span>
+
+                                    <h4 class="fw-bold">
+                                        From idea to application
+                                    </h4>
+
+                                    <p class="text-secondary mb-0">
+
+                                        A clear development workflow
+                                        helps keep projects manageable
+                                        as they grow.
+
+                                    </p>
+
+                                </div>
+
+
+                                <div class="d-flex gap-3 mb-4">
+
+                                    <div
+                                        class="
+                                            rounded-circle
+                                            bg-primary
+                                            text-white
+                                            d-flex
+                                            align-items-center
+                                            justify-content-center
+                                            flex-shrink-0
+                                        "
+                                        style="
+                                            width: 2.5rem;
+                                            height: 2.5rem;
+                                        "
+                                    >
+                                        1
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Define
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Structure your application.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="d-flex gap-3 mb-4">
+
+                                    <div
+                                        class="
+                                            rounded-circle
+                                            bg-primary
+                                            text-white
+                                            d-flex
+                                            align-items-center
+                                            justify-content-center
+                                            flex-shrink-0
+                                        "
+                                        style="
+                                            width: 2.5rem;
+                                            height: 2.5rem;
+                                        "
+                                    >
+                                        2
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Build
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Develop features using
+                                            reusable framework components.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="d-flex gap-3">
+
+                                    <div
+                                        class="
+                                            rounded-circle
+                                            bg-primary
+                                            text-white
+                                            d-flex
+                                            align-items-center
+                                            justify-content-center
+                                            flex-shrink-0
+                                        "
+                                        style="
+                                            width: 2.5rem;
+                                            height: 2.5rem;
+                                        "
+                                    >
+                                        3
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="fw-bold mb-1">
+                                            Test
+                                        </h6>
+
+                                        <p class="small text-secondary mb-0">
+                                            Verify your application
+                                            before deployment.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        {# =================================================
+           CALL TO ACTION
+           ================================================= #}
+
+        <section class="py-5">
+
+            <div class="container">
+
+                <div
+                    class="
+                        bg-primary
+                        text-white
+                        rounded-4
+                        shadow
+                        p-4
+                        p-md-5
+                        text-center
+                    "
+                >
+
+                    <span
+                        class="
+                            badge
+                            bg-white
+                            text-primary
+                            rounded-pill
+                            px-3
+                            py-2
+                            mb-3
+                        "
+                    >
+                        Start Building
+                    </span>
+
+                    <h2 class="fw-bold mb-3">
+                        Build your next application with PixelFix.
+                    </h2>
+
+                    <p class="lead mb-4">
+
+                        Explore the framework, learn how it works,
+                        and start building with a structured PHP
+                        application foundation.
+
+                    </p>
+
+
+                    <div
+                        class="
+                            d-flex
+                            flex-wrap
+                            justify-content-center
+                            gap-2
+                        "
+                    >
+
+                        {% include 'components/forms/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                'https://github.com/PixelFixFramework/pixelfix/tree/main/docs',
+
+                            target:
+                                '_blank',
+
+                            rel:
+                                'noopener noreferrer',
+
+                            class:
+                                'btn btn-light btn-lg px-4',
+
+                            icon:
+                                'bi bi-book',
+
+                            content:
+                                'Read Documentation'
+
+                        } %}
+
+
+                        {% include 'components/forms/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                '#',
+
+                            class:
+                                'btn btn-outline-light btn-lg px-4',
+
+                            icon:
+                                'bi bi-code-slash',
+
+                            content:
+                                'View Demo'
+
+                        } %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
+
+
+    {# =====================================================
+       FOOTER LINKS
+       ===================================================== #}
+
+    {% set footerLinks %}
+
+        {% include 'components/forms/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                '#',
+
+            class:
+                'text-decoration-none me-3',
+
+            content:
+                'About'
+
+        } %}
+
+
+        {% include 'components/forms/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                '#',
+
+            class:
+                'text-decoration-none me-3',
+
+            content:
+                'Contact'
+
+        } %}
+
+
+        {% include 'components/forms/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                '#',
+
+            class:
+                'text-decoration-none',
+
+            content:
+                'Privacy'
+
+        } %}
+
+    {% endset %}
 
 
     {# =====================================================
@@ -434,9 +1806,13 @@
         footer_company_url:
             route('home'),
 
+        container:
+            'py-3',
+
         footer_right:
-            ''
+            footerLinks
 
     } %}
+
 
 {% endblock %}

@@ -10,24 +10,83 @@
 {% set items = items|default([]) %}
 {% set expand = expand|default('lg') %}
 {% set theme = theme|default('light') %}
-{% set background = background|default('light') %}
+{% set background = background|default('bg-light') %}
+{% set style = style|default(null) %}
 {% set fixed = fixed|default(null) %}
 {% set container = container|default('container') %}
 {% set navbarId = id|default('navbar') %}
 {% set search = search|default(null) %}
+
+{% set mobileOffcanvas = mobile_offcanvas|default(null) %}
+
+
+{# =====================================================
+   BACKGROUND
+   ===================================================== #}
+
+{% set backgroundClass = '' %}
+{% set backgroundStyle = '' %}
+
+{% if background starts with 'bg-' %}
+
+    {% set backgroundClass = background %}
+
+{% elseif background starts with '#' %}
+
+    {% set backgroundStyle =
+        'background-color: ' ~ background ~ ';'
+    %}
+
+{% elseif background starts with 'rgb(' %}
+
+    {% set backgroundStyle =
+        'background-color: ' ~ background ~ ';'
+    %}
+
+{% elseif background starts with 'rgba(' %}
+
+    {% set backgroundStyle =
+        'background-color: ' ~ background ~ ';'
+    %}
+
+{% elseif background starts with 'hsl(' %}
+
+    {% set backgroundStyle =
+        'background-color: ' ~ background ~ ';'
+    %}
+
+{% elseif background starts with 'hsla(' %}
+
+    {% set backgroundStyle =
+        'background-color: ' ~ background ~ ';'
+    %}
+
+{% else %}
+
+    {% set backgroundClass =
+        'bg-' ~ background
+    %}
+
+{% endif %}
+
 
 {# =====================================================
    BRAND URL
    ===================================================== #}
 
 {% if brandRoute %}
+
     {% set resolvedBrandUrl = route(
         brandRoute,
         brandRouteParams
     ) %}
+
 {% else %}
+
     {% set resolvedBrandUrl = brandUrl %}
+
 {% endif %}
+
 
 {# =====================================================
    FIXED POSITION
@@ -38,6 +97,7 @@
     'bottom': 'fixed-bottom'
 }[fixed]|default('') %}
 
+
 {# =====================================================
    NAVBAR
    ===================================================== #}
@@ -46,10 +106,18 @@
     class="
         navbar
         navbar-expand-{{ expand }}
-        navbar-{{ theme }}
-        bg-{{ background }}
+        {{ backgroundClass }}
         {{ fixedClass }}
     "
+    data-bs-theme="{{ theme }}"
+    {% if backgroundStyle or style %}
+        style="
+            {{ backgroundStyle }}
+            {% if style %}
+                {{ style }}
+            {% endif %}
+        "
+    {% endif %}
 >
 
     <div class="{{ container }}">
@@ -62,8 +130,11 @@
             class="navbar-brand"
             href="{{ resolvedBrandUrl }}"
         >
+
             {{ brand }}
+
         </a>
+
 
         {# =============================================
            TOGGLER
@@ -72,16 +143,30 @@
         <button
             class="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#{{ navbarId }}"
-            aria-controls="{{ navbarId }}"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
+
+            {% if mobileOffcanvas %}
+
+                data-bs-toggle="offcanvas"
+                data-bs-target="#{{ mobileOffcanvas }}"
+                aria-controls="{{ mobileOffcanvas }}"
+                aria-expanded="false"
+                aria-label="Open navigation menu"
+
+            {% else %}
+
+                data-bs-toggle="collapse"
+                data-bs-target="#{{ navbarId }}"
+                aria-controls="{{ navbarId }}"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+
+            {% endif %}
         >
 
             <span class="navbar-toggler-icon"></span>
 
         </button>
+
 
         {# =============================================
            COLLAPSE
@@ -117,6 +202,7 @@
 
                     {% endif %}
 
+
                     {# =================================
                        DROPDOWN
                        ================================= #}
@@ -143,6 +229,7 @@
 
                             </a>
 
+
                             <ul class="dropdown-menu">
 
                                 {% for child in item.children %}
@@ -161,6 +248,7 @@
 
                                         </li>
 
+
                                     {# =====================
                                        DIVIDER
                                        ===================== #}
@@ -172,6 +260,7 @@
                                             <hr class="dropdown-divider">
 
                                         </li>
+
 
                                     {# =====================
                                        LINK
@@ -196,6 +285,7 @@
 
                                         {% endif %}
 
+
                                         <li>
 
                                             <a
@@ -206,6 +296,12 @@
                                                     {% endif %}
                                                 "
                                                 href="{{ childUrl }}"
+                                                {% if child.target is defined and child.target %}
+                                                    target="{{ child.target }}"
+                                                {% endif %}
+                                                {% if child.rel is defined and child.rel %}
+                                                    rel="{{ child.rel }}"
+                                                {% endif %}
                                             >
 
                                                 {{ child.label }}
@@ -221,6 +317,7 @@
                             </ul>
 
                         </li>
+
 
                     {# =================================
                        STANDARD LINK
@@ -241,6 +338,12 @@
                                     aria-current="page"
                                 {% endif %}
                                 href="{{ itemUrl }}"
+                                {% if item.target is defined and item.target %}
+                                    target="{{ item.target }}"
+                                {% endif %}
+                                {% if item.rel is defined and item.rel %}
+                                    rel="{{ item.rel }}"
+                                {% endif %}
                             >
 
                                 {{ item.label }}
@@ -254,6 +357,7 @@
                 {% endfor %}
 
             </ul>
+
 
             {# =========================================
                SEARCH
@@ -278,6 +382,7 @@
 
                 {% endif %}
 
+
                 <form
                     class="d-flex"
                     role="{{ search.role|default('search') }}"
@@ -298,6 +403,7 @@
                         placeholder="{{ search.placeholder|default('Search') }}"
                         aria-label="{{ search.aria_label|default('Search') }}"
                     >
+
 
                     <button
                         class="btn {{ search.button_class|default('btn-outline-success') }}"

@@ -18,6 +18,10 @@
     footer_right|default(null)
 %}
 
+{% set container =
+    container|default('container-fluid')
+%}
+
 
 {# =====================================================
    FOOTER
@@ -25,52 +29,54 @@
 
 <footer class="pixelfix-footer">
 
+    <div class="{{ container }}">
 
-    {# =================================================
-       COPYRIGHT
-       ================================================= #}
-
-    <div class="pixelfix-footer-copyright">
-
-        <strong>
-
-            Copyright &copy;
-
-            {{ footerCurrentYear }}
-
-            <a
-                href="{{ footerCompanyUrl }}"
-                class="text-decoration-none"
-            >{{ footerCompanyName }}</a>.
-
-        </strong>
-
-        <span>
-            All rights reserved.
-        </span>
-
-    </div>
+        <div class="pixelfix-footer-content">
 
 
-    {# =================================================
-       RIGHT CONTENT
-       ================================================= #}
+            {# =================================================
+               COPYRIGHT
+               ================================================= #}
 
-    {% if footerRight %}
+            <div class="pixelfix-footer-copyright">
 
-        <div
-            class="
-                pixelfix-footer-right
-                d-none
-                d-sm-inline
-            "
-        >
+                <strong>
 
-            {{ footerRight }}
+                    Copyright &copy;
+
+                    {{ footerCurrentYear }}
+
+                    <a
+                        href="{{ footerCompanyUrl }}"
+                        class="text-decoration-none"
+                    >{{ footerCompanyName }}</a>.
+
+                </strong>
+
+                <span>
+                    All rights reserved.
+                </span>
+
+            </div>
+
+
+            {# =================================================
+               RIGHT CONTENT
+               ================================================= #}
+
+            {% if footerRight %}
+
+                <div class="pixelfix-footer-right">
+
+                    {{ footerRight|raw }}
+
+                </div>
+
+            {% endif %}
+
 
         </div>
 
-    {% endif %}
-
+    </div>
 
 </footer>
