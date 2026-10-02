@@ -5,15 +5,13 @@ A starter application for building web applications with the PixelFix Framework.
 ## Developer
 
 **Neene Kaseba Ned**
-
 Developer and Creator of PixelFix Framework.
 
 **Zambia Air Services Training Institute**
-
-310198, KK International Airport  
+310198, KK International Airport
 Lusaka, Zambia
 
-**Email:** [neene@zasti.ac.zm](mailto:neene@zasti.ac.zm)  
+**Email:** [neene@zasti.ac.zm](mailto:neene@zasti.ac.zm)
 **Phone:** (+260) 976-032-099 | (+260) 969-889-084
 
 # 📚 Documentation
