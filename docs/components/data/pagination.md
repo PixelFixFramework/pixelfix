@@ -1,44 +1,35 @@
-# Pagination
+# Pagination Component
 
-> **Component:** `components/data/pagination.twig`
+Renders pagination controls from a `paginator` object. The component renders nothing when `paginator.hasPages()` is false.
 
-## Purpose
+**Component:** `data/pagination.twig`
 
-Renders Bootstrap pagination controls from the framework paginator. The component includes previous/next navigation, optional first/last links, a page window and an optional result summary.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `alignment` | `center` | Controls pagination alignment. Supported values: `start`, `center`, `end`. |
+| `size` | `null` | Optional size. Supported values: `sm` and `lg`. |
+| `showSummary` | `true` | Shows the “Showing X to Y of Z results” summary. |
+| `showFirstLast` | `true` | Shows the First and Last links. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``alignment`` | Optional | `center` | Accepted values are `start`, `center` or `end`. |
-| ``size`` | Optional | `null` | Accepted values are `sm` or `lg`. |
-| ``showSummary`` | Optional | `true` | Whether to show the `Showing … to … of … results` summary. |
-| ``showFirstLast`` | Optional | `true` | Whether to render First and Last controls. |
+## Behavior and Notes
 
+The component requires a `paginator` variable in the rendering context; it does not define a default.
 
-## Behavior
+The paginator is expected to provide `hasPages()`, `onFirstPage()`, `onLastPage()`, `links()`, `pages()`, `pageLinks()`, `currentPage()`, `from()`, `to()`, `total()`, and `lastPage()` methods.
 
-The component does not accept the paginator as a component parameter. It expects a `paginator` object to already be available in the template context and first checks `paginator.hasPages()`. It uses `onFirstPage()`, `onLastPage()`, `links()`, `pages()`, `pageLinks()`, `currentPage()`, `lastPage()`, `from()`, `to()` and `total()`.
+`alignment` values outside `start`, `center`, and `end` fall back to centered alignment.
 
-## Example
+`size` values other than `sm` and `lg` render with no size class.
+
+## Usage
 
 ```twig
 {% include 'components/data/pagination.twig' with {
-    alignment: 'end',
+    alignment: 'center',
     size: 'sm',
     showSummary: true,
     showFirstLast: true
 } %}
 ```
-
-## Usage
-
-Call the component after a paginated result list. Ensure the framework paginator is available in the view context before rendering it.
-
-## Notes
-
-The exact variable name expected by the component is `paginator`.
-
-## Related Components
-
-- `components/data/table.twig`

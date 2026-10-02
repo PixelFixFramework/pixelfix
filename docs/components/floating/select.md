@@ -1,45 +1,38 @@
-# Floating Select
+# Floating Select Component
 
-> **Component:** `components/floating/select.twig`
+Renders a floating-label `<select>` with a placeholder option and automatic validation state.
 
-## Purpose
+**Component:** `floating/select.twig`
 
-Renders a Bootstrap floating-label `<select>` with a placeholder option, old-value selection and validation state.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Select name/id. |
+| `label` | `''` | Floating label text. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `options` | `{}` | Map of option values to option text. |
+| `placeholder` | `Select` | Text in the initial empty option. |
+| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Select name and id. No default is declared. |
-| ``label`` | Optional | `''` | Floating label. |
-| ``required`` | Optional | `false` | Adds the required attribute. |
-| ``options`` | Optional | `{}` | Associative array of option value => option text. |
-| ``placeholder`` | Optional | `Select` | Placeholder option text. |
+## Behavior and Notes
 
+The selected value is resolved from `old(name)`; there is no separate `value` parameter.
 
-## Behavior
+The option whose key matches `old(name)` is marked selected.
 
-The first option always uses an empty value. Existing input is read with `old(name)`. Validation state is based on `has_error(name)` and the component renders either `error(name)` or an automatically generated validation message.
+Validation state is `is-invalid` for errors and `is-valid` when an old value is present.
 
-## Example
+## Usage
 
 ```twig
 {% include 'components/floating/select.twig' with {
-    name: 'programme',
-    label: 'Programme',
+    name: 'status',
+    label: 'Status',
     options: {
-        'ict': 'Information Technology',
-        'business': 'Business Studies'
+        draft: 'Draft',
+        published: 'Published'
     },
     required: true
 } %}
 ```
-
-## Usage
-
-Use for compact forms where the floating-label layout is preferred.
-
-## Related Components
-
-- `components/floating/input.twig`
-- `components/form/select.twig`

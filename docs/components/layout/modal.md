@@ -1,50 +1,35 @@
-# Modal
+# Modal Component
 
-> **Component:** `components/layout/modal.twig`
+Renders a Bootstrap modal with configurable size, scrolling, vertical centering, static backdrop behavior, and optional footer content.
 
-## Purpose
+**Component:** `layout/modal.twig`
 
-Renders a Bootstrap modal dialog with title, raw body content, optional footer, size presets, scrollable/centered behavior and static-backdrop behavior.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `id` | Required | Unique modal id. |
+| `title` | `Modal` | Modal title. |
+| `content` | `''` | Modal body content. Rendered as raw HTML. |
+| `footer` | `null` | Optional modal footer content. Rendered as raw HTML. |
+| `size` | `null` | Optional size. Supported values: `sm`, `lg`, `xl`, `fullscreen`, `fullscreen-sm-down`, `fullscreen-md-down`, `fullscreen-lg-down`, `fullscreen-xl-down`, `fullscreen-xxl-down`. |
+| `scrollable` | `false` | Adds Bootstrap's `modal-dialog-scrollable` class. |
+| `centered` | `false` | Adds Bootstrap's `modal-dialog-centered` class. |
+| `static` | `false` | Uses a static backdrop and disables keyboard closing. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``id`` | Required | `—` | Modal id and base for the label id. |
-| ``title`` | Optional | `Modal` | Modal title. |
-| ``content`` | Optional | `''` | Modal body HTML; rendered raw. |
-| ``footer`` | Optional | `null` | Modal footer HTML; rendered raw. |
-| ``size`` | Optional | `null` | `sm`, `lg`, `xl`, or Bootstrap fullscreen variants. |
-| ``scrollable`` | Optional | `false` | Adds `modal-dialog-scrollable`. |
-| ``centered`` | Optional | `false` | Adds `modal-dialog-centered`. |
-| ``static`` | Optional | `false` | Uses a static backdrop and disables keyboard dismissal. |
+## Behavior and Notes
 
-
-## Behavior
-
-Supported size values are `sm`, `lg`, `xl`, `fullscreen`, `fullscreen-sm-down`, `fullscreen-md-down`, `fullscreen-lg-down`, `fullscreen-xl-down` and `fullscreen-xxl-down`. Invalid values fall back to no size class.
-
-## Example
-
-```twig
-{% include 'components/layout/modal.twig' with {
-    id: 'deleteModal',
-    title: 'Confirm deletion',
-    content: '<p>Delete this record?</p>',
-    footer: '<button class="btn btn-danger">Delete</button>',
-    centered: true
-} %}
-```
+`id` is required because it is used by the modal and `aria-labelledby` target.
 
 ## Usage
 
-Place the modal markup in the page and trigger it with Bootstrap's modal API or `data-bs-*` attributes.
-
-## Notes
-
-`content` and `footer` are raw. Supply trusted HTML.
-
-## Related Components
-
-- `components/form/button.twig`
-- `components/layout/card.twig`
+```twig
+{% include 'components/layout/modal.twig' with {
+    id: 'task-details',
+    title: 'Task Details',
+    content: '<p>Task information</p>',
+    centered: true,
+    scrollable: true,
+    size: 'lg'
+} %}
+```

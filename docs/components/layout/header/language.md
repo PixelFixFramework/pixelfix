@@ -1,34 +1,19 @@
-# Header Language Menu
+# Language Header Item
 
-> **Component:** `components/layout/header/language.twig`
+Renders the static language-selection dropdown included in the default header.
 
-## Purpose
+**Component:** `layout/header/language.twig`
 
-Adds the built-in language selector menu with English, Español, Français, Deutsch and العربية entries.
+## Behavior and Notes
 
-## API / Properties
+No configurable parameters are defined.
 
-This component declares **no configurable properties**.
+The current markup contains English, Español, Français, Deutsch, and العربية entries.
 
-## Behavior
+The links are currently hard-coded to `#`.
 
-The current source renders a fixed language list and marks English as the active language. The link destinations are currently `#`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/layout/header/language.twig' %}
 ```
-
-## Usage
-
-Use as part of the default header while the application provides its own language-switching behaviour. The current Twig does not accept a dynamic language collection.
-
-## Notes
-
-The current implementation is static. It is documentation of the present component, not a claim that language routing is already parameterized.
-
-## Related Components
-
-- `components/layout/default-header.twig`
-- `components/layout/header.twig`

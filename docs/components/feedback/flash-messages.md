@@ -1,33 +1,21 @@
-# Flash Messages
+# Flash Messages Component
 
-> **Component:** `components/feedback/flash-messages.twig`
+Reads flash messages through the `flash_messages()` helper and renders each message through the Alert component.
 
-## Purpose
+**Component:** `feedback/flash-messages.twig`
 
-Reads framework flash messages and renders each message through the alert component. It is designed for page-level success, error and other session-flash feedback.
+## Behavior and Notes
 
-## API / Properties
+No component parameters are defined.
 
-This component declares **no configurable component properties**. It reads the framework `flash_messages()` helper and passes each message into `components/feedback/alert.twig`. The special `error` type is normalized to Bootstrap `danger`.
+The `flash_messages()` helper is called internally.
 
-## Behavior
+A flash message type of `error` is converted to the alert type `danger`; other types are passed through unchanged.
 
-The component loops through flash message groups by type and message. Multiple messages are rendered as multiple alerts.
+Each message is rendered by `components/feedback/alert.twig`.
 
-## Example
+## Usage
 
 ```twig
 {% include 'components/feedback/flash-messages.twig' %}
 ```
-
-## Usage
-
-Place the component near the top of a page or content area where post-redirect flash feedback should appear.
-
-## Notes
-
-The component depends on the framework `flash_messages()` helper being available. It does not take a `messages` parameter.
-
-## Related Components
-
-- `components/feedback/alert.twig`

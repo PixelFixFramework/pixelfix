@@ -1,49 +1,40 @@
-# Checkbox
+# Checkbox Component
 
-> **Component:** `components/form/checkbox.twig`
+Renders a checkbox with optional HTML label content and validation feedback.
 
-## Purpose
+**Component:** `form/checkbox.twig`
 
-Renders a Bootstrap checkbox with optional custom label HTML, validation state, old-value resolution and required/disabled states.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Checkbox name/id. |
+| `label` | `''` | Plain label text. |
+| `label_html` | `null` | Optional raw HTML used instead of `label`. |
+| `value` | `1` | Checkbox value. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `checked` | `false` | Initial checked state. |
+| `class` | `''` | Additional checkbox classes. |
+| `disabled` | `false` | Adds the HTML `disabled` attribute. |
+| `validation_message` | `null` | Custom fallback validation message. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Checkbox name and id. |
-| ``label`` | Optional | `''` | Plain-text label. |
-| ``label_html`` | Optional | `null` | Raw HTML label content. Used instead of `label` when not null. |
-| ``value`` | Optional | `1` | Submitted checkbox value. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``checked`` | Optional | `false` | Initial checked state. |
-| ``class`` | Optional | `''` | Additional input classes. |
-| ``disabled`` | Optional | `false` | Adds disabled. |
-| ``validation_message`` | Optional | `Auto-generated` | Fallback validation message. |
+## Behavior and Notes
 
+The checked state is resolved using `old(name, checked ? value : '')`.
 
-## Behavior
+A checkbox is considered checked when the resolved old value equals its value or is boolean `true`.
 
-The checked state is resolved from `old(name, checked ? value : '')`. A field is considered checked when the old value equals the configured value or boolean `true`. Validation uses `errors()` and `has_error()`.
+`label_html` is rendered with `|raw`; use only trusted HTML.
 
-## Example
-
-```twig
-{% include 'components/form/checkbox.twig' with {
-    name: 'terms',
-    label_html: 'I agree to the <a href="/terms">Terms</a>.',
-    required: true
-} %}
-```
+The component calls `errors()` and `has_error()` for validation.
 
 ## Usage
 
-Use `label_html` when the label must contain a link or other trusted markup. Otherwise prefer the safer plain `label` value.
-
-## Notes
-
-Both `label_html` and input validation content are rendered as raw HTML where the component explicitly uses `|raw`; supply trusted markup.
-
-## Related Components
-
-- `components/auth/register.twig`
-- `components/form/radio.twig`
+```twig
+{% include 'components/form/checkbox.twig' with {
+    name: 'remember',
+    label: 'Remember Me',
+    value: '1',
+    checked: true
+} %}
+```

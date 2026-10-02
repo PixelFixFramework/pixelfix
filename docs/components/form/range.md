@@ -1,48 +1,39 @@
-# Range
+# Range Component
 
-> **Component:** `components/form/range.twig`
+Renders an HTML range input with configurable minimum, maximum, step, and validation feedback.
 
-## Purpose
+**Component:** `form/range.twig`
 
-Renders an HTML range slider with min/max/step values, validation and framework old-value handling.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Range input name/id. |
+| `label` | `''` | Optional label. |
+| `min` | `0` | Minimum value. |
+| `max` | `100` | Maximum value. |
+| `step` | `1` | Range step. |
+| `value` | `min` | Initial value; defaults to the configured minimum. |
+| `class` | `''` | Additional range classes. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `disabled` | `false` | Adds the HTML `disabled` attribute. |
+| `validation_message` | `null` | Custom fallback validation message. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Range input name and id. |
-| ``label`` | Optional | `''` | Visible label. |
-| ``min`` | Optional | `0` | Minimum value. |
-| ``max`` | Optional | `100` | Maximum value. |
-| ``step`` | Optional | `1` | Step value. |
-| ``value`` | Optional | `min` | Fallback initial value. |
-| ``class`` | Optional | `''` | Additional classes. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``disabled`` | Optional | `false` | Adds disabled. |
-| ``validation_message`` | Optional | `Auto-generated` | Fallback validation message. |
+## Behavior and Notes
 
+The rendered value is resolved using `old(name, value)`.
 
-## Behavior
-
-The initial value is resolved using `old(name, value)`. Field errors are loaded from `errors()[name]`. The default value expression is the component's `min` value, so changing `min` also changes the default starting position.
-
-## Example
-
-```twig
-{% include 'components/form/range.twig' with {
-    name: 'priority',
-    label: 'Priority',
-    min: 1,
-    max: 10,
-    step: 1,
-    value: 5
-} %}
-```
+The component reads field errors from `errors()[name]`.
 
 ## Usage
 
-Use for numeric values naturally represented on a continuous or bounded scale.
-
-## Related Components
-
-- `components/form/input.twig`
+```twig
+{% include 'components/form/range.twig' with {
+    name: 'progress',
+    label: 'Progress',
+    min: 0,
+    max: 100,
+    step: 5,
+    value: 50
+} %}
+```

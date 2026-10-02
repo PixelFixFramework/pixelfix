@@ -1,38 +1,23 @@
-# Spinner
+# Spinner Component
 
-> **Component:** `components/feedback/spinner.twig`
+Renders a Bootstrap-style spinner with a visually hidden loading label.
 
-## Purpose
+**Component:** `feedback/spinner.twig`
 
-Renders an accessible Bootstrap border spinner with a contextual colour, optional small size and a visually-hidden status label.
+## Parameters
 
-## API / Properties
-
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `primary` | Bootstrap text colour suffix. |
-| ``size`` | Optional | `null` | Use `sm` for `spinner-border-sm`. |
-| ``label`` | Optional | `Loading...` | Visually-hidden status text. |
-
-
-## Behavior
-
-The spinner uses `role="status"` and puts the label inside `.visually-hidden`.
-
-## Example
-
-```twig
-{% include 'components/feedback/spinner.twig' with {
-    type: 'success',
-    size: 'sm',
-    label: 'Saving changes...'
-} %}
-```
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `primary` | Spinner text type appended to `text-`. |
+| `size` | `null` | Use `sm` for the small spinner variant. |
+| `label` | `Loading...` | Visually hidden status text. |
 
 ## Usage
 
-Use while waiting for an operation to complete. Provide a meaningful `label` when the surrounding UI does not already explain the loading state.
-
-## Related Components
-
-- `components/feedback/toast.twig`
+```twig
+{% include 'components/feedback/spinner.twig' with {
+    type: 'primary',
+    size: 'sm',
+    label: 'Loading tasks...'
+} %}
+```

@@ -1,35 +1,23 @@
-# Header Notifications
+# Notifications Header Item
 
-> **Component:** `components/layout/header/notifications.twig`
+Renders the notifications dropdown with an unread count and fixed notification entries.
 
-## Purpose
+**Component:** `layout/header/notifications.twig`
 
-Displays a header notifications control with a numeric count.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `notification_count` | `15` | Notification count shown in the badge, header, and accessible label. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``notification_count`` | Optional | `15` | Number displayed on the notifications badge. |
+## Behavior and Notes
 
-
-## Behavior
-
-The component is intentionally small: the public API is the notification count only.
-
-## Example
-
-```twig
-{% include 'components/layout/header/notifications.twig' with {
-    notification_count: 7
-} %}
-```
+The notification entries themselves are static in the template; only the count is configurable.
 
 ## Usage
 
-Use as part of the default application header. Detailed notification content belongs in the surrounding application logic.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/layout/header/messages.twig`
+```twig
+{% include 'components/layout/header/notifications.twig' with {
+    notification_count: 4
+} %}
+```

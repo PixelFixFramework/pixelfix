@@ -1,46 +1,38 @@
-# Default Application Header
+# Default Header Component
 
-> **Component:** `components/layout/default-header.twig`
+Renders the standard PixelFix application header by embedding `components/layout/header.twig` and supplying the default navigation components.
 
-## Purpose
+**Component:** `layout/default-header.twig`
 
-Composes the main PixelFix header with the standard start and end controls: live preview, documentation, search, messages, notifications, language, fullscreen, theme and user menu.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `user` | `null` | Optional user object. `name`, `email`, and `created_at` are read when available. |
+| `avatar_url` | `null` | Optional user avatar URL. |
+| `user_created_at` | Derived | Optional member date; when omitted, `user.created_at` is used when available. |
+| `user_role_text` | `User` | Role/status text passed to the user menu. |
+| `profile_url` | `#` | Profile URL passed to the user menu. |
+| `logout_url` | `#` | Logout URL passed to the user menu. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``user`` | Optional | `null` | User object used to derive name, email and created-at metadata. |
-| ``avatar_url`` | Optional | `null` | Avatar URL passed to the user menu. |
-| ``user_role_text`` | Optional | `User` | Role/status text shown by the user menu. |
-| ``profile_url`` | Optional | `#` | Profile destination. |
-| ``logout_url`` | Optional | `#` | Logout destination. |
+## Behavior and Notes
 
+The component includes Live Preview and Documentation in the start region.
 
-## Behavior
+The end region includes Search, Messages, Notifications, Language, Fullscreen, Theme, and User Menu.
 
-The component embeds `components/layout/header.twig`. It supplies the start/end blocks and includes the eight specialised header controls. The user menu is passed normalized user information.
+The user object is expected to expose `name`, `email`, and optionally `created_at` when those values are used.
 
-## Example
+The computed user email is passed to the user-menu component, although the current user-menu markup does not display that value.
+
+## Usage
 
 ```twig
 {% include 'components/layout/default-header.twig' with {
-    user: auth_user(),
-    avatar_url: '/assets/images/avatar.png',
+    user: app.user,
+    avatar_url: '/images/avatar.png',
+    user_role_text: 'Administrator',
     profile_url: route('profile'),
     logout_url: route('logout')
 } %}
 ```
-
-## Usage
-
-Use when an application needs the standard PixelFix application header with the complete built-in control set.
-
-## Notes
-
-The component depends on the child header components and the surrounding PixelFix header CSS/JavaScript.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/layout/header/user-menu.twig`

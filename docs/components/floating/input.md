@@ -1,47 +1,40 @@
-# Floating Input
+# Floating Input Component
 
-> **Component:** `components/floating/input.twig`
+Renders a Bootstrap floating-label text input with automatic validation state and optional autocomplete.
 
-## Purpose
+**Component:** `floating/input.twig`
 
-Renders a Bootstrap floating-label input with framework-aware old-value and validation handling.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `text` | HTML input type. |
+| `name` | Required | Input name/id. |
+| `label` | `''` | Floating label text. |
+| `required` | `false` | Adds the HTML `required` attribute and an empty danger marker in the label. |
+| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
+| `autocomplete` | `null` | Autocomplete value. When omitted, the component infers `email`, `current-password`, `name`, or `username` for matching fields. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `text` | HTML input type. |
-| ``name`` | Required | `—` | Input name and id. No default is declared. |
-| ``label`` | Optional | `''` | Floating label. |
-| ``required`` | Optional | `false` | Adds the required attribute. |
-| ``autocomplete`` | Optional | `null` | Explicit autocomplete value; inferred for common email/password/name/username fields. |
+## Behavior and Notes
 
+The value is taken from `old(name)`; there is no separate `value` parameter.
 
-## Behavior
+Password inputs deliberately render an empty value attribute instead of repopulating a password.
 
-The component reads `has_error()`, `old()` and `error()`. It assigns `is-invalid` when an error exists and `is-valid` when a non-empty old value exists. Password inputs intentionally render an empty value.
+The component calls `has_error(name)` and `error(name)`.
 
-## Example
+Unsupported or missing autocomplete inference leaves the autocomplete attribute unset.
+
+Validation state is `is-invalid` when the field has an error and `is-valid` when an old value is present without an error.
+
+## Usage
 
 ```twig
 {% include 'components/floating/input.twig' with {
     type: 'email',
     name: 'email',
-    label: 'Email Address',
-    required: true
+    label: 'Email',
+    required: true,
+    autocomplete: 'email'
 } %}
 ```
-
-## Usage
-
-Use when you want Bootstrap's floating-label pattern without the separate visible label above the control.
-
-## Notes
-
-The source does not expose `placeholder`, `disabled`, `readonly`, `maxlength` or `class` inputs. The floating input uses the label as its placeholder.
-
-## Related Components
-
-- `components/floating/select.twig`
-- `components/floating/textarea.twig`
-- `components/form/input.twig`

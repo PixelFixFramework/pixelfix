@@ -1,45 +1,33 @@
-# Textarea
+# Textarea Component
 
-> **Component:** `components/form/textarea.twig`
+Renders a standard textarea with optional label, row count, placeholder, and validation feedback.
 
-## Purpose
+**Component:** `form/textarea.twig`
 
-Renders a standard Bootstrap textarea with optional label, rows, placeholder, required state, custom classes and validation.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Textarea name/id. |
+| `label` | `''` | Optional label. |
+| `rows` | `4` | HTML textarea row count. |
+| `placeholder` | `''` | Textarea placeholder. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `class` | `''` | Additional textarea classes. |
+| `value` | `''` | Initial value before `old()` resolution. |
+| `validation_message` | `null` | Custom fallback validation message. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Textarea name and id. |
-| ``label`` | Optional | `''` | Visible label. |
-| ``rows`` | Optional | `4` | Number of textarea rows. |
-| ``placeholder`` | Optional | `''` | Placeholder. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``class`` | Optional | `''` | Additional classes. |
-| ``value`` | Optional | `''` | Fallback value used by `old()`. |
-| ``validation_message`` | Optional | `Auto-generated` | Fallback validation message. |
+## Behavior and Notes
 
+The value is resolved with `old(name, value)`.
 
-## Behavior
-
-The displayed value comes from `old(name, value)`. When field errors exist, the first error is displayed. The component adds `is-invalid` to the textarea.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/form/textarea.twig' with {
     name: 'description',
     label: 'Description',
     rows: 6,
-    placeholder: 'Describe the task',
-    required: true
+    placeholder: 'Enter a description'
 } %}
 ```
-
-## Usage
-
-Use for multi-line text fields such as descriptions, comments and notes.
-
-## Related Components
-
-- `components/floating/textarea.twig`

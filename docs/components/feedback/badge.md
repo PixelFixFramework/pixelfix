@@ -1,24 +1,17 @@
-# Badge
+# Badge Component
 
-> **Component:** `components/feedback/badge.twig`
+Renders a small badge using the supplied type and text.
 
-## Purpose
+**Component:** `feedback/badge.twig`
 
-Renders a compact Bootstrap contextual badge.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `primary` | Value appended to `text-bg-`. |
+| `text` | `Badge` | Badge text. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `primary` | Bootstrap contextual suffix. |
-| ``text`` | Optional | `Badge` | Badge text. |
-
-
-## Behavior
-
-The component uses Bootstrap's `text-bg-{type}` utility classes.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/feedback/badge.twig' with {
@@ -26,12 +19,3 @@ The component uses Bootstrap's `text-bg-{type}` utility classes.
     text: 'Active'
 } %}
 ```
-
-## Usage
-
-Use badges for statuses, counts and small categorical labels.
-
-## Related Components
-
-- `components/data/table.twig`
-- `components/dashboard/tile.twig`

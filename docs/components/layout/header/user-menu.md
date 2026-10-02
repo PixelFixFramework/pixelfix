@@ -1,45 +1,41 @@
-# Header User Menu
+# User Menu Header Item
 
-> **Component:** `components/layout/header/user-menu.twig`
+Renders the authenticated-user dropdown with avatar/initial, role/date information, profile links, and optional POST logout.
 
-## Purpose
+**Component:** `layout/header/user-menu.twig`
 
-Displays the authenticated user's avatar/initial, name, email and account actions such as profile and logout.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `user_name` | `User` | Displayed user name. |
+| `user_email` | `''` | User email value accepted by the component; it is currently not displayed in the markup. |
+| `avatar_url` | `null` | Optional avatar image URL. When absent, the first letter of `user_name` is shown. |
+| `user_created_at` | `null` | Optional membership date formatted as `M. Y`. |
+| `user_role_text` | `''` | Optional role/status text shown after the user name. |
+| `profile_url` | `#` | Profile link URL. |
+| `logout_url` | `#` | Logout action URL. When truthy, a POST logout form is rendered. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``user_name`` | Optional | `User` | Display name. |
-| ``user_email`` | Optional | `''` | Email address. |
-| ``avatar_url`` | Optional | `null` | Avatar image URL. |
-| ``user_created_at`` | Optional | `null` | Account creation date/time. |
-| ``user_role_text`` | Optional | `''` | Role text shown in the menu. |
-| ``profile_url`` | Optional | `#` | Profile destination. |
-| ``logout_url`` | Optional | `#` | Logout destination. |
+## Behavior and Notes
 
+The component generates the initial with `user_name|slice(0, 1)|upper` when no avatar URL is supplied.
 
-## Behavior
+When `logout_url` is truthy, the template renders `{{ csrf|raw }}` inside the logout form, so a `csrf` value must be available in context.
 
-When `avatar_url` is absent, the component can fall back to an initial-based representation. The menu includes the account information and profile/logout actions defined by the current source.
+The `Tasks` and `Settings` links in the user body are hard-coded to `#`.
 
-## Example
+The `user_email` parameter is defined and passed by the default header but is not displayed by the current markup.
+
+## Usage
 
 ```twig
 {% include 'components/layout/header/user-menu.twig' with {
-    user_name: 'Neene Ned',
-    user_email: 'neene@example.com',
+    user_name: 'Jane Doe',
+    user_email: 'jane@example.com',
+    avatar_url: '/images/jane.png',
+    user_created_at: '2026-01-15',
     user_role_text: 'Administrator',
     profile_url: route('profile'),
     logout_url: route('logout')
 } %}
 ```
-
-## Usage
-
-Use with authenticated user data. The `default-header.twig` component already normalizes a user object and forwards the appropriate values.
-
-## Related Components
-
-- `components/layout/default-header.twig`
-- `components/layout/header.twig`

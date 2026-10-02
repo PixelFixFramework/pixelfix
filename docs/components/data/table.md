@@ -1,56 +1,44 @@
-# Data Table
+# Table Component
 
-> **Component:** `components/data/table.twig`
+Renders a data table from header and row arrays, with optional caption, footer, responsive wrapping, and common table style classes.
 
-## Purpose
+**Component:** `data/table.twig`
 
-Builds a reusable Bootstrap table from header and row arrays, with optional caption, footer, responsive wrapping, striped/hover/bordered/compact/dark styles and row numbering.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `headers` | `[]` | Array of column header values. |
+| `rows` | `[]` | Array of row arrays. Each cell is rendered as raw HTML. |
+| `caption` | `null` | Optional table caption. |
+| `footer` | `null` | Optional raw HTML rendered inside `<tfoot>`. |
+| `responsive` | `true` | Wraps the table in `.table-responsive`. |
+| `striped` | `true` | Adds `.table-striped`. |
+| `hover` | `true` | Adds `.table-hover`. |
+| `bordered` | `false` | Adds `.table-bordered`. |
+| `compact` | `false` | Adds `.table-sm`. |
+| `dark` | `false` | Adds `.table-dark`. |
+| `numbered` | `false` | Adds a `#` column and row numbers. |
+| `emptyMessage` | `No records found.` | Message shown when `rows` is empty. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``headers`` | Optional | `[]` | Array of header labels. |
-| ``rows`` | Optional | `[]` | Array of row arrays. Cell content is rendered as raw HTML. |
-| ``caption`` | Optional | `null` | Table caption. |
-| ``footer`` | Optional | `null` | Raw footer HTML inserted inside `<tfoot>`. |
-| ``responsive`` | Optional | `true` | Wrap the table in `.table-responsive`. |
-| ``striped`` | Optional | `true` | Adds `table-striped`. |
-| ``hover`` | Optional | `true` | Adds `table-hover`. |
-| ``bordered`` | Optional | `false` | Adds `table-bordered`. |
-| ``compact`` | Optional | `false` | Adds `table-sm`. |
-| ``dark`` | Optional | `false` | Adds `table-dark`. |
-| ``numbered`` | Optional | `false` | Adds a first `#` column with loop indexes. |
-| ``emptyMessage`` | Optional | `No records found.` | Message rendered when `rows` is empty. |
+## Behavior and Notes
 
+The `rows` array is expected to contain arrays whose values correspond to the `headers` order.
 
-## Behavior
+Cell values and footer content are rendered with `|raw`; pass trusted HTML only.
 
-Rows are traversed in order. Each cell uses `|raw`, so callers can supply markup such as buttons or links. When `numbered` is true, the component adds a one-based loop index column.
-
-## Example
-
-```twig
-{% include 'components/data/table.twig' with {
-    headers: ['Name', 'Email', 'Status'],
-    rows: [
-        ['Jane', 'jane@example.com', '<span class="badge text-bg-success">Active</span>'],
-        ['John', 'john@example.com', '<span class="badge text-bg-secondary">Inactive</span>']
-    ],
-    responsive: true,
-    numbered: true
-} %}
-```
+When `numbered=true`, the empty-state colspan includes the additional number column.
 
 ## Usage
 
-Prepare the `headers` and `rows` arrays in the controller/view model, then include the component. Use `raw` cell content only for HTML you trust.
-
-## Notes
-
-The source defaults `emptyMessage` even though it is not shown in the compact normalization block; it is still a supported public input used by the template.
-
-## Related Components
-
-- `components/data/pagination.twig`
-- `components/feedback/badge.twig`
+```twig
+{% include 'components/data/table.twig' with {
+    headers: ['Name', 'Status'],
+    rows: [
+        ['Task One', '<span class="badge text-bg-success">Done</span>'],
+        ['Task Two', '<span class="badge text-bg-warning">Pending</span>']
+    ],
+    caption: 'Tasks',
+    numbered: true
+} %}
+```

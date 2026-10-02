@@ -1,35 +1,23 @@
-# Header Messages
+# Messages Header Item
 
-> **Component:** `components/layout/header/messages.twig`
+Renders the messages dropdown with an unread count and a fixed set of sample message entries.
 
-## Purpose
+**Component:** `layout/header/messages.twig`
 
-Displays a header messages control with a numeric count.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `message_count` | `3` | Unread message count shown in the badge and accessible label. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``message_count`` | Optional | `3` | Number displayed on the messages badge. |
+## Behavior and Notes
 
+The message list itself is static in the template; only the count is configurable.
 
-## Behavior
-
-The current component uses the count value to render the header badge/control. No message collection is accepted by this component.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/layout/header/messages.twig' with {
     message_count: 5
 } %}
 ```
-
-## Usage
-
-Use the component for the navigation affordance; application-specific message lists are outside this component's current API.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/layout/header/notifications.twig`

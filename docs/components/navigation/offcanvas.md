@@ -1,48 +1,35 @@
-# Offcanvas
+# Offcanvas Component
 
-> **Component:** `components/navigation/offcanvas.twig`
+Renders a Bootstrap offcanvas panel with configurable placement, backdrop, scrolling, title, and raw body content.
 
-## Purpose
+**Component:** `navigation/offcanvas.twig`
 
-Renders a Bootstrap Offcanvas panel with configurable placement, title, content, backdrop and scrolling behaviour.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `id` | Required | Unique offcanvas id. |
+| `title` | `Menu` | Offcanvas title. |
+| `content` | `''` | Body content. Rendered as raw HTML. |
+| `placement` | `start` | Supported values: `start`, `end`, `top`, `bottom`. |
+| `backdrop` | `true` | Controls the Bootstrap backdrop. |
+| `scroll` | `false` | Controls body scrolling while the offcanvas is open. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``id`` | Required | `—` | Offcanvas id; used by Bootstrap and label linkage. |
-| ``title`` | Optional | `Menu` | Header title. |
-| ``content`` | Optional | `''` | Body HTML rendered raw. |
-| ``placement`` | Optional | `start` | `start`, `end`, `top` or `bottom`. |
-| ``backdrop`` | Optional | `true` | Whether Bootstrap should show a backdrop. |
-| ``scroll`` | Optional | `false` | Whether body scrolling is allowed while open. |
+## Behavior and Notes
 
+Unsupported placement values fall back to `start`.
 
-## Behavior
-
-The placement map converts the public value into Bootstrap classes. Invalid values fall back to `offcanvas-start`. The component emits `data-bs-scroll` and `data-bs-backdrop` attributes.
-
-## Example
-
-```twig
-{% include 'components/navigation/offcanvas.twig' with {
-    id: 'mobileNavigation',
-    title: 'Navigation',
-    placement: 'end',
-    backdrop: true,
-    scroll: false,
-    content: '<a class="dropdown-item" href="/">Home</a>'
-} %}
-```
+`content` is rendered with `|raw`.
 
 ## Usage
 
-Pair the offcanvas id with the `mobile_offcanvas` option of `components/navigation/navbar.twig` when using the navbar toggler to open it.
-
-## Notes
-
-`content` is raw HTML. Supply trusted markup.
-
-## Related Components
-
-- `components/navigation/navbar.twig`
+```twig
+{% include 'components/navigation/offcanvas.twig' with {
+    id: 'mobile-menu',
+    title: 'Menu',
+    placement: 'start',
+    backdrop: true,
+    scroll: false,
+    content: '<p>Navigation goes here.</p>'
+} %}
+```

@@ -1,42 +1,31 @@
-# Alert
+# Alert Component
 
-> **Component:** `components/feedback/alert.twig`
+Renders a Bootstrap-style alert with an optional title and optional dismiss button.
 
-## Purpose
+**Component:** `feedback/alert.twig`
 
-Displays a Bootstrap alert message with an optional heading and optional dismiss button.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `primary` | Alert type appended to `alert-`. |
+| `title` | `null` | Optional alert heading. |
+| `dismissible` | `false` | When true, adds dismissible classes and a close button. |
+| `content` | `''` | Alert body content. Rendered as raw HTML. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `primary` | Bootstrap contextual class, producing `alert-{type}`. |
-| ``title`` | Optional | `null` | Optional alert heading. |
-| ``dismissible`` | Optional | `false` | Adds Bootstrap dismissible alert behavior. |
-| ``content`` | Optional | `''` | Alert body. Rendered as raw HTML. |
+## Behavior and Notes
 
+`content` is rendered with `|raw`.
 
-## Behavior
+The dismiss button uses Bootstrap's `data-bs-dismiss="alert"` behavior.
 
-When `dismissible` is true, the component adds `alert-dismissible fade show` and a close button. `content` is rendered with `|raw`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/feedback/alert.twig' with {
     type: 'success',
     title: 'Saved',
-    content: 'The record was updated successfully.',
-    dismissible: true
+    dismissible: true,
+    content: '<strong>Task saved successfully.</strong>'
 } %}
 ```
-
-## Usage
-
-Use for prominent feedback that belongs in the page content rather than transient toast notifications.
-
-## Related Components
-
-- `components/feedback/flash-messages.twig`
-- `components/feedback/validation-errors.twig`
-- `components/feedback/toast.twig`

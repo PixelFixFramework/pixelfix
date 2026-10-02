@@ -1,45 +1,31 @@
-# Floating Textarea
+# Floating Textarea Component
 
-> **Component:** `components/floating/textarea.twig`
+Renders a floating-label textarea with configurable rows and automatic validation state.
 
-## Purpose
+**Component:** `floating/textarea.twig`
 
-Renders a Bootstrap floating-label `<textarea>` with framework-aware old-value and validation state.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Textarea name/id. |
+| `label` | `''` | Floating label text. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `rows` | `5` | Used to calculate the inline height (`rows * 30px`). |
+| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Textarea name and id. |
-| ``label`` | Optional | `''` | Floating label. |
-| ``required`` | Optional | `false` | Adds the required attribute. |
-| ``rows`` | Optional | `5` | Controls the component's calculated height. |
-| ``validation_message`` | Optional | `Auto-generated` | Custom fallback validation message. |
+## Behavior and Notes
 
+The value is taken from `old(name)`; there is no separate `value` parameter.
 
-## Behavior
+Validation state is `is-invalid` for errors and `is-valid` when an old value is present.
 
-The source uses `style="height: {{ rows * 30 }}px"` rather than the HTML `rows` attribute. Existing text is loaded with `old(name)` and validation uses `has_error()` / `error()`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/floating/textarea.twig' with {
     name: 'description',
     label: 'Description',
-    rows: 6,
-    required: true
+    rows: 6
 } %}
 ```
-
-## Usage
-
-Use when a multi-line field should use Bootstrap's floating-label presentation.
-
-## Notes
-
-The source requires the `name` input. The calculated height is based on the `rows` value.
-
-## Related Components
-
-- `components/form/textarea.twig`

@@ -1,49 +1,45 @@
-# Radio
+# Radio Component
 
-> **Component:** `components/form/radio.twig`
+Renders a group of radio buttons from an options map with optional inline display and validation state.
 
-## Purpose
+**Component:** `form/radio.twig`
 
-Renders a group of Bootstrap radio inputs from an associative options array, with optional inline layout and validation.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Radio group name. |
+| `label` | `''` | Optional group label. |
+| `options` | `{}` | Map of option values to option text. |
+| `inline` | `false` | Renders each radio as `.form-check-inline` when true. |
+| `required` | `false` | Adds `required` to each radio input. |
+| `value` | `''` | Initial selected value before `old()` resolution. |
+| `class` | `''` | Additional classes applied to each radio input. |
+| `disabled` | `false` | Disables every radio input when true. |
+| `validation_message` | Contextual default | Custom fallback validation message. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Shared radio group name. |
-| ``label`` | Optional | `''` | Group label. |
-| ``options`` | Optional | `{}` | Associative array of option value => option text. |
-| ``inline`` | Optional | `false` | Renders each option as `form-check-inline`. |
-| ``required`` | Optional | `false` | Adds required to each radio input. |
-| ``value`` | Optional | `''` | Fallback selected value used by `old()`. |
-| ``class`` | Optional | `''` | Additional input classes. |
-| ``disabled`` | Optional | `false` | Disables all options. |
+## Behavior and Notes
 
+The selected value is resolved with `old(name, value)`.
 
-## Behavior
+Each option receives an id in the form `{name}_{optionValue}`.
 
-Each option receives an id of `name_optionValue`. The selected value is resolved with `old(name, value)`. Validation uses `has_error(name)` and `error(name)`.
+The `options` map is expected as `value => text`.
 
-## Example
-
-```twig
-{% include 'components/form/radio.twig' with {
-    name: 'gender',
-    label: 'Gender',
-    options: {
-        'male': 'Male',
-        'female': 'Female'
-    },
-    inline: true,
-    required: true
-} %}
-```
+The component calls `has_error(name)` and `error(name)` for validation.
 
 ## Usage
 
-Use for a small, mutually exclusive set of choices. Keep the same `name` for the entire group.
-
-## Related Components
-
-- `components/form/checkbox.twig`
-- `components/form/select.twig`
+```twig
+{% include 'components/form/radio.twig' with {
+    name: 'priority',
+    label: 'Priority',
+    options: {
+        low: 'Low',
+        medium: 'Medium',
+        high: 'High'
+    },
+    value: 'medium',
+    inline: true
+} %}
+```

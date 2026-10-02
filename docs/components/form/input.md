@@ -1,53 +1,43 @@
-# Input
+# Input Component
 
-> **Component:** `components/form/input.twig`
+Renders a simple form input with an optional label, standard input attributes, old-value handling, and validation feedback.
 
-## Purpose
+**Component:** `form/input.twig`
 
-Renders a standard Bootstrap form input with optional label, placeholder, required state, maxlength, autofocus, initial value and validation feedback.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `text` | HTML input type. |
+| `name` | `''` | Input name/id. |
+| `label` | `null` | Optional label. |
+| `placeholder` | `''` | Input placeholder. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `class` | `''` | Additional input classes. |
+| `maxlength` | `null` | Optional HTML `maxlength`. |
+| `autofocus` | `false` | Adds the HTML `autofocus` attribute. |
+| `value` | `''` | Initial value before `old()` resolution. |
+| `validationMessage` | `null` | Custom fallback validation message. Note the exact camelCase parameter name. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `text` | HTML input type. |
-| ``name`` | Optional | `''` | Input name and id. |
-| ``label`` | Optional | `null` | Optional label text. |
-| ``placeholder`` | Optional | `''` | Placeholder. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``class`` | Optional | `''` | Additional CSS classes. |
-| ``maxlength`` | Optional | `null` | Maximum input length. |
-| ``autofocus`` | Optional | `false` | Adds autofocus. |
-| ``value`` | Optional | `''` | Fallback value passed to `old()`. |
-| ``validationMessage`` | Optional | `null` | Custom fallback validation message; note the exact camelCase input name. |
+## Behavior and Notes
 
+The component uses `validationMessage`, not `validation_message`.
 
-## Behavior
+The field value is resolved using `old(name, value)`.
 
-The component reads `errors()[name]` and uses `old(name, value)` to resolve the displayed value. For password inputs it intentionally renders an empty value. Validation feedback shows the first field error when present.
+Password inputs render an empty value attribute and are not repopulated.
 
-## Example
+The component uses the first value in `errors()[name]` for validation feedback when errors exist.
+
+## Usage
 
 ```twig
 {% include 'components/form/input.twig' with {
     type: 'text',
     name: 'title',
-    label: 'Task Title',
-    placeholder: 'Enter task title',
-    required: true,
-    maxlength: 150
+    label: 'Title',
+    placeholder: 'Enter title',
+    value: '',
+    required: true
 } %}
 ```
-
-## Usage
-
-Use for ordinary form fields when no input-group icon presentation is required.
-
-## Notes
-
-The public validation input is named `validationMessage` in the current component source; it is not `validation_message`.
-
-## Related Components
-
-- `components/form/input-group.twig`
-- `components/floating/input.twig`

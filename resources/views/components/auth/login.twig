@@ -14,6 +14,10 @@
     logo_text|default('')
 %}
 
+{% set loginShowLogo =
+    show_logo|default(false)
+%}
+
 {% set loginMessage =
     message|default('Sign in to start your session')
 %}
@@ -107,6 +111,10 @@
    SOCIAL AUTHENTICATION
    ===================================================== #}
 
+{% set loginShowSocial =
+    show_social|default(false)
+%}
+
 {% set loginFacebookUrl =
     facebook_url|default('#')
 %}
@@ -156,28 +164,31 @@
 
 <main class="login-box">
 
+    {% if loginShowLogo %}
 
-    {# =================================================
-       LOGO
-       ================================================= #}
+        {# =================================================
+           LOGO
+           ================================================= #}
 
-    <h1 class="login-logo">
+        <h1 class="login-logo">
 
-        <a href="{{ loginLogoUrl }}">
+            <a href="{{ loginLogoUrl }}">
 
-            {% if loginLogoBold %}
+                {% if loginLogoBold %}
 
-                <b>
-                    {{ loginLogoBold }}
-                </b>
+                    <b>
+                        {{ loginLogoBold }}
+                    </b>
 
-            {% endif %}
+                {% endif %}
 
-            {{ loginLogoText }}
+                {{ loginLogoText }}
 
-        </a>
+            </a>
 
-    </h1>
+        </h1>
+
+    {% endif %}
 
 
     {# =================================================
@@ -235,7 +246,7 @@
 
                     icon:
                         '<i class="bi bi-envelope"></i>',
-                   
+
                     autofocus:
                         loginEmailAutofocus,
 
@@ -268,7 +279,7 @@
 
                     icon:
                         '<i class="bi bi-lock-fill"></i>',
-                    
+
                     autocomplete:
                         'current-password',
 
@@ -346,60 +357,61 @@
             </form>
 
 
-            {# =================================================
-               SOCIAL AUTHENTICATION
-               ================================================= #}
+            {% if loginShowSocial %}
 
-            <div class="social-auth-links text-center mb-3 d-grid gap-2">
+                {# =================================================
+                   SOCIAL AUTHENTICATION
+                   ================================================= #}
 
-                <p>
-                    - OR -
-                </p>
+                <div class="social-auth-links text-center mb-3 d-grid gap-2">
 
-
-                {% include 'components/form/button.twig' with {
-
-                    tag:
-                        'a',
-
-                    href:
-                        loginFacebookUrl,
-
-                    class:
-                        'btn btn-primary',
-
-                    icon:
-                        'bi bi-facebook',
-
-                    content:
-                        loginFacebookText
-
-                } %}
+                    <p>
+                        - OR -
+                    </p>
 
 
-                {% include 'components/form/button.twig' with {
+                    {% include 'components/form/button.twig' with {
 
-                    tag:
-                        'a',
+                        tag:
+                            'a',
 
-                    href:
-                        loginGoogleUrl,
+                        href:
+                            loginFacebookUrl,
 
-                    class:
-                        'btn btn-danger',
+                        class:
+                            'btn btn-primary',
 
-                    icon:
-                        'bi bi-google',
+                        icon:
+                            'bi bi-facebook',
 
-                    content:
-                        loginGoogleText
+                        content:
+                            loginFacebookText
 
-                } %}
-
-            </div>
+                    } %}
 
 
-            {# /.social-auth-links #}
+                    {% include 'components/form/button.twig' with {
+
+                        tag:
+                            'a',
+
+                        href:
+                            loginGoogleUrl,
+
+                        class:
+                            'btn btn-danger',
+
+                        icon:
+                            'bi bi-google',
+
+                        content:
+                            loginGoogleText
+
+                    } %}
+
+                </div>
+
+            {% endif %}
 
 
             {# =================================================

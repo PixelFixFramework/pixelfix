@@ -1,38 +1,29 @@
-# Breadcrumb
+# Breadcrumb Component
 
-> **Component:** `components/navigation/breadcrumb.twig`
+Renders a breadcrumb navigation from an ordered item array.
 
-## Purpose
+**Component:** `navigation/breadcrumb.twig`
 
-Renders a Bootstrap breadcrumb trail from an array of navigation items.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `items` | `[]` | Array of breadcrumb objects with `label` and optional `url`. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``items`` | Optional | `[]` | Array of breadcrumb objects containing `label` and `url`. |
+## Behavior and Notes
 
+The last item is always rendered as the active/current page.
 
-## Behavior
+Non-final items are rendered as links using `item.url`.
 
-Every item except the last is rendered as a link using `item.url`. The last item is rendered as the active page and is marked with `aria-current="page"`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/navigation/breadcrumb.twig' with {
     items: [
-        {label: 'Dashboard', url: route('home')},
-        {label: 'Tasks', url: route('tasks.index')},
-        {label: 'Edit Task'}
+        { label: 'Home', url: '/' },
+        { label: 'Tasks', url: '/tasks' },
+        { label: 'Details' }
     ]
 } %}
 ```
-
-## Usage
-
-Provide the items in display order. Leave the last item's `url` out when it should represent the current page.
-
-## Related Components
-
-- `components/layout/main.twig`

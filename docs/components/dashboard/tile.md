@@ -1,43 +1,33 @@
-# Dashboard Tile
+# Dashboard Tile Component
 
-> **Component:** `components/dashboard/tile.twig`
+Renders a dashboard summary tile with a value, label, optional Bootstrap icon, and footer link.
 
-## Purpose
+**Component:** `dashboard/tile.twig`
 
-Displays a compact dashboard statistic consisting of a value, label, optional Bootstrap icon and a footer link.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `value` | `''` | Primary value shown in the tile. |
+| `label` | `''` | Text shown below the value. |
+| `icon` | `null` | Optional Bootstrap icon name. The template prefixes it with `bi `. |
+| `class` | `''` | Additional CSS classes for the tile. |
+| `url` | `#` | Footer link URL. |
+| `footer_text` | `More info` | Footer link text. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``value`` | Optional | `''` | Primary statistic shown in the tile. |
-| ``label`` | Optional | `''` | Descriptive label. |
-| ``icon`` | Optional | `null` | Bootstrap Icons class suffix. The component prepends `bi `. |
-| ``class`` | Optional | `''` | Additional CSS class(es) appended to the tile root. |
-| ``url`` | Optional | `#` | Footer link destination. |
-| ``footer_text`` | Optional | `More info` | Footer link text. |
+## Behavior and Notes
 
+The icon is rendered only when `icon` has a value. The footer link is always rendered.
 
-## Behavior
-
-The component renders `pixelfix-dashboard-tile` classes supplied by the framework stylesheet. When `icon` is provided, the markup uses `<i class="bi {{ icon }}"></i>`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/dashboard/tile.twig' with {
-    value: 42,
-    label: 'Open Tasks',
-    icon: 'check-circle',
+    value: '42',
+    label: 'Tasks',
+    icon: 'check2-square',
+    class: 'my-tile',
     url: route('tasks.index'),
     footer_text: 'View tasks'
 } %}
 ```
-
-## Usage
-
-Use dashboard tiles for aggregate counts or headline metrics. Pass an icon name such as `check-circle`, not a complete `<i>` tag.
-
-## Related Components
-
-- `components/layout/main.twig`

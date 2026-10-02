@@ -14,6 +14,10 @@
     logo_text|default('')
 %}
 
+{% set registerShowLogo =
+    show_logo|default(false)
+%}
+
 {% set registerMessage =
     message|default('Register a new membership')
 %}
@@ -94,6 +98,10 @@
    CONFIRM PASSWORD
    ===================================================== #}
 
+{% set registerShowConfirmPassword =
+    show_confirm_password|default(false)
+%}
+
 {% set registerConfirmPasswordName =
     confirm_password_name|default('password_confirmation')
 %}
@@ -145,6 +153,10 @@
    SOCIAL AUTHENTICATION
    ===================================================== #}
 
+{% set registerShowSocial =
+    show_social|default(false)
+%}
+
 {% set registerFacebookUrl =
     facebook_url|default('#')
 %}
@@ -181,28 +193,31 @@
 
 <main class="register-box">
 
+    {% if registerShowLogo %}
 
-    {# =================================================
-       LOGO
-       ================================================= #}
+        {# =================================================
+           LOGO
+           ================================================= #}
 
-    <h1 class="register-logo">
+        <h1 class="register-logo">
 
-        <a href="{{ registerLogoUrl }}">
+            <a href="{{ registerLogoUrl }}">
 
-            {% if registerLogoBold %}
+                {% if registerLogoBold %}
 
-                <b>
-                    {{ registerLogoBold }}
-                </b>
+                    <b>
+                        {{ registerLogoBold }}
+                    </b>
 
-            {% endif %}
+                {% endif %}
 
-            {{ registerLogoText }}
+                {{ registerLogoText }}
 
-        </a>
+            </a>
 
-    </h1>
+        </h1>
+
+    {% endif %}
 
 
     {# =================================================
@@ -263,7 +278,7 @@
 
                     icon:
                         '<i class="bi bi-person"></i>',
-                   
+
                     autocomplete:
                         'name',
 
@@ -299,7 +314,7 @@
 
                     icon:
                         '<i class="bi bi-envelope"></i>',
-                    
+
                     autocomplete:
                         'email',
 
@@ -332,7 +347,7 @@
 
                     icon:
                         '<i class="bi bi-lock-fill"></i>',
-                    
+
                     autocomplete:
                         'new-password',
 
@@ -341,7 +356,44 @@
 
                 } %}
 
-               
+
+                {% if registerShowConfirmPassword %}
+
+                    {# =================================================
+                       CONFIRM PASSWORD
+                       ================================================= #}
+
+                    {% include 'components/form/input-group.twig' with {
+
+                        type:
+                            'password',
+
+                        name:
+                            registerConfirmPasswordName,
+
+                        label:
+                            registerConfirmPasswordLabel,
+
+                        label_class:
+                            'visually-hidden',
+
+                        placeholder:
+                            registerConfirmPasswordPlaceholder,
+
+                        icon:
+                            '<i class="bi bi-lock-fill"></i>',
+
+                        autocomplete:
+                            'new-password',
+
+                        required:
+                            true
+
+                    } %}
+
+                {% endif %}
+
+
                 {# =================================================
                    ROW
                    ================================================= #}
@@ -423,66 +475,67 @@
             </form>
 
 
-            {# =================================================
-               SOCIAL AUTHENTICATION
-               ================================================= #}
+            {% if registerShowSocial %}
 
-            <div class="social-auth-links text-center mb-3 d-grid gap-2">
+                {# =================================================
+                   SOCIAL AUTHENTICATION
+                   ================================================= #}
 
-                <p>
-                    - OR -
-                </p>
+                <div class="social-auth-links text-center mb-3 d-grid gap-2">
 
-
-                {% include 'components/form/button.twig' with {
-
-                    tag:
-                        'a',
-
-                    href:
-                        registerFacebookUrl,
-
-                    class:
-                        'btn btn-primary',
-
-                    icon:
-                        'bi bi-facebook',
-
-                    icon_class:
-                        'me-2',
-
-                    content:
-                        registerFacebookText
-
-                } %}
+                    <p>
+                        - OR -
+                    </p>
 
 
-                {% include 'components/form/button.twig' with {
+                    {% include 'components/form/button.twig' with {
 
-                    tag:
-                        'a',
+                        tag:
+                            'a',
 
-                    href:
-                        registerGoogleUrl,
+                        href:
+                            registerFacebookUrl,
 
-                    class:
-                        'btn btn-danger',
+                        class:
+                            'btn btn-primary',
 
-                    icon:
-                        'bi bi-google',
+                        icon:
+                            'bi bi-facebook',
 
-                    icon_class:
-                        'me-2',
+                        icon_class:
+                            'me-2',
 
-                    content:
-                        registerGoogleText
+                        content:
+                            registerFacebookText
 
-                } %}
-
-            </div>
+                    } %}
 
 
-            {# /.social-auth-links #}
+                    {% include 'components/form/button.twig' with {
+
+                        tag:
+                            'a',
+
+                        href:
+                            registerGoogleUrl,
+
+                        class:
+                            'btn btn-danger',
+
+                        icon:
+                            'bi bi-google',
+
+                        icon_class:
+                            'me-2',
+
+                        content:
+                            registerGoogleText
+
+                    } %}
+
+                </div>
+
+            {% endif %}
 
 
             {# =================================================

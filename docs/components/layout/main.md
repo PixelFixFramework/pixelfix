@@ -1,46 +1,40 @@
-# Main Content
+# Main Content Component
 
-> **Component:** `components/layout/main.twig`
+Renders the main PixelFix application content area, with optional title, breadcrumbs, and configurable container/content classes.
 
-## Purpose
+**Component:** `layout/main.twig`
 
-Renders the main application content area, including an optional page title, breadcrumb trail and configurable content/container classes.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `class` | `''` | Additional classes for the main element. |
+| `id` | `pixelfix-main` | Main element id. |
+| `title` | `null` | Optional page title. |
+| `breadcrumbs` | `[]` | Optional breadcrumb array. |
+| `content` | `''` | Main content. Rendered as raw HTML. |
+| `container_class` | `''` | Additional class applied to the main container elements. |
+| `content_class` | `''` | Additional class applied to the main content wrapper. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``class`` | Optional | `''` | Additional class on the `<main>` element. |
-| ``id`` | Optional | `pixelfix-main` | Main element id. |
-| ``title`` | Optional | `null` | Page title shown in the content header. |
-| ``breadcrumbs`` | Optional | `[]` | Array of `{label, url}` items; last item is active. |
-| ``content`` | Optional | `''` | Main page content; rendered raw. |
-| ``container_class`` | Optional | `''` | Additional class on the inner content container. |
-| ``content_class`` | Optional | `''` | Additional class on the `.pixelfix-main-content` wrapper. |
+## Behavior and Notes
 
+A content header is rendered when `title` is set or when breadcrumbs are present.
 
-## Behavior
+Breadcrumb entries use `label` and optional `url`. The final breadcrumb is always rendered as the current page, even if a URL is supplied.
 
-The header area is rendered when either `title` exists or `breadcrumbs` contains items. The last breadcrumb is rendered as plain text and marked `aria-current="page"`. Earlier breadcrumbs become links only when their `url` is present.
-
-## Example
-
-```twig
-{% include 'components/layout/main.twig' with {
-    title: 'Tasks',
-    breadcrumbs: [
-        {label: 'Dashboard', url: '/'},
-        {label: 'Tasks'}
-    ],
-    content: '<p>Task list goes here.</p>'
-} %}
-```
+`content` is rendered with `|raw`.
 
 ## Usage
 
-Use as the content shell inside the PixelFix dashboard layout. Supply prepared page content via `content` when using the component as a standalone include.
-
-## Related Components
-
-- `components/navigation/breadcrumb.twig`
-- `components/layout/card.twig`
+```twig
+{% include 'components/layout/main.twig' with {
+    id: 'dashboard-main',
+    class: 'dashboard-page',
+    title: 'Dashboard',
+    breadcrumbs: [
+        { label: 'Home', url: '/' },
+        { label: 'Dashboard' }
+    ],
+    content: '<p>Dashboard content</p>'
+} %}
+```

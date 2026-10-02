@@ -1,35 +1,25 @@
-# Header Search
+# Search Header Item
 
-> **Component:** `components/layout/header/search.twig`
+Renders a desktop search form and a small-screen search link.
 
-## Purpose
+**Component:** `layout/header/search.twig`
 
-Adds a compact header search control with a configurable destination.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `search_url` | `#` | Search destination URL. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``search_url`` | Optional | `#` | Search destination. |
+## Behavior and Notes
 
+Desktop search uses GET with a `query` field.
 
-## Behavior
+The small-screen link points directly to `search_url`.
 
-The current component is a fixed header search affordance. Its public API contains only the destination URL.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/layout/header/search.twig' with {
     search_url: route('search')
 } %}
 ```
-
-## Usage
-
-Use inside the `header_end` block of the application header.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/navigation/navbar.twig`

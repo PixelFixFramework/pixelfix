@@ -1,43 +1,28 @@
-# Footer
+# Footer Component
 
-> **Component:** `components/layout/footer.twig`
+Renders the standard PixelFix application footer with copyright information and optional right-side content.
 
-## Purpose
+**Component:** `layout/footer.twig`
 
-Renders the canonical PixelFix application footer with copyright attribution and an optional right-side content area.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `footer_company_name` | `config('app.name')` | Company/application name shown in the copyright link. |
+| `footer_company_url` | `#` | URL of the copyright company/application link. |
+| `footer_right` | `null` | Optional raw HTML rendered on the right side. |
+| `container` | `container-fluid` | CSS container class wrapping footer content. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``footer_company_name`` | Optional | `config('app.name')` | Company/application name. |
-| ``footer_company_url`` | Optional | `#` | Copyright link destination. |
-| ``footer_right`` | Optional | `null` | Optional right-side HTML. |
-| ``container`` | Optional | `container-fluid` | Footer container class. |
+## Behavior and Notes
 
-
-## Behavior
-
-The current year is derived inside the component with `"now"|date('Y')`. The right-side block is hidden on small screens using `d-none d-sm-inline`.
-
-## Example
-
-```twig
-{% include 'components/layout/footer.twig' with {
-    footer_company_name: config('app.name'),
-    footer_company_url: route('home'),
-    footer_right: ''
-} %}
-```
+The current year is generated internally with `"now"|date('Y')`; there is no year parameter.
 
 ## Usage
 
-Include the footer at page level when the page needs it. The neutral `layouts/app.twig` does not automatically include the footer.
-
-## Notes
-
-Do not pass `footer_start_year`; the current component API does not define it.
-
-## Related Components
-
-- `components/layout/main.twig`
+```twig
+{% include 'components/layout/footer.twig' with {
+    footer_company_name: 'PixelFix',
+    footer_company_url: route('home'),
+    footer_right: '<span>Version 0.1.10</span>'
+} %}
+```

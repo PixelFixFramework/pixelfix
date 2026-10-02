@@ -1,61 +1,53 @@
-# Input Group
+# Input Group Component
 
-> **Component:** `components/form/input-group.twig`
+Renders a conventional form input with optional label, leading/trailing icon, validation feedback, and common HTML input attributes.
 
-## Purpose
+**Component:** `form/input-group.twig`
 
-Renders a Bootstrap input-group control with a label, optional icon on either side, old-value handling and validation.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `type` | `text` | HTML input type. |
+| `name` | Required | Input name/id. |
+| `label` | `''` | Input label. |
+| `label_class` | `form-label` | CSS class for the label. |
+| `placeholder` | `''` | Input placeholder. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `icon` | `null` | Optional icon markup. Rendered as raw HTML. |
+| `icon_position` | `start` | Use `start` or `end` to choose where the icon appears. |
+| `value` | `''` | Initial value before `old()` resolution. |
+| `class` | `''` | Additional input classes. |
+| `maxlength` | `null` | Optional HTML `maxlength`. |
+| `autofocus` | `false` | Adds the HTML `autofocus` attribute. |
+| `disabled` | `false` | Adds the HTML `disabled` attribute. |
+| `readonly` | `false` | Adds the HTML `readonly` attribute. |
+| `validation_message` | `null` | Custom fallback validation message. |
+| `autocomplete` | `null` | Autocomplete value. When omitted, common values are inferred for email, password, name/full_name, and username. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``type`` | Optional | `text` | HTML input type. |
-| ``name`` | Required | `—` | Input name and id. |
-| ``label`` | Optional | `''` | Visible label text. |
-| ``label_class`` | Optional | `form-label` | Label class. |
-| ``placeholder`` | Optional | `''` | Placeholder. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``icon`` | Optional | `null` | Raw icon markup. |
-| ``icon_position`` | Optional | `start` | Use `start` or `end`. |
-| ``value`` | Optional | `''` | Fallback value used by `old()`. |
-| ``class`` | Optional | `''` | Additional input classes. |
-| ``maxlength`` | Optional | `null` | Maximum input length. |
-| ``autofocus`` | Optional | `false` | Adds autofocus. |
-| ``disabled`` | Optional | `false` | Adds disabled. |
-| ``readonly`` | Optional | `false` | Adds readonly. |
-| ``validation_message`` | Optional | `Auto-generated` | Fallback validation message. |
-| ``autocomplete`` | Optional | `null` | Explicit autocomplete value; inferred for common field names/types. |
+## Behavior and Notes
 
+The field value is resolved with `old(name, value)`.
 
-## Behavior
+Password inputs render an empty value attribute and are not repopulated.
 
-The component checks `errors()[name]` and `has_error(name)` and resolves a prior value with `old(name, value)`. Password inputs do not reuse a previous value. Autocomplete is inferred for email, password, name/full_name and username when not explicitly supplied. The component wraps the control in a `.mb-3` container.
+The `icon` value is rendered with `|raw` and therefore should be trusted HTML when using markup such as `<i class="bi ..."></i>`.
 
-## Example
+The icon is only rendered when `icon` is supplied and `icon_position` is `start` or `end`.
+
+The component calls `errors()` and uses the first field error in the invalid-feedback block.
+
+## Usage
 
 ```twig
 {% include 'components/form/input-group.twig' with {
     type: 'email',
     name: 'email',
     label: 'Email',
+    placeholder: 'Enter your email',
     icon: '<i class="bi bi-envelope"></i>',
-    icon_position: 'end',
-    required: true,
-    autocomplete: 'email'
+    icon_position: 'start',
+    autocomplete: 'email',
+    required: true
 } %}
 ```
-
-## Usage
-
-Use when an input needs Bootstrap's input-group presentation, particularly auth or icon-enhanced controls.
-
-## Notes
-
-Unlike `forms/input.twig`, the `icon` value is expected to contain the icon HTML because the component explicitly renders it with `|raw`.
-
-## Related Components
-
-- `components/form/input.twig`
-- `components/auth/login.twig`
-- `components/auth/register.twig`

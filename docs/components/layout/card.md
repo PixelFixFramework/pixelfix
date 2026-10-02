@@ -1,42 +1,30 @@
-# Card
+# Card Component
 
-> **Component:** `components/layout/card.twig`
+Renders a card with optional title, subtitle, body content, and footer.
 
-## Purpose
+**Component:** `layout/card.twig`
 
-Provides a simple Bootstrap card with optional title, subtitle, body content and footer.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `title` | `null` | Optional card title. |
+| `subtitle` | `null` | Optional card subtitle. |
+| `content` | `''` | Card body content. Rendered as raw HTML. |
+| `footer` | `null` | Optional footer content. Rendered as raw HTML. |
+| `class` | `''` | Additional card classes. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``title`` | Optional | `null` | Card heading. |
-| ``subtitle`` | Optional | `null` | Secondary heading. |
-| ``content`` | Optional | `''` | Card body content; rendered raw. |
-| ``footer`` | Optional | `null` | Footer content; rendered raw. |
-| ``class`` | Optional | `''` | Additional card class. |
+## Behavior and Notes
 
+Both `content` and `footer` are rendered with `|raw`.
 
-## Behavior
-
-The component renders title/subtitle conditionally. `content` and `footer` use `|raw`, allowing callers to pass prepared HTML fragments.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/layout/card.twig' with {
     title: 'Task Summary',
-    subtitle: 'Today',
-    content: '<p>5 tasks remain.</p>',
-    footer: '<a href="/tasks">View all tasks</a>'
+    subtitle: 'Current status',
+    content: '<p>All tasks are up to date.</p>',
+    footer: '<a href="/tasks">View Tasks</a>'
 } %}
 ```
-
-## Usage
-
-Use for reusable content panels. Prefer trusted/generated markup for raw `content` and `footer` inputs.
-
-## Related Components
-
-- `components/layout/modal.twig`
-- `components/layout/main.twig`

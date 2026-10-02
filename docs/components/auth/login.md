@@ -1,74 +1,74 @@
-# Authentication Login
+# Login Component
 
-> **Component:** `components/auth/login.twig`
+Renders the PixelFix login form, including the optional logo, authentication form, optional social-login links, password-reset link, and registration link.
 
-## Purpose
+**Component:** `auth/login.twig`
 
-Renders the reusable PixelFix login interface. The component provides the logo area, sign-in message, email and password fields, remember-me option, submit button, optional social-auth links, password-recovery link and registration link.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `logo_url` | `#` | URL used by the optional logo link. |
+| `logo_bold` | `''` | Optional bold portion of the logo text. |
+| `logo_text` | `''` | Optional regular logo text. |
+| `show_logo` | `false` | When `true`, renders the `login-logo` section. |
+| `message` | `Sign in to start your session` | Message displayed above the form. |
+| `action` | `#` | Form action URL. |
+| `method` | `post` | Form method. |
+| `csrf` | `''` | Raw CSRF markup inserted into the form. |
+| `email_name` | `email` | Name/id of the email input. |
+| `email_label` | `Email` | Label variable defined by the component. |
+| `email_placeholder` | `Email` | Email placeholder. |
+| `email_value` | `''` | Initial email value. |
+| `autofocus` | `false` | Enables autofocus on the email field. |
+| `password_name` | `password` | Name/id of the password input. |
+| `password_label` | `Password` | Label variable defined by the component. |
+| `password_placeholder` | `Password` | Password placeholder. |
+| `remember_name` | `remember` | Name/id of the remember-me checkbox. |
+| `remember_value` | `1` | Value of the remember-me checkbox. |
+| `remember_text` | `Remember Me` | Visible remember-me label text. |
+| `remember_checked` | `false` | Initial checked state. |
+| `submit_text` | `Sign In` | Submit button text. |
+| `show_social` | `false` | When `true`, renders the social-login block. |
+| `facebook_url` | `#` | Facebook login link URL. |
+| `facebook_text` | `Sign in using Facebook` | Facebook login link text. |
+| `google_url` | `#` | Google login link URL. |
+| `google_text` | `Sign in using Google` | Google login link text. |
+| `forgot_password_url` | `#` | Password-reset link URL. |
+| `forgot_password_text` | `I forgot my password` | Password-reset link text. |
+| `register_url` | `#` | Registration link URL. |
+| `register_text` | `Create a new account` | Registration link text. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``logo_url`` | Optional | `#` | Destination of the login logo. |
-| ``logo_bold`` | Optional | `''` | Text rendered inside `<b>` in the logo. |
-| ``logo_text`` | Optional | `''` | Additional logo text. |
-| ``message`` | Optional | `Sign in to start your session` | Message displayed above the form. |
-| ``action`` | Optional | `#` | Form action URL. |
-| ``method`` | Optional | `post` | HTTP method used by the form. |
-| ``csrf`` | Optional | `''` | Raw CSRF markup inserted inside the form. |
-| ``email_name`` | Optional | `email` | Name used for the email input. |
-| ``email_label`` | Optional | `Email` | Normalized label value passed into the input-group component. |
-| ``email_placeholder`` | Optional | `Email` | Placeholder for the email field. |
-| ``email_value`` | Optional | `''` | Initial email value. |
-| ``autofocus`` | Optional | `false` | Whether the email input receives autofocus. |
-| ``password_name`` | Optional | `password` | Name used for the password input. |
-| ``password_label`` | Optional | `Password` | Password label value. |
-| ``password_placeholder`` | Optional | `Password` | Password placeholder. |
-| ``remember_name`` | Optional | `remember` | Remember-me field name. |
-| ``remember_value`` | Optional | `1` | Remember-me submitted value. |
-| ``remember_text`` | Optional | `Remember Me` | Text displayed beside the checkbox. |
-| ``remember_checked`` | Optional | `false` | Initial checked state. |
-| ``submit_text`` | Optional | `Sign In` | Text displayed on the submit button. |
-| ``facebook_url`` | Optional | `#` | Facebook authentication URL. |
-| ``facebook_text`` | Optional | `Sign in using Facebook` | Facebook button/link text. |
-| ``google_url`` | Optional | `#` | Google authentication URL. |
-| ``google_text`` | Optional | `Sign in using Google` | Google button/link text. |
-| ``forgot_password_url`` | Optional | `#` | Password-reset destination. |
-| ``forgot_password_text`` | Optional | `I forgot my password` | Forgot-password link text. |
-| ``register_url`` | Optional | `#` | Registration destination. |
-| ``register_text`` | Optional | `Create a new account` | Registration link text. |
+## Behavior and Notes
 
+The logo is disabled by default with `show_logo=false`.
 
-## Behavior
+Social authentication is disabled by default with `show_social=false`; both Facebook and Google links are rendered when the block is enabled.
 
-The component delegates the email and password controls to `components/form/input-group.twig` and the remember-me control to `components/form/checkbox.twig`. The CSRF value is output as raw markup. The component itself contains the AdminLTE-style `.login-box` structure.
+The current login template defines `email_label` and `password_label`, but passes an empty `label` to the nested `input-group` components. Therefore these two parameters do not currently change the rendered labels.
 
-## Example
+The email and password fields use the `components/form/input-group.twig` component. Password values are not repopulated by the nested component.
 
-```twig
-{% include 'components/auth/login.twig' with {
-    logo_bold: config('app.name'),
-    action: route('auth.attempt'),
-    method: 'post',
-    csrf: csrf(),
-    email_name: 'email',
-    password_name: 'password',
-    remember_name: 'remember',
-    register_url: route('auth.register')
-} %}
-```
+The `csrf` value is rendered with `|raw` and is intended for already-generated CSRF markup.
 
 ## Usage
 
-Place the component inside the page-level login wrapper. Keep page navigation/footer decisions outside this component so the login component remains reusable.
-
-## Notes
-
-The source defines label variables for email/password/remember but the current markup passes an empty visible label for the input-group email/password controls and uses the checkbox text for the remember control. The public API documents the inputs exactly as the component accepts them.
-
-## Related Components
-
-- `components/form/input-group.twig`
-- `components/form/checkbox.twig`
-- `components/form/button.twig`
+```twig
+{% include 'components/auth/login.twig' with {
+    show_logo: false,
+    show_social: true,
+    message: 'Sign in to manage your tasks.',
+    action: route('auth.attempt'),
+    method: 'POST',
+    csrf: csrf,
+    email_name: 'email',
+    email_placeholder: 'Email or username',
+    password_name: 'password',
+    password_placeholder: 'Password',
+    remember_name: 'remember',
+    remember_value: '1',
+    forgot_password_url: '#',
+    register_url: route('auth.register'),
+    register_text: 'Create a new account'
+} %}
+```

@@ -1,55 +1,45 @@
-# Tabs
+# Tabs Component
 
-> **Component:** `components/navigation/tabs.twig`
+Renders a tab navigation and corresponding tab-content panels from an ordered tabs array.
 
-## Purpose
+**Component:** `navigation/tabs.twig`
 
-Renders Bootstrap tabs or pills together with their tab panels from a tab definition array.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `id` | `tabs` | Base id used to generate tab and panel ids. |
+| `tabs` | `[]` | Array of tab objects. |
+| `style` | `tabs` | Use `tabs` or `pills` for the navigation style. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``id`` | Optional | `tabs` | Base id used to generate tab and panel ids. |
-| ``tabs`` | Optional | `[]` | Array of tab objects. |
-| ``style`` | Optional | `tabs` | Use `tabs` or `pills`. |
+## Behavior and Notes
 
+Each tab object supports `id`, `label`, `active`, optional `icon`, and `content`.
 
-## Behavior
+The `icon` and `content` values are rendered with `|raw`.
 
-Each tab object accepts `id`, `label`, `content` and optional `icon` and `active`. The component uses `active` to set the button/panel state and ARIA attributes. `content` and `icon` are rendered raw.
+Supported styles are `tabs` and `pills`; unsupported values fall back to `tabs`.
 
-## Example
+The first/active state is controlled independently for each tab through `active`.
+
+## Usage
 
 ```twig
 {% include 'components/navigation/tabs.twig' with {
-    id: 'taskTabs',
-    style: 'pills',
+    id: 'task-tabs',
+    style: 'tabs',
     tabs: [
         {
             id: 'details',
             label: 'Details',
-            content: '<p>Task details</p>',
-            active: true
+            active: true,
+            content: '<p>Task details</p>'
         },
         {
             id: 'history',
             label: 'History',
-            content: '<p>Activity history</p>'
+            content: '<p>Task history</p>'
         }
     ]
 } %}
 ```
-
-## Usage
-
-Use unique tab ids within a page. Ensure Bootstrap's tab JavaScript is loaded so clicking the generated buttons switches panels.
-
-## Notes
-
-An optional `icon` may contain trusted icon HTML such as `<i class="bi bi-info-circle"></i>`.
-
-## Related Components
-
-- `components/navigation/breadcrumb.twig`
-- `components/navigation/navbar.twig`

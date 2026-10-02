@@ -1,76 +1,71 @@
-# Sidebar
+# Sidebar Component
 
-> **Component:** `components/layout/sidebar.twig`
+Renders a configurable PixelFix application sidebar with branding, searchable navigation, nested menu items, optional user information, and optional logout.
 
-## Purpose
+**Component:** `layout/sidebar.twig`
 
-Renders the PixelFix dashboard/application sidebar with branding, optional menu search, recursive nested navigation, optional user information and optional POST logout.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `brand` | `PixelFix` | Brand text. |
+| `logo` | `P` | Brand logo/short text. |
+| `items` | `[]` | Navigation item array. |
+| `user` | `null` | Optional user object used for the sidebar footer. |
+| `logout_url` | `null` | Optional logout URL. When set, a POST logout form is rendered. |
+| `logout_text` | `Logout` | Logout button text. |
+| `class` | `''` | Additional sidebar classes. |
+| `id` | `pixelfix-sidebar` | Sidebar id. |
+| `brand_url` | `/` | Brand link URL. |
+| `search` | `true` | Whether to render the menu search box. |
+| `search_placeholder` | `Filter menu…` | Search input placeholder. |
+| `search_empty_text` | `No matching pages.` | Message displayed when search has no matches. |
+| `breakpoint` | `991.98` | Breakpoint value written to `data-sidebar-breakpoint`. |
+| `persistence` | `false` | Enables persistence data attribute. |
+| `mini` | `false` | Adds the mini sidebar class and data attribute. |
+| `collapsed` | `false` | Adds the collapsed class. |
+| `without_hover` | `false` | Adds the without-hover class. |
+| `accordion` | `true` | Controls the sidebar accordion data attribute. |
+| `animation_speed` | `300` | Animation speed data value. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``brand`` | Optional | `PixelFix` | Brand text. |
-| ``logo`` | Optional | `P` | Logo text. |
-| ``items`` | Optional | `[]` | Navigation item tree. |
-| ``user`` | Optional | `null` | User object with `name` and `email`. |
-| ``logout_url`` | Optional | `null` | When present, renders a POST logout form. |
-| ``logout_text`` | Optional | `Logout` | Logout button text. |
-| ``class`` | Optional | `''` | Additional sidebar classes. |
-| ``id`` | Optional | `pixelfix-sidebar` | Sidebar id. |
-| ``brand_url`` | Optional | `/` | Brand link destination. |
-| ``search`` | Optional | `true` | Show menu filter. |
-| ``search_placeholder`` | Optional | `Filter menu…` | Search placeholder. |
-| ``search_empty_text`` | Optional | `No matching pages.` | Message when menu filtering finds nothing. |
-| ``breakpoint`` | Optional | `991.98` | Responsive breakpoint stored in data attributes. |
-| ``persistence`` | Optional | `false` | Enable sidebar state persistence. |
-| ``mini`` | Optional | `false` | Enable mini sidebar mode. |
-| ``collapsed`` | Optional | `false` | Start collapsed. |
-| ``without_hover`` | Optional | `false` | Disable hover behaviour. |
-| ``accordion`` | Optional | `true` | Enable accordion-style child navigation. |
-| ``animation_speed`` | Optional | `300` | Sidebar animation speed. |
+## Behavior and Notes
 
+Navigation items are recursive and support `label`, `url`, `icon`, `active`, `open`, `disabled`, `badge`, `badge_class`, `header`, and `children`.
 
-## Behavior
+A navigation item with `header=true` renders a section header instead of a link.
 
-Each menu item may define `label`, `url`, `icon`, `active`, `disabled`, `badge`, `badge_class`, `open`, `children` and `header`. Items with `header` truthy become section headers; items with `children` render recursive trees and a toggle button. The logout form outputs the framework `csrf` value from the surrounding template context.
+An item with children renders a toggle and nested navigation tree.
 
-## Example
+The sidebar navigation uses `url` directly; it does not resolve a route name.
+
+When `logout_url` is supplied, the component renders `{{ csrf|raw }}` inside the POST form, so a `csrf` value must also be available in the rendering context.
+
+The user object is expected to expose `name` and optionally `email` for the footer.
+
+## Usage
 
 ```twig
 {% include 'components/layout/sidebar.twig' with {
     brand: 'Task Manager',
-    logo: 'TM',
+    logo: 'T',
     brand_url: route('home'),
     items: [
         {
             label: 'Dashboard',
-            url: route('dashboard'),
+            url: '/dashboard',
             icon: '▣',
             active: true
         },
         {
             label: 'Tasks',
+            url: '/tasks',
             icon: '✓',
             children: [
-                {label: 'All Tasks', url: route('tasks.index')},
-                {label: 'Create Task', url: route('tasks.create')}
+                { label: 'All Tasks', url: '/tasks' },
+                { label: 'Completed', url: '/tasks/completed' }
             ]
         }
     ],
     search: true
 } %}
 ```
-
-## Usage
-
-Use inside `.pixelfix-app-wrapper` with the matching framework sidebar styles and JavaScript. Keep the item tree as data so navigation can be generated consistently.
-
-## Notes
-
-For logout, provide a valid `logout_url` and ensure a `csrf` value is available in the template scope because the source renders `{{ csrf|raw }}`.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/layout/main.twig`

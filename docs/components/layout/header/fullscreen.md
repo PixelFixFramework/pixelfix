@@ -1,30 +1,17 @@
-# Header Fullscreen Toggle
+# Fullscreen Header Item
 
-> **Component:** `components/layout/header/fullscreen.twig`
+Renders the fullscreen toggle navigation item.
 
-## Purpose
+**Component:** `layout/header/fullscreen.twig`
 
-Adds the header control used to enter/exit fullscreen mode.
+## Behavior and Notes
 
-## API / Properties
+No configurable parameters are defined.
 
-This component declares **no configurable properties**.
+The component relies on the PixelFix fullscreen behavior attached to `data-pixelfix-toggle="fullscreen"`.
 
-## Behavior
-
-The control emits `data-pixelfix-toggle="fullscreen"` and swaps the enter/exit icons using the classes `pixelfix-fullscreen-enter` and `pixelfix-fullscreen-exit`.
-
-## Example
+## Usage
 
 ```twig
 {% include 'components/layout/header/fullscreen.twig' %}
 ```
-
-## Usage
-
-Include it in the header end area. The framework's JavaScript must implement the fullscreen toggle behaviour.
-
-## Related Components
-
-- `components/layout/header.twig`
-- `components/layout/header/theme.twig`

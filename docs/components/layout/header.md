@@ -1,53 +1,39 @@
-# Base Application Header
+# Base Header Component
 
-> **Component:** `components/layout/header.twig`
+Provides the base PixelFix header markup and three Twig blocks for custom header content.
 
-## Purpose
+**Component:** `layout/header.twig`
 
-Provides the reusable PixelFix application header shell. It contains the sidebar toggle and exposes three Twig blocks for custom header content.
+## Behavior and Notes
 
-## API / Properties
+The component defines no configurable input parameters.
 
-`header.twig` does not declare ordinary component properties. Its extension points are Twig blocks:
+The `header_start` block is rendered on the left after the default sidebar-toggle item.
 
-- `header_start` — injected into the left/start navigation area.
-- `header_center` — injected into the central header area.
-- `header_end` — injected into the right/end navigation area.
+The `header_center` block is rendered in the center.
 
-## Behavior
+The `header_end` block is rendered on the right.
 
-The base header always includes the sidebar toggle link. The rest of the header is supplied through Twig blocks.
+When using Twig `embed`, these blocks can be overridden by the embedding template.
 
-## Example
+## Usage
 
 ```twig
 {% embed 'components/layout/header.twig' %}
     {% block header_start %}
         <li class="pixelfix-nav-item">
-            <a class="pixelfix-nav-link" href="/preview">
-                Preview
-            </a>
+            Custom Start Item
         </li>
+    {% endblock %}
+
+    {% block header_center %}
+        <span>Page Context</span>
     {% endblock %}
 
     {% block header_end %}
         <li class="pixelfix-nav-item">
-            <a class="pixelfix-nav-link" href="/help">
-                Help
-            </a>
+            Custom End Item
         </li>
     {% endblock %}
 {% endembed %}
 ```
-
-## Usage
-
-Use `embed` when you need custom header composition. The predefined `default-header.twig` demonstrates how the framework fills the blocks.
-
-## Notes
-
-The only built-in control in this base component is the sidebar toggle. It uses `data-pixelfix-toggle="sidebar"`.
-
-## Related Components
-
-- `components/layout/default-header.twig`

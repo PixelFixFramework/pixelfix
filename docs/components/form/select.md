@@ -1,48 +1,40 @@
-# Select
+# Select Component
 
-> **Component:** `components/form/select.twig`
+Renders a standard `<select>` element with a placeholder option, selectable options map, old-value resolution, and validation feedback.
 
-## Purpose
+**Component:** `form/select.twig`
 
-Renders a standard Bootstrap `<select>` with an empty placeholder option, option mapping, old-value preservation and validation.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `name` | Required | Select name/id. |
+| `label` | `''` | Optional label. |
+| `required` | `false` | Adds the HTML `required` attribute. |
+| `options` | `{}` | Map of option values to option text. |
+| `placeholder` | `Select` | Text used for the initial empty option. |
+| `value` | `''` | Initial selected value before `old()` resolution. |
+| `validation_message` | `null` | Custom fallback validation message. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``name`` | Required | `—` | Select name and id. |
-| ``label`` | Optional | `''` | Visible label. |
-| ``required`` | Optional | `false` | Adds required. |
-| ``options`` | Optional | `{}` | Associative array of option value => option text. |
-| ``placeholder`` | Optional | `Select` | Empty placeholder option text. |
-| ``value`` | Optional | `''` | Fallback selected value. |
-| ``validation_message`` | Optional | `Auto-generated` | Fallback validation message. |
+## Behavior and Notes
 
+The selected value is resolved with `old(name, value)`.
 
-## Behavior
+The `options` map is expected as `value => text`.
 
-The selected value is resolved with `old(name, value)`. Option values are compared directly to that resolved value. Validation uses the first field error when available.
+The first option always has an empty value.
 
-## Example
+## Usage
 
 ```twig
 {% include 'components/form/select.twig' with {
     name: 'status',
     label: 'Status',
     options: {
-        'pending': 'Pending',
-        'completed': 'Completed'
+        draft: 'Draft',
+        published: 'Published'
     },
-    value: 'pending',
+    placeholder: 'Choose a status',
     required: true
 } %}
 ```
-
-## Usage
-
-Prepare an associative map where the array key is the submitted value and the array value is the user-facing label.
-
-## Related Components
-
-- `components/floating/select.twig`
-- `components/form/radio.twig`

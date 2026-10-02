@@ -1,71 +1,69 @@
-# Navbar
+# Navbar Component
 
-> **Component:** `components/navigation/navbar.twig`
+Renders a Bootstrap-style responsive navigation bar with route-aware brand and links, dropdown children, optional search, configurable theme/background, and optional mobile offcanvas integration.
 
-## Purpose
+**Component:** `navigation/navbar.twig`
 
-Renders a Bootstrap responsive navigation bar with brand, route-aware items, dropdowns, optional search, optional fixed positioning and optional mobile offcanvas integration.
+## Parameters
 
-## API / Properties
+| Parameter | Default | Description |
+|---|---|---|
+| `brand` | `PixelFix` | Brand text. |
+| `brand_url` | `#` | Brand URL when no `brand_route` is supplied. |
+| `brand_route` | `null` | Optional route name used to resolve the brand URL. |
+| `brand_route_params` | `[]` | Parameters passed to `brand_route`. |
+| `items` | `[]` | Navigation item array. |
+| `expand` | `lg` | Breakpoint used in `navbar-expand-*`. |
+| `theme` | `light` | Value written to `data-bs-theme`. |
+| `background` | `bg-light` | Bootstrap background class, a CSS color value, or another value that becomes `bg-{background}`. |
+| `style` | `null` | Optional inline style appended to the navbar. |
+| `fixed` | `null` | Use `top` or `bottom` for Bootstrap fixed positioning. |
+| `container` | `container` | Container class. |
+| `id` | `navbar` | Collapse target id. |
+| `search` | `null` | Optional search configuration object. |
+| `mobile_offcanvas` | `null` | Optional offcanvas id used by the mobile toggler instead of Bootstrap collapse. |
 
-| Property | Required | Default | Description |
-|---|---|---|---|
-| ``brand`` | Optional | `PixelFix` | Brand text. |
-| ``brand_url`` | Optional | `#` | Direct brand URL. |
-| ``brand_route`` | Optional | `null` | Named route used for the brand URL when supplied. |
-| ``brand_route_params`` | Optional | `[]` | Parameters passed to `brand_route`. |
-| ``items`` | Optional | `[]` | Top-level navigation item array. |
-| ``expand`` | Optional | `lg` | Bootstrap navbar expand breakpoint. |
-| ``theme`` | Optional | `light` | Bootstrap colour scheme value. |
-| ``background`` | Optional | `bg-light` | Bootstrap bg class or CSS colour function. |
-| ``style`` | Optional | `null` | Additional inline CSS. |
-| ``fixed`` | Optional | `null` | `top` or `bottom`. |
-| ``container`` | Optional | `container` | Bootstrap container class. |
-| ``id`` | Optional | `navbar` | Collapse target id. |
-| ``search`` | Optional | `null` | Search configuration object. |
-| ``mobile_offcanvas`` | Optional | `null` | Id of an offcanvas target used instead of collapse on mobile. |
+## Behavior and Notes
 
+When `brand_route` is supplied, its resolved URL takes precedence over `brand_url`.
 
-## Behavior
+Top-level items support `label`, `url` or `route` plus optional `route_params`, `active`, `target`, `rel`, and `children`.
 
-Top-level items accept `label`, `url`, `route`, `route_params`, `active`, `target`, `rel` and optional `children`. Dropdown children can also define `header` or `divider`. Search accepts `route`, `route_params`, `action`, `method`, `type`, `name`, `placeholder`, `aria_label`, `role`, `button_class` and `button_label`. When `background` begins with `rgb(`, `rgba(`, `hsl(` or `hsla(`, the value is emitted as inline `background-color`; otherwise the component prepends `bg-`.
+Items with `children` render a dropdown. Each child can be a `header`, a `divider`, or a link with `label`, `url` or `route`, optional `route_params`, `active`, `target`, and `rel`.
 
-## Example
+The `background` value is treated specially: values beginning with `bg-` become classes; CSS color values beginning with `#`, `rgb(`, `rgba(`, `hsl(`, or `hsla(` become inline background color; other values become `bg-{background}`.
+
+`fixed` recognizes `top` and `bottom`; other values result in no fixed-position class.
+
+The optional `search` object supports `route`, `route_params`, `action`, `role`, `method`, `type`, `name`, `placeholder`, `aria_label`, `button_class`, and `button_label`.
+
+When `mobile_offcanvas` is set, the navbar toggler targets that offcanvas id; otherwise it targets the navbar collapse id.
+
+## Usage
 
 ```twig
 {% include 'components/navigation/navbar.twig' with {
     brand: config('app.name'),
     brand_route: 'home',
+    brand_route_params: [],
+    expand: 'lg',
+    theme: 'light',
+    background: 'bg-light',
+    container: 'container',
     items: [
-        {label: 'Home', route: 'home', active: true},
         {
-            label: 'Resources',
+            label: 'Home',
+            route: 'home',
+            active: true
+        },
+        {
+            label: 'Tasks',
             children: [
-                {header: 'Documentation'},
-                {label: 'Guides', url: '/guides'},
-                {divider: true},
-                {label: 'API', url: '/api'}
+                { label: 'All Tasks', route: 'tasks.index' },
+                { divider: true },
+                { label: 'Create Task', route: 'tasks.create' }
             ]
         }
-    ],
-    search: {
-        route: 'search',
-        method: 'get',
-        name: 'q',
-        placeholder: 'Search'
-    }
+    ]
 } %}
 ```
-
-## Usage
-
-Use this component for public/starter application navigation. For mobile navigation backed by Bootstrap Offcanvas, set `mobile_offcanvas` to the offcanvas element's id.
-
-## Notes
-
-The current component renders item and child labels as trusted template values, while search is configured through a nested object.
-
-## Related Components
-
-- `components/navigation/offcanvas.twig`
-- `components/navigation/breadcrumb.twig`
