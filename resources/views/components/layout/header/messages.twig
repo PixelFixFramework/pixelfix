@@ -2,17 +2,32 @@
    PIXELFIX HEADER - MESSAGES
    ===================================================== #}
 
-{% set messageCount =
-    message_count|default(3)
+{% set messages =
+    messages|default([])
 %}
 
+{% set messageCount =
+    message_count|default(messages|length)
+%}
 
-<li
-    class="
-        pixelfix-nav-item
-        dropdown
-    "
->
+{% set messagesFooterText =
+    messages_footer_text|default(
+        'See All Messages'
+    )
+%}
+
+{% set messageBadgeTypes = [
+    'primary',
+    'secondary',
+    'success',
+    'danger',
+    'warning',
+    'info',
+    'dark'
+] %}
+
+
+<li class="pixelfix-nav-item dropdown">
 
     <a
         href="#"
@@ -24,13 +39,14 @@
     >
 
         <i
-            class="
-                bi
-                bi-chat-left-text
-            "
+            class="bi bi-chat-left-text"
             aria-hidden="true"
         ></i>
 
+
+        {# =================================================
+           MESSAGE COUNT
+           ================================================= #}
 
         {% if messageCount > 0 %}
 
@@ -51,6 +67,10 @@
     </a>
 
 
+    {# =================================================
+       MESSAGE DROPDOWN
+       ================================================= #}
+
     <div
         class="
             dropdown-menu
@@ -59,205 +79,136 @@
         "
     >
 
-        {# =================================================
-           MESSAGE 1
-           ================================================= #}
+        {% for message in messages %}
 
-        <a
-            href="#"
-            class="pixelfix-message-item dropdown-item"
-        >
-
-            <span
+            <a
+                href="{{ message.url|default('#') }}"
                 class="
-                    pixelfix-message-avatar
-                    pixelfix-message-avatar-image
+                    pixelfix-message-item
+                    dropdown-item
                 "
             >
 
-                <img
-                    src="https://i.pravatar.cc/96?img=12"
-                    alt="Brad Diesel"
+                <span
+                    class="
+                        pixelfix-message-avatar
+
+                        {% if message.avatar|default(null) %}
+                            pixelfix-message-avatar-image
+                        {% endif %}
+                    "
                 >
 
-            </span>
+                    {% if message.avatar|default(null) %}
 
+                        <img
+                            src="{{ message.avatar }}"
+                            alt="{{ message.name|default('User') }}"
+                        >
 
-            <span class="pixelfix-message-content">
+                    {% else %}
 
-                <span class="pixelfix-message-name">
-                    Brad Diesel
+                        {% set badgeType =
+                            message.badge_type|default(
+                                random(messageBadgeTypes)
+                            )
+                        %}
+
+                        {% include
+                            'components/feedback/badge.twig'
+                            with {
+                                type:
+                                    badgeType,
+
+                                text:
+                                    message.initials|default(
+                                        message.name|default('U')
+                                            |first
+                                            |upper
+                                    )
+                            }
+                            only
+                        %}
+
+                    {% endif %}
+
                 </span>
 
-                <span class="pixelfix-message-preview">
-                    Call me whenever you can...
+
+                <span class="pixelfix-message-content">
+
+                    <span class="pixelfix-message-name">
+                        {{ message.name|default('Unknown User') }}
+                    </span>
+
+                    <span class="pixelfix-message-preview">
+                        {{ message.preview|default('') }}
+                    </span>
+
+                    <span class="pixelfix-message-time">
+
+                        <i
+                            class="bi bi-clock-fill"
+                            aria-hidden="true"
+                        ></i>
+
+                        {{ message.time|default('') }}
+
+                    </span>
+
                 </span>
 
-                <span class="pixelfix-message-time">
 
-                    <i
-                        class="bi bi-clock-fill"
-                        aria-hidden="true"
-                    ></i>
+                <i
+                    class="
+                        bi
+                        bi-star-fill
+                        pixelfix-message-star
+                        {{ message.star_type|default('text-secondary') }}
+                    "
+                    aria-hidden="true"
+                ></i>
 
-                    4 Hours Ago
+            </a>
 
-                </span>
-
-            </span>
-
-
-            <i
-                class="
-                    bi
-                    bi-star-fill
-                    pixelfix-message-star
-                    text-danger
-                "
-                aria-hidden="true"
-            ></i>
-
-        </a>
+        {% endfor %}
 
 
-        {# =================================================
-           MESSAGE 2
-           ================================================= #}
-
-        <a
-            href="#"
-            class="pixelfix-message-item dropdown-item"
-        >
+        {% if messages is empty %}
 
             <span
                 class="
-                    pixelfix-message-avatar
-                    pixelfix-message-avatar-image
+                    pixelfix-message-item
+                    dropdown-item
+                    text-muted
                 "
             >
-
-                <img
-                    src="https://i.pravatar.cc/96?img=11"
-                    alt="John Pierce"
-                >
-
+                No messages
             </span>
 
-
-            <span class="pixelfix-message-content">
-
-                <span class="pixelfix-message-name">
-                    John Pierce
-                </span>
-
-                <span class="pixelfix-message-preview">
-                    I got your message bro
-                </span>
-
-                <span class="pixelfix-message-time">
-
-                    <i
-                        class="bi bi-clock-fill"
-                        aria-hidden="true"
-                    ></i>
-
-                    4 Hours Ago
-
-                </span>
-
-            </span>
+        {% endif %}
 
 
-            <i
-                class="
-                    bi
-                    bi-star-fill
-                    pixelfix-message-star
-                    text-secondary
-                "
-                aria-hidden="true"
-            ></i>
+        {% include
+            'components/form/button.twig'
+            with {
+                tag:
+                    'a',
 
-        </a>
+                href:
+                    messages_url|default('#'),
 
+                class:
+                    '
+                        pixelfix-messages-footer
+                        dropdown-item
+                    ',
 
-        {# =================================================
-           MESSAGE 3
-           ================================================= #}
-
-        <a
-            href="#"
-            class="pixelfix-message-item dropdown-item"
-        >
-
-            <span
-                class="
-                    pixelfix-message-avatar
-                    pixelfix-message-avatar-image
-                "
-            >
-
-                <img
-                    src="https://i.pravatar.cc/96?img=47"
-                    alt="Nora Silvester"
-                >
-
-            </span>
-
-
-            <span class="pixelfix-message-content">
-
-                <span class="pixelfix-message-name">
-                    Nora Silvester
-                </span>
-
-                <span class="pixelfix-message-preview">
-                    The subject goes here
-                </span>
-
-                <span class="pixelfix-message-time">
-
-                    <i
-                        class="bi bi-clock-fill"
-                        aria-hidden="true"
-                    ></i>
-
-                    4 Hours Ago
-
-                </span>
-
-            </span>
-
-
-            <i
-                class="
-                    bi
-                    bi-star-fill
-                    pixelfix-message-star
-                    text-warning
-                "
-                aria-hidden="true"
-            ></i>
-
-        </a>
-
-
-        {# =================================================
-           FOOTER
-           ================================================= #}
-
-        <a
-            href="#"
-            class="
-                pixelfix-messages-footer
-                dropdown-item
-            "
-        >
-
-            See All Messages
-
-        </a>
-
+                content:
+                    messagesFooterText
+            }
+            only
+        %}
 
     </div>
 

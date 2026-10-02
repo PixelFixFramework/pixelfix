@@ -2,7 +2,7 @@
 
 Renders the standard PixelFix application header by embedding `components/layout/header.twig` and supplying the default navigation components.
 
-**Component:** `layout/default-header.twig`
+**Component:** `components/layout/default-header.twig`
 
 ## Parameters
 
@@ -14,25 +14,81 @@ Renders the standard PixelFix application header by embedding `components/layout
 | `user_role_text` | `User` | Role/status text passed to the user menu. |
 | `profile_url` | `#` | Profile URL passed to the user menu. |
 | `logout_url` | `#` | Logout URL passed to the user menu. |
+| `messages` | `[]` | Array of message objects passed to the Messages header component. |
+| `message_count` | `messages|length` | Number of unread messages displayed in the Messages badge. |
+| `messages_url` | `#` | URL used by the Messages footer button. |
+| `messages_footer_text` | `See All Messages` | Text displayed by the Messages footer button. |
+| `notifications` | `[]` | Array of notification objects passed to the Notifications header component. |
+| `notification_count` | `notifications|length` | Number of unread notifications displayed in the Notifications badge and header. |
+| `notifications_url` | `#` | URL used by the Notifications footer button. |
+| `notifications_footer_text` | `See All Notifications` | Text displayed by the Notifications footer button. |
+
+## Message Data
+
+The `messages` parameter accepts an array of message objects.
+
+Each message may contain:
+
+| Property | Default | Description |
+|---|---|---|
+| `id` | — | Unique message identifier. |
+| `name` | `Unknown User` | Name of the message sender. |
+| `preview` | `''` | Message preview text. |
+| `time` | `''` | Relative or formatted message time. |
+| `avatar` | `null` | Avatar image URL. |
+| `initials` | Derived | Initials displayed when an avatar is unavailable. |
+| `badge_type` | Random | Badge type used for the initials fallback. |
+| `star_type` | `text-secondary` | Text color class applied to the message star. |
+| `url` | `#` | URL opened when the message is selected. |
+
+For the complete Messages API, see:
+
+`components/layout/header/messages.twig`
+
+## Notification Data
+
+The `notifications` parameter accepts an array of notification objects.
+
+Each notification may contain:
+
+| Property | Default | Description |
+|---|---|---|
+| `id` | — | Unique notification identifier. |
+| `icon` | `null` | Bootstrap Icons class displayed with the notification. |
+| `text` | `Notification` | Notification text. |
+| `time` | `null` | Relative or formatted notification time. |
+| `url` | `#` | URL opened when the notification is selected. |
+
+For the complete Notifications API, see:
+
+`components/layout/header/notifications.twig`
 
 ## Behavior and Notes
 
-The component includes Live Preview and Documentation in the start region.
+The component embeds:
 
-The end region includes Search, Messages, Notifications, Language, Fullscreen, Theme, and User Menu.
+`components/layout/header.twig`
 
-The user object is expected to expose `name`, `email`, and optionally `created_at` when those values are used.
+The start region includes:
 
-The computed user email is passed to the user-menu component, although the current user-menu markup does not display that value.
+- Live Preview
+- Documentation
 
-## Usage
+The end region includes:
+
+- Search
+- Messages
+- Notifications
+- Language
+- Fullscreen
+- Theme
+- User Menu
+
+### Messages
+
+The `messages` array is passed directly to the Messages header component.
+
+When `message_count` is not supplied, the component uses:
 
 ```twig
-{% include 'components/layout/default-header.twig' with {
-    user: app.user,
-    avatar_url: '/images/avatar.png',
-    user_role_text: 'Administrator',
-    profile_url: route('profile'),
-    logout_url: route('logout')
-} %}
-```
+messages|length

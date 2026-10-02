@@ -6,7 +6,7 @@ A starter application for building web applications with the PixelFix Framework.
 
 <p>
 Neene Kaseba Ned<br>
-Developer and Creator of PixelFix Framework.
+Developer and Creator of PixelFix Framework
 </p>
 
 <p>

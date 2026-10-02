@@ -43,6 +43,54 @@
 %}
 
 
+{# =====================================================
+   MESSAGES
+   ===================================================== #}
+
+{% set headerMessages =
+    messages|default([])
+%}
+
+{% set headerMessageCount =
+    message_count|default(headerMessages|length)
+%}
+
+{% set headerMessagesUrl =
+    messages_url|default('#')
+%}
+
+{% set headerMessagesFooterText =
+    messages_footer_text|default(
+        'See All Messages'
+    )
+%}
+
+
+{# =====================================================
+   NOTIFICATIONS
+   ===================================================== #}
+
+{% set headerNotifications =
+    notifications|default([])
+%}
+
+{% set headerNotificationCount =
+    notification_count|default(
+        headerNotifications|length
+    )
+%}
+
+{% set headerNotificationsUrl =
+    notifications_url|default('#')
+%}
+
+{% set headerNotificationsFooterText =
+    notifications_footer_text|default(
+        'See All Notifications'
+    )
+%}
+
+
 {% embed 'components/layout/header.twig' %}
 
 
@@ -73,13 +121,52 @@
             'components/layout/header/search.twig'
         %}
 
+
+        {# =============================================
+           MESSAGES
+           ============================================= #}
+
         {% include
             'components/layout/header/messages.twig'
+            with {
+                message_count:
+                    headerMessageCount,
+
+                messages_url:
+                    headerMessagesUrl,
+
+                messages_footer_text:
+                    headerMessagesFooterText,
+
+                messages:
+                    headerMessages
+            }
+            only
         %}
+
+
+        {# =============================================
+           NOTIFICATIONS
+           ============================================= #}
 
         {% include
             'components/layout/header/notifications.twig'
+            with {
+                notification_count:
+                    headerNotificationCount,
+
+                notifications_url:
+                    headerNotificationsUrl,
+
+                notifications_footer_text:
+                    headerNotificationsFooterText,
+
+                notifications:
+                    headerNotifications
+            }
+            only
         %}
+
 
         {% include
             'components/layout/header/language.twig'
@@ -117,6 +204,7 @@
                 logout_url:
                     headerLogoutUrl
             }
+            only
         %}
 
     {% endblock %}

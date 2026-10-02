@@ -2,9 +2,24 @@
    PIXELFIX HEADER - NOTIFICATIONS
    ===================================================== #}
 
-{% set notificationCount =
-    notification_count|default(15)
+{% set notificationItems =
+    notifications|default([])
 %}
+
+{% set notificationCount =
+    notification_count|default(notificationItems|length)
+%}
+
+{% set notificationsUrl =
+    notifications_url|default('#')
+%}
+
+{% set notificationsFooterText =
+    notifications_footer_text|default(
+        'See All Notifications'
+    )
+%}
+
 
 <li class="pixelfix-nav-item dropdown">
 
@@ -50,6 +65,10 @@
         "
     >
 
+        {# =================================================
+           NOTIFICATION HEADER
+           ================================================= #}
+
         <span
             class="
                 dropdown-item
@@ -63,114 +82,105 @@
         </span>
 
 
-        <div class="dropdown-divider"></div>
+        {% if notificationItems is not empty %}
+
+            <div class="dropdown-divider"></div>
 
 
-        <a
-            href="#"
-            class="dropdown-item"
-        >
+            {# =================================================
+               NOTIFICATIONS
+               ================================================= #}
 
-            <i
-                class="
-                    bi
-                    bi-envelope
-                    me-2
-                "
-                aria-hidden="true"
-            ></i>
+            {% for notification in notificationItems %}
 
-            4 new messages
+                <a
+                    href="{{ notification.url|default('#') }}"
+                    class="dropdown-item"
+                >
 
-            <span
-                class="
-                    float-end
-                    text-secondary
-                    fs-7
-                "
-            >
-                3 mins
-            </span>
+                    {% if notification.icon|default(null) %}
 
-        </a>
+                        <i
+                            class="
+                                {{ notification.icon }}
+                                me-2
+                            "
+                            aria-hidden="true"
+                        ></i>
+
+                    {% endif %}
 
 
-        <div class="dropdown-divider"></div>
+                    {{ notification.text|default('Notification') }}
 
 
-        <a
-            href="#"
-            class="dropdown-item"
-        >
+                    {% if notification.time|default(null) %}
 
-            <i
-                class="
-                    bi
-                    bi-people-fill
-                    me-2
-                "
-                aria-hidden="true"
-            ></i>
+                        <span
+                            class="
+                                float-end
+                                text-secondary
+                                fs-7
+                            "
+                        >
 
-            8 friend requests
+                            {{ notification.time }}
 
-            <span
-                class="
-                    float-end
-                    text-secondary
-                    fs-7
-                "
-            >
-                12 hours
-            </span>
+                        </span>
 
-        </a>
+                    {% endif %}
+
+                </a>
 
 
-        <div class="dropdown-divider"></div>
+                {% if not loop.last %}
 
+                    <div class="dropdown-divider"></div>
 
-        <a
-            href="#"
-            class="dropdown-item"
-        >
+                {% endif %}
 
-            <i
-                class="
-                    bi
-                    bi-file-earmark-fill
-                    me-2
-                "
-                aria-hidden="true"
-            ></i>
+            {% endfor %}
 
-            3 new reports
+        {% else %}
 
             <span
                 class="
-                    float-end
-                    text-secondary
-                    fs-7
+                    dropdown-item
+                    text-muted
                 "
             >
-                2 days
+
+                No notifications
+
             </span>
 
-        </a>
+        {% endif %}
 
 
-        <div class="dropdown-divider"></div>
+        {# =================================================
+           NOTIFICATIONS FOOTER
+           ================================================= #}
 
+        {% include
+            'components/form/button.twig'
+            with {
+                tag:
+                    'a',
 
-        <a
-            href="#"
-            class="dropdown-item dropdown-footer"
-        >
+                href:
+                    notificationsUrl,
 
-            See All Notifications
+                class:
+                    '
+                        dropdown-item
+                        dropdown-footer
+                    ',
 
-        </a>
-
+                content:
+                    notificationsFooterText
+            }
+            only
+        %}
 
     </div>
 
