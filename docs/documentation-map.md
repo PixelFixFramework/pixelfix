@@ -6,41 +6,110 @@ This map is generated from the current documentation bundle. The current PixelFi
 
 ```text
 docs/
+
 ├── README.md
+
 ├── api
 │   ├── pagination.md
 │   ├── resources.md
 │   └── serialization.md
+
 ├── application
 │   ├── exceptions.md
 │   ├── filesystem.md
 │   ├── logging.md
 │   └── sessions.md
+
 ├── architecture
 │   ├── application-lifecycle.md
 │   ├── dependency-injection.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── public-api.md
 │   └── service-providers.md
+
 ├── authentication
 │   ├── auth-reference.md
 │   ├── guards.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── password-reset.md
 │   ├── providers.md
 │   └── tokens.md
+
 ├── authorization
 │   ├── gates.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── policies.md
 │   └── policy-reference.md
+
+├── components
+│   ├── auth
+│   │   ├── login.md
+│   │   └── register.md
+│   │
+│   ├── dashboard
+│   │   └── tile.md
+│   │
+│   ├── data
+│   │   ├── pagination.md
+│   │   └── table.md
+│   │
+│   ├── feedback
+│   │   ├── alert.md
+│   │   ├── badge.md
+│   │   ├── flash-messages.md
+│   │   ├── spinner.md
+│   │   ├── toast.md
+│   │   └── validation-errors.md
+│   │
+│   ├── floating
+│   │   ├── input.md
+│   │   ├── select.md
+│   │   └── textarea.md
+│   │
+│   ├── form
+│   │   ├── button.md
+│   │   ├── checkbox.md
+│   │   ├── input-group.md
+│   │   ├── input.md
+│   │   ├── radio.md
+│   │   ├── range.md
+│   │   ├── select.md
+│   │   └── textarea.md
+│   │
+│   ├── layout
+│   │   ├── card.md
+│   │   ├── default-header.md
+│   │   ├── footer.md
+│   │   ├── header.md
+│   │   ├── main.md
+│   │   ├── modal.md
+│   │   ├── sidebar.md
+│   │   │
+│   │   └── header
+│   │       ├── documentation.md
+│   │       ├── fullscreen.md
+│   │       ├── language.md
+│   │       ├── live-preview.md
+│   │       ├── messages.md
+│   │       ├── notifications.md
+│   │       ├── search.md
+│   │       ├── theme.md
+│   │       └── user-menu.md
+│   │
+│   └── navigation
+│       ├── breadcrumb.md
+│       ├── navbar.md
+│       ├── offcanvas.md
+│       └── tabs.md
+
 ├── console
 │   ├── command-reference.md
 │   ├── custom-commands.md
 │   ├── generator-architecture.md
 │   ├── generators.md
-│   ├── overview.md
+│   ├── overview\.md
 │   └── stubs.md
+
 ├── database
 │   ├── connections-reference.md
 │   ├── connections.md
@@ -50,7 +119,7 @@ docs/
 │   ├── model-reference.md
 │   ├── models.md
 │   ├── orm-lifecycle.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── query-builder-reference.md
 │   ├── query-builder.md
 │   ├── relationships-reference.md
@@ -61,7 +130,9 @@ docs/
 │   ├── soft-deletes.md
 │   ├── transactions.md
 │   └── upserts.md
+
 ├── documentation-map.md
+
 ├── getting-started
 │   ├── application-structure.md
 │   ├── configuration.md
@@ -69,6 +140,7 @@ docs/
 │   ├── installation.md
 │   ├── introduction.md
 │   └── requirements.md
+
 ├── http
 │   ├── controllers.md
 │   ├── csrf.md
@@ -81,6 +153,7 @@ docs/
 │   ├── route-model-binding.md
 │   ├── routing-reference.md
 │   └── routing.md
+
 ├── reference
 │   ├── cli.md
 │   ├── configuration.md
@@ -89,6 +162,7 @@ docs/
 │   ├── helpers.md
 │   ├── releasing.md
 │   └── troubleshooting.md
+
 ├── task-manager
 │   ├── authentication.md
 │   ├── authorization.md
@@ -106,24 +180,28 @@ docs/
 │   ├── tutorial.md
 │   ├── validation.md
 │   └── views.md
+
 ├── testing
 │   ├── database-testing.md
 │   ├── feature-tests.md
 │   ├── integration-tests.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── test-runner.md
 │   └── unit-tests.md
+
 ├── validation
 │   ├── custom-rules.md
-│   ├── overview.md
+│   ├── overview\.md
 │   ├── requests.md
 │   ├── rule-reference.md
 │   └── rules.md
+
 └── views
     ├── layouts.md
-    ├── overview.md
+    ├── overview\.md
     ├── templates.md
     └── twig.md
+
 ```
 
 ## Documentation principles

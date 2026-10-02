@@ -23,7 +23,7 @@ A page can extend the application layout:
 Reusable UI pieces are included with Twig's `include` syntax:
 
 ```twig
-{% include 'components/forms/input.twig' with {
+{% include 'components/form/input.twig' with {
     name: 'email',
     label: 'Email',
     required: true

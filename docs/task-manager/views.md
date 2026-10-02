@@ -40,7 +40,7 @@ The controller selects the appropriate template and passes model data explicitly
 The create page includes shared form components rather than repeating raw markup. For example:
 
 ```twig
-{% include 'components/forms/input.twig' with {
+{% include 'components/form/input.twig' with {
     name: 'title',
     label: 'Title',
     placeholder: 'Enter task title',

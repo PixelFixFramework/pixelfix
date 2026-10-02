@@ -4,10 +4,12 @@ A starter application for building web applications with the PixelFix Framework.
 
 ## Developer
 
-**Neene Kaseba Ned**  
+**Neene Kaseba Ned**
+
 Developer and Creator of PixelFix Framework.
 
-**Zambia Air Services Training Institute**  
+**Zambia Air Services Training Institute**
+
 310198, KK International Airport  
 Lusaka, Zambia
 
@@ -111,6 +113,77 @@ The PixelFix documentation is organized into the sections below.
 - [Twig](./docs/views/twig.md)
 - [Layouts](./docs/views/layouts.md)
 
+## Components
+
+### Authentication Components
+
+- [Login](./docs/components/auth/login.md)
+- [Register](./docs/components/auth/register.md)
+
+### Dashboard Components
+
+- [Tile](./docs/components/dashboard/tile.md)
+
+### Data Components
+
+- [Pagination](./docs/components/data/pagination.md)
+- [Table](./docs/components/data/table.md)
+
+### Feedback Components
+
+- [Alert](./docs/components/feedback/alert.md)
+- [Badge](./docs/components/feedback/badge.md)
+- [Flash Messages](./docs/components/feedback/flash-messages.md)
+- [Spinner](./docs/components/feedback/spinner.md)
+- [Toast](./docs/components/feedback/toast.md)
+- [Validation Errors](./docs/components/feedback/validation-errors.md)
+
+### Floating Form Components
+
+- [Floating Input](./docs/components/floating/input.md)
+- [Floating Select](./docs/components/floating/select.md)
+- [Floating Textarea](./docs/components/floating/textarea.md)
+
+### Form Components
+
+- [Button](./docs/components/form/button.md)
+- [Checkbox](./docs/components/form/checkbox.md)
+- [Input](./docs/components/form/input.md)
+- [Input Group](./docs/components/form/input-group.md)
+- [Radio](./docs/components/form/radio.md)
+- [Range](./docs/components/form/range.md)
+- [Select](./docs/components/form/select.md)
+- [Textarea](./docs/components/form/textarea.md)
+
+### Layout Components
+
+- [Card](./docs/components/layout/card.md)
+- [Default Header](./docs/components/layout/default-header.md)
+- [Footer](./docs/components/layout/footer.md)
+- [Main](./docs/components/layout/main.md)
+- [Modal](./docs/components/layout/modal.md)
+- [Sidebar](./docs/components/layout/sidebar.md)
+- [Base Header](./docs/components/layout/header.md)
+
+### Header Components
+
+- [Documentation](./docs/components/layout/header/documentation.md)
+- [Fullscreen](./docs/components/layout/header/fullscreen.md)
+- [Language](./docs/components/layout/header/language.md)
+- [Live Preview](./docs/components/layout/header/live-preview.md)
+- [Messages](./docs/components/layout/header/messages.md)
+- [Notifications](./docs/components/layout/header/notifications.md)
+- [Search](./docs/components/layout/header/search.md)
+- [Theme](./docs/components/layout/header/theme.md)
+- [User Menu](./docs/components/layout/header/user-menu.md)
+
+### Navigation Components
+
+- [Breadcrumb](./docs/components/navigation/breadcrumb.md)
+- [Navbar](./docs/components/navigation/navbar.md)
+- [Offcanvas](./docs/components/navigation/offcanvas.md)
+- [Tabs](./docs/components/navigation/tabs.md)
+
 ## API
 
 - [Pagination](./docs/api/pagination.md)
@@ -172,7 +245,7 @@ The PixelFix documentation is organized into the sections below.
 - Composer
 - Git
 
-## Create an application
+## Create an Application
 
 PixelFix applications are distributed through Packagist as the `pixelfix/pixelfix` project package.
 

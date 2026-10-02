@@ -91,7 +91,7 @@ A page can extend it:
 Application templates can include smaller reusable templates:
 
 ```twig
-{% include 'components/forms/input.twig' with {
+{% include 'components/form/input.twig' with {
     name: 'title',
     label: 'Title'
 } %}
@@ -235,7 +235,7 @@ The create page demonstrates the normal server-rendered form flow:
 >
     {{ csrf|raw }}
 
-    {% include 'components/forms/input.twig' with {
+    {% include 'components/form/input.twig' with {
         name: 'title',
         label: 'Title'
     } %}
