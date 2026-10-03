@@ -1,35 +1,93 @@
-# Modal Component
+# Modal
 
-Renders a Bootstrap modal with configurable size, scrolling, vertical centering, static backdrop behavior, and optional footer content.
+Renders a Bootstrap modal with configurable size, scrolling, centering, static behavior, content, and footer.
 
-**Component:** `layout/modal.twig`
+**Component:** `components/layout/modal.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `id` | Required | Unique modal id. |
+| `id` | Required | Modal id and label target. |
 | `title` | `Modal` | Modal title. |
-| `content` | `''` | Modal body content. Rendered as raw HTML. |
-| `footer` | `null` | Optional modal footer content. Rendered as raw HTML. |
-| `size` | `null` | Optional size. Supported values: `sm`, `lg`, `xl`, `fullscreen`, `fullscreen-sm-down`, `fullscreen-md-down`, `fullscreen-lg-down`, `fullscreen-xl-down`, `fullscreen-xxl-down`. |
-| `scrollable` | `false` | Adds Bootstrap's `modal-dialog-scrollable` class. |
-| `centered` | `false` | Adds Bootstrap's `modal-dialog-centered` class. |
-| `static` | `false` | Uses a static backdrop and disables keyboard closing. |
+| `content` | `''` | Modal body content rendered as raw HTML. |
+| `footer` | `null` | Optional modal footer rendered as raw HTML. |
+| `size` | `null` | Modal size. |
+| `scrollable` | `false` | Enables a scrollable modal dialog. |
+| `centered` | `false` | Centers the modal vertically. |
+| `static` | `false` | Prevents closing through backdrop click or keyboard escape. |
 
-## Behavior and Notes
+---
 
-`id` is required because it is used by the modal and `aria-labelledby` target.
+## Sizes
 
-## Usage
+Supported `size` values are:
+
+- `sm`
+- `lg`
+- `xl`
+- `fullscreen`
+- `fullscreen-sm-down`
+- `fullscreen-md-down`
+- `fullscreen-lg-down`
+- `fullscreen-xl-down`
+- `fullscreen-xxl-down`
+
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/modal.twig' with {
-    id: 'task-details',
-    title: 'Task Details',
-    content: '<p>Task information</p>',
-    centered: true,
-    scrollable: true,
-    size: 'lg'
-} %}
+{% include
+    'components/layout/modal.twig'
+    with {
+        id:
+            'edit-user',
+
+        title:
+            'Edit User',
+
+        content:
+            '<p>User form goes here.</p>',
+
+        footer:
+            '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>',
+
+        size:
+            'lg',
+
+        scrollable:
+            true,
+
+        centered:
+            true
+    }
+    only
+%}
+```
+
+---
+
+## Static Modal
+
+```twig
+{% include
+    'components/layout/modal.twig'
+    with {
+        id:
+            'confirmation',
+
+        title:
+            'Confirm Action',
+
+        content:
+            '<p>This action requires confirmation.</p>',
+
+        static:
+            true
+    }
+    only
+%}
 ```

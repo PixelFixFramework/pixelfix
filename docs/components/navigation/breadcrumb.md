@@ -1,29 +1,56 @@
-# Breadcrumb Component
+# Breadcrumb
 
-Renders a breadcrumb navigation from an ordered item array.
+Renders a Bootstrap breadcrumb trail from an ordered collection of items.
 
-**Component:** `navigation/breadcrumb.twig`
+**Component:** `components/navigation/breadcrumb.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `items` | `[]` | Array of breadcrumb objects with `label` and optional `url`. |
+| `items` | `[]` | Ordered breadcrumb item collection. |
 
-## Behavior and Notes
+---
 
-The last item is always rendered as the active/current page.
+## Breadcrumb Item
 
-Non-final items are rendered as links using `item.url`.
+Each item must provide:
 
-## Usage
+| Property | Description |
+|---|---|
+| `label` | Text displayed for the breadcrumb. |
+| `url` | URL used for non-final breadcrumb items. |
+
+The final item is rendered as the current page and is not linked.
+
+---
+
+# Usage
 
 ```twig
-{% include 'components/navigation/breadcrumb.twig' with {
-    items: [
-        { label: 'Home', url: '/' },
-        { label: 'Tasks', url: '/tasks' },
-        { label: 'Details' }
-    ]
-} %}
+{% set items = [
+    {
+        label: 'Home',
+        url: '/'
+    },
+    {
+        label: 'Students',
+        url: '/students'
+    },
+    {
+        label: 'Details',
+        url: '/students/1'
+    }
+] %}
+
+{% include
+    'components/navigation/breadcrumb.twig'
+    with {
+        items:
+            items
+    }
+    only
+%}
 ```

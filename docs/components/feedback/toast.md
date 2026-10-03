@@ -1,49 +1,120 @@
-# Toast Component
+# Toast
 
-Renders a positioned Bootstrap toast with configurable message, appearance, auto-hide behavior, and optional automatic display on page load.
+Renders a Bootstrap toast notification with configurable content, position, theme, timing, and optional automatic display.
 
-**Component:** `feedback/toast.twig`
+**Component:** `components/feedback/toast.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `id` | `toast` | DOM id of the toast. |
+| `id` | `toast` | HTML id assigned to the toast. |
 | `title` | `Notification` | Toast header title. |
 | `message` | `Operation completed successfully.` | Toast body message. |
-| `type` | `primary` | Type used for the colored indicator. |
-| `time` | `Just now` | Timestamp/status text in the header. |
-| `autohide` | `true` | Value written to `data-bs-autohide`. |
-| `delay` | `5000` | Value written to `data-bs-delay`, in milliseconds for Bootstrap. |
+| `type` | `primary` | Bootstrap contextual color used by the toast indicator. |
+| `time` | `Just now` | Time text displayed in the toast header. |
+| `autohide` | `true` | Controls Bootstrap toast autohide behavior. |
+| `delay` | `5000` | Autohide delay in milliseconds. |
 | `position` | `bottom-end` | Toast container position. |
-| `showOnLoad` | `false` | When true, injects a script that calls Bootstrap Toast `.show()` after `DOMContentLoaded`. |
-| `theme` | `light` | Supported values are `light` and `dark`. |
+| `showOnLoad` | `false` | Automatically shows the toast after DOM content loads. |
+| `theme` | `light` | Toast theme: `light` or `dark`. |
 
-## Behavior and Notes
+---
 
-Supported `position` values: `top-start`, `top-center`, `top-end`, `middle-start`, `middle-center`, `middle-end`, `bottom-start`, `bottom-center`, and `bottom-end`.
+## Position
 
-Unsupported positions fall back to `bottom-end`.
+Supported `position` values are:
 
-Unsupported themes fall back to the light theme classes.
+- `top-start`
+- `top-center`
+- `top-end`
+- `middle-start`
+- `middle-center`
+- `middle-end`
+- `bottom-start`
+- `bottom-center`
+- `bottom-end`
 
-The `showOnLoad` parameter uses camelCase exactly as written; it is not `show_on_load`.
+Unknown values use the `bottom-end` position.
 
-The auto-show script requires Bootstrap's JavaScript API to be available as `bootstrap.Toast`.
+---
 
-## Usage
+## Theme
+
+Supported `theme` values are:
+
+- `light`
+- `dark`
+
+Unknown values use the light theme.
+
+---
+
+# Usage
 
 ```twig
-{% include 'components/feedback/toast.twig' with {
-    id: 'task-toast',
-    title: 'Task Saved',
-    message: 'The task was saved successfully.',
-    type: 'success',
-    time: 'Just now',
-    autohide: true,
-    delay: 5000,
-    position: 'bottom-end',
-    showOnLoad: true,
-    theme: 'light'
-} %}
+{% include
+    'components/feedback/toast.twig'
+    with {
+        id:
+            'save-toast'
+
+        title:
+            'Saved'
+
+        message:
+            'Your changes have been saved.'
+
+        type:
+            'success'
+
+        time:
+            'Just now'
+
+        autohide:
+            true
+
+        delay:
+            5000
+
+        position:
+            'bottom-end'
+
+        showOnLoad:
+            true
+
+        theme:
+            'light'
+    }
+    only
+%}
+```
+
+---
+
+## Manual Display
+
+Set `showOnLoad` to `false` when the application will control display using
+Bootstrap's Toast API.
+
+```twig
+{% include
+    'components/feedback/toast.twig'
+    with {
+        id:
+            'notification-toast',
+
+        title:
+            'Notification',
+
+        message:
+            'A new notification is available.',
+
+        showOnLoad:
+            false
+    }
+    only
+%}
 ```

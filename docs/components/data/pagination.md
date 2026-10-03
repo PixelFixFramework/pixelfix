@@ -1,35 +1,113 @@
-# Pagination Component
+# Pagination
 
-Renders pagination controls from a `paginator` object. The component renders nothing when `paginator.hasPages()` is false.
+Renders Bootstrap pagination controls for a paginator instance.
 
-**Component:** `data/pagination.twig`
+**Component:** `components/data/pagination.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `alignment` | `center` | Controls pagination alignment. Supported values: `start`, `center`, `end`. |
-| `size` | `null` | Optional size. Supported values: `sm` and `lg`. |
-| `showSummary` | `true` | Shows the “Showing X to Y of Z results” summary. |
-| `showFirstLast` | `true` | Shows the First and Last links. |
+| `paginator` | Required | Paginator object used to generate pages, links, and result summary. |
+| `alignment` | `center` | Pagination alignment: `start`, `center`, or `end`. |
+| `size` | `null` | Pagination size: `sm`, `lg`, or `null`. |
+| `showSummary` | `true` | Determines whether the result summary is displayed. |
+| `showFirstLast` | `true` | Determines whether First and Last controls are displayed. |
 
-## Behavior and Notes
+---
 
-The component requires a `paginator` variable in the rendering context; it does not define a default.
+# Paginator API
 
-The paginator is expected to provide `hasPages()`, `onFirstPage()`, `onLastPage()`, `links()`, `pages()`, `pageLinks()`, `currentPage()`, `from()`, `to()`, `total()`, and `lastPage()` methods.
+The component uses the paginator methods:
 
-`alignment` values outside `start`, `center`, and `end` fall back to centered alignment.
+| Method | Purpose |
+|---|---|
+| `hasPages()` | Determines whether pagination should be rendered. |
+| `onFirstPage()` | Determines whether the current page is the first page. |
+| `onLastPage()` | Determines whether the current page is the last page. |
+| `links()` | Provides previous and next URLs. |
+| `pages()` | Provides the page window, including `...` entries. |
+| `currentPage()` | Returns the current page number. |
+| `pageLinks()` | Provides URLs keyed by page number. |
+| `lastPage()` | Returns the last page number. |
+| `from()` | Returns the first result number on the current page. |
+| `to()` | Returns the last result number on the current page. |
+| `total()` | Returns the total result count. |
 
-`size` values other than `sm` and `lg` render with no size class.
+---
 
-## Usage
+# Usage
+
+Pass a paginator instance to the component.
 
 ```twig
-{% include 'components/data/pagination.twig' with {
-    alignment: 'center',
-    size: 'sm',
-    showSummary: true,
-    showFirstLast: true
-} %}
+{% include
+    'components/data/pagination.twig'
+    with {
+        paginator:
+            paginator
+
+        alignment:
+            'center'
+
+        size:
+            'sm'
+
+        showSummary:
+            true
+
+        showFirstLast:
+            true
+    }
+    only
+%}
+```
+
+---
+
+## Alignment
+
+Supported values are `start`, `center`, and `end`.
+
+```twig
+{% include
+    'components/data/pagination.twig'
+    with {
+        paginator:
+            paginator
+
+        alignment:
+            'end'
+    }
+    only
+%}
+```
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/data/pagination.twig'
+    with {
+        paginator:
+            users,
+
+        alignment:
+            'center',
+
+        size:
+            'sm',
+
+        showSummary:
+            true,
+
+        showFirstLast:
+            true
+    }
+    only
+%}
 ```

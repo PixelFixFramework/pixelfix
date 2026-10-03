@@ -25,3 +25,5 @@ Route::middleware('web')
         )->name('home');
 
     });
+
+return Route::all();

@@ -1,40 +1,79 @@
-# Floating Input Component
+# Floating Input
 
-Renders a Bootstrap floating-label text input with automatic validation state and optional autocomplete.
+Renders a Bootstrap floating-label input with automatic validation state and framework old-input/error integration.
 
-**Component:** `floating/input.twig`
+**Component:** `components/floating/input.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
 | `type` | `text` | HTML input type. |
-| `name` | Required | Input name/id. |
+| `name` | Required | Input name and id. |
 | `label` | `''` | Floating label text. |
-| `required` | `false` | Adds the HTML `required` attribute and an empty danger marker in the label. |
-| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
-| `autocomplete` | `null` | Autocomplete value. When omitted, the component infers `email`, `current-password`, `name`, or `username` for matching fields. |
+| `required` | `false` | Adds the required attribute. |
+| `validation_message` | Derived | Custom validation message used when the field has no server error. |
+| `autocomplete` | Derived | Autocomplete value. Automatically inferred for common email, password, name, and username fields. |
 
-## Behavior and Notes
+---
 
-The value is taken from `old(name)`; there is no separate `value` parameter.
-
-Password inputs deliberately render an empty value attribute instead of repopulating a password.
-
-The component calls `has_error(name)` and `error(name)`.
-
-Unsupported or missing autocomplete inference leaves the autocomplete attribute unset.
-
-Validation state is `is-invalid` when the field has an error and `is-valid` when an old value is present without an error.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/floating/input.twig' with {
-    type: 'email',
-    name: 'email',
-    label: 'Email',
-    required: true,
-    autocomplete: 'email'
-} %}
+{% include
+    'components/floating/input.twig'
+    with {
+        type:
+            'email'
+
+        name:
+            'email'
+
+        label:
+            'Email Address'
+
+        required:
+            true
+
+        autocomplete:
+            'email'
+    }
+    only
+%}
+```
+
+---
+
+## Validation
+
+The component uses `has_error()` and `error()`/framework validation state to
+apply `is-invalid`. A non-empty old value produces the valid state.
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/floating/input.twig'
+    with {
+        type:
+            'text',
+
+        name:
+            'full_name',
+
+        label:
+            'Full Name',
+
+        required:
+            true,
+
+        validation_message:
+            'Please provide your full name.'
+    }
+    only
+%}
 ```

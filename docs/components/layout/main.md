@@ -1,40 +1,74 @@
-# Main Content Component
+# Main Content
 
-Renders the main PixelFix application content area, with optional title, breadcrumbs, and configurable container/content classes.
+Renders the application main content area with an optional title, breadcrumb trail, container classes, and raw content.
 
-**Component:** `layout/main.twig`
+**Component:** `components/layout/main.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `class` | `''` | Additional classes for the main element. |
+| `class` | `''` | Additional CSS class applied to the main element. |
 | `id` | `pixelfix-main` | Main element id. |
 | `title` | `null` | Optional page title. |
-| `breadcrumbs` | `[]` | Optional breadcrumb array. |
-| `content` | `''` | Main content. Rendered as raw HTML. |
-| `container_class` | `''` | Additional class applied to the main container elements. |
+| `breadcrumbs` | `[]` | Breadcrumb collection rendered in the page header. |
+| `content` | `''` | Main content rendered as raw HTML. |
+| `container_class` | `''` | Additional class applied to the main containers. |
 | `content_class` | `''` | Additional class applied to the main content wrapper. |
 
-## Behavior and Notes
+---
 
-A content header is rendered when `title` is set or when breadcrumbs are present.
+## Breadcrumb Object
 
-Breadcrumb entries use `label` and optional `url`. The final breadcrumb is always rendered as the current page, even if a URL is supplied.
+Each breadcrumb item may contain:
 
-`content` is rendered with `|raw`.
+| Property | Default | Description |
+|---|---|---|
+| `label` | `''` | Breadcrumb label. |
+| `url` | `null` | Link URL. The final breadcrumb is rendered without a link. |
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/main.twig' with {
-    id: 'dashboard-main',
-    class: 'dashboard-page',
-    title: 'Dashboard',
-    breadcrumbs: [
-        { label: 'Home', url: '/' },
-        { label: 'Dashboard' }
-    ],
-    content: '<p>Dashboard content</p>'
-} %}
+{% set breadcrumbs = [
+    {
+        label: 'Home',
+        url: '/'
+    },
+    {
+        label: 'Students',
+        url: '/students'
+    },
+    {
+        label: 'Details'
+    }
+] %}
+
+{% include
+    'components/layout/main.twig'
+    with {
+        id:
+            'students-main',
+
+        title:
+            'Student Details',
+
+        breadcrumbs:
+            breadcrumbs,
+
+        content:
+            '<p>Student information goes here.</p>',
+
+        container_class:
+            'container',
+
+        content_class:
+            'py-4'
+    }
+    only
+%}
 ```

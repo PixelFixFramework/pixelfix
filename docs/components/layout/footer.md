@@ -1,28 +1,47 @@
-# Footer Component
+# Footer
 
-Renders the standard PixelFix application footer with copyright information and optional right-side content.
+Renders the application footer with configurable company identity, URL, right-side content, and container class.
 
-**Component:** `layout/footer.twig`
+**Component:** `components/layout/footer.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `footer_company_name` | `config('app.name')` | Company/application name shown in the copyright link. |
-| `footer_company_url` | `#` | URL of the copyright company/application link. |
-| `footer_right` | `null` | Optional raw HTML rendered on the right side. |
-| `container` | `container-fluid` | CSS container class wrapping footer content. |
+| `footer_company_name` | `config('app.name')` | Company or application name. |
+| `footer_company_url` | `#` | URL used by the company name. |
+| `footer_right` | `null` | Optional right-side footer content. |
+| `container` | `container-fluid` | Bootstrap container class. |
 
-## Behavior and Notes
+---
 
-The current year is generated internally with `"now"|date('Y')`; there is no year parameter.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/layout/footer.twig' with {
-    footer_company_name: 'PixelFix',
-    footer_company_url: route('home'),
-    footer_right: '<span>Version 0.1.10</span>'
-} %}
+{% include
+    'components/layout/footer.twig'
+    with {
+        footer_company_name:
+            config('app.name'),
+
+        footer_company_url:
+            route('home'),
+
+        footer_right:
+            'Version 0.1.16',
+
+        container:
+            'container'
+    }
+    only
+%}
 ```
+
+---
+
+## Current Year
+
+The component obtains the current year from Twig's `now` date value. No
+parameter is required for the year.

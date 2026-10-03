@@ -1,31 +1,44 @@
-# Floating Textarea Component
+# Floating Textarea
 
-Renders a floating-label textarea with configurable rows and automatic validation state.
+Renders a Bootstrap floating-label textarea with configurable rows and validation state.
 
-**Component:** `floating/textarea.twig`
+**Component:** `components/floating/textarea.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `name` | Required | Textarea name/id. |
+| `name` | Required | Textarea name and id. |
 | `label` | `''` | Floating label text. |
-| `required` | `false` | Adds the HTML `required` attribute. |
-| `rows` | `5` | Used to calculate the inline height (`rows * 30px`). |
-| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
+| `required` | `false` | Adds the required attribute. |
+| `rows` | `5` | Logical textarea row count used to calculate its height. |
+| `validation_message` | Derived | Custom validation message used when no server error exists. |
 
-## Behavior and Notes
+---
 
-The value is taken from `old(name)`; there is no separate `value` parameter.
-
-Validation state is `is-invalid` for errors and `is-valid` when an old value is present.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/floating/textarea.twig' with {
-    name: 'description',
-    label: 'Description',
-    rows: 6
-} %}
+{% include
+    'components/floating/textarea.twig'
+    with {
+        name:
+            'description'
+
+        label:
+            'Description'
+
+        rows:
+            6
+
+        required:
+            true
+
+        validation_message:
+            'Please provide a description.'
+    }
+    only
+%}
 ```

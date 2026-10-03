@@ -1,21 +1,50 @@
-# Badge Component
+# Badge
 
-Renders a small badge using the supplied type and text.
+Renders a Bootstrap badge using the supplied badge type and text.
 
-**Component:** `feedback/badge.twig`
+**Component:** `components/feedback/badge.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `type` | `primary` | Value appended to `text-bg-`. |
-| `text` | `Badge` | Badge text. |
+| `type` | `primary` | Bootstrap contextual badge type. |
+| `text` | `Badge` | Text displayed inside the badge. |
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/feedback/badge.twig' with {
-    type: 'success',
-    text: 'Active'
-} %}
+{% include
+    'components/feedback/badge.twig'
+    with {
+        type:
+            'success'
+
+        text:
+            'Active'
+    }
+    only
+%}
+```
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/feedback/badge.twig'
+    with {
+        type:
+            'warning',
+
+        text:
+            'Pending'
+    }
+    only
+%}
 ```

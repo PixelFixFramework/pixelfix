@@ -1,23 +1,32 @@
-# Validation Errors Component
+# Validation Errors
 
-Reads the current validation errors through `errors()` and displays them in a danger Alert.
+Renders the current validation errors as a list grouped by field.
 
-**Component:** `feedback/validation-errors.twig`
+**Component:** `components/feedback/validation-errors.twig`
 
-## Behavior and Notes
+---
 
-No component parameters are defined.
+## Parameters
 
-The `errors()` helper is called internally.
+This component does not accept explicit parameters.
 
-Each field is rendered with its field name in bold followed by its messages.
+It reads validation errors using the framework `errors()` helper.
 
-Iterable messages are joined with `, `; non-iterable values are rendered directly.
+---
 
-The resulting content is passed to `components/feedback/alert.twig` with `type: 'danger'`.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/feedback/validation-errors.twig' %}
+{% include
+    'components/feedback/validation-errors.twig'
+%}
 ```
+
+---
+
+## Error Output
+
+Each validation field is rendered with its field name followed by its first
+available validation message.
+
+The component renders nothing when there are no validation errors.

@@ -1,19 +1,40 @@
 # Language Header Item
 
-Renders the static language-selection dropdown included in the default header.
+Renders the language selection dropdown in the application header.
 
-**Component:** `layout/header/language.twig`
+**Component:** `components/layout/header/language.twig`
 
-## Behavior and Notes
+---
 
-No configurable parameters are defined.
+## Parameters
 
-The current markup contains English, Español, Français, Deutsch, and العربية entries.
+This component does not accept explicit parameters.
 
-The links are currently hard-coded to `#`.
+The current implementation provides fixed language entries for English,
+Spanish, French, German, and Arabic.
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/header/language.twig' %}
+{% include
+    'components/layout/header/language.twig'
+%}
 ```
+
+---
+
+## Current Languages
+
+The component currently renders:
+
+| Language | Code |
+|---|---|
+| English | `en` |
+| Español | `es` |
+| Français | `fr` |
+| Deutsch | `de` |
+| العربية | `ar` |
+
+The English entry is marked as the active language in the current template.

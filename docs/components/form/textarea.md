@@ -1,33 +1,47 @@
-# Textarea Component
+# Textarea
 
-Renders a standard textarea with optional label, row count, placeholder, and validation feedback.
+Renders a standard Bootstrap textarea with configurable rows, old-input restoration, and validation feedback.
 
-**Component:** `form/textarea.twig`
+**Component:** `components/form/textarea.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `name` | Required | Textarea name/id. |
-| `label` | `''` | Optional label. |
-| `rows` | `4` | HTML textarea row count. |
-| `placeholder` | `''` | Textarea placeholder. |
-| `required` | `false` | Adds the HTML `required` attribute. |
-| `class` | `''` | Additional textarea classes. |
-| `value` | `''` | Initial value before `old()` resolution. |
-| `validation_message` | `null` | Custom fallback validation message. |
+| `name` | Required | Textarea name and id. |
+| `label` | `''` | Field label. |
+| `rows` | `4` | Number of textarea rows. |
+| `placeholder` | `''` | Placeholder text. |
+| `required` | `false` | Adds the required attribute. |
+| `class` | `''` | Additional CSS classes. |
+| `value` | `''` | Initial textarea value. |
+| `validation_message` | `null` | Custom validation message. |
 
-## Behavior and Notes
+---
 
-The value is resolved with `old(name, value)`.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/form/textarea.twig' with {
-    name: 'description',
-    label: 'Description',
-    rows: 6,
-    placeholder: 'Enter a description'
-} %}
+{% include
+    'components/form/textarea.twig'
+    with {
+        name:
+            'description',
+
+        label:
+            'Description',
+
+        rows:
+            6,
+
+        placeholder:
+            'Enter description',
+
+        required:
+            true
+    }
+    only
+%}
 ```

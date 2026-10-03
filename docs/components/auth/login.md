@@ -1,74 +1,207 @@
-# Login Component
+# Login
 
-Renders the PixelFix login form, including the optional logo, authentication form, optional social-login links, password-reset link, and registration link.
+Renders the application login form with configurable credentials, remember-me, social authentication, and account links.
 
-**Component:** `auth/login.twig`
+**Component:** `components/auth/login.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `logo_url` | `#` | URL used by the optional logo link. |
-| `logo_bold` | `''` | Optional bold portion of the logo text. |
-| `logo_text` | `''` | Optional regular logo text. |
-| `show_logo` | `false` | When `true`, renders the `login-logo` section. |
-| `message` | `Sign in to start your session` | Message displayed above the form. |
-| `action` | `#` | Form action URL. |
-| `method` | `post` | Form method. |
-| `csrf` | `''` | Raw CSRF markup inserted into the form. |
-| `email_name` | `email` | Name/id of the email input. |
-| `email_label` | `Email` | Label variable defined by the component. |
-| `email_placeholder` | `Email` | Email placeholder. |
-| `email_value` | `''` | Initial email value. |
-| `autofocus` | `false` | Enables autofocus on the email field. |
-| `password_name` | `password` | Name/id of the password input. |
-| `password_label` | `Password` | Label variable defined by the component. |
-| `password_placeholder` | `Password` | Password placeholder. |
-| `remember_name` | `remember` | Name/id of the remember-me checkbox. |
-| `remember_value` | `1` | Value of the remember-me checkbox. |
-| `remember_text` | `Remember Me` | Visible remember-me label text. |
-| `remember_checked` | `false` | Initial checked state. |
-| `submit_text` | `Sign In` | Submit button text. |
-| `show_social` | `false` | When `true`, renders the social-login block. |
-| `facebook_url` | `#` | Facebook login link URL. |
-| `facebook_text` | `Sign in using Facebook` | Facebook login link text. |
-| `google_url` | `#` | Google login link URL. |
-| `google_text` | `Sign in using Google` | Google login link text. |
-| `forgot_password_url` | `#` | Password-reset link URL. |
-| `forgot_password_text` | `I forgot my password` | Password-reset link text. |
-| `register_url` | `#` | Registration link URL. |
+| `logo_url` | `#` | URL used by the authentication logo. |
+| `logo_bold` | `''` | Bold portion of the logo text. |
+| `logo_text` | `''` | Logo text displayed beside the bold portion. |
+| `show_logo` | `false` | Determines whether the logo is rendered. |
+| `message` | `Sign in to start your session` | Message displayed above the login form. |
+| `action` | `#` | Form submission URL. |
+| `method` | `post` | Form submission method. |
+| `csrf` | `''` | Raw CSRF markup rendered inside the form. |
+| `email_name` | `email` | Name attribute for the email field. |
+| `email_label` | `Email` | Email field label. |
+| `email_placeholder` | `Email` | Email field placeholder. |
+| `email_value` | `''` | Initial email field value. |
+| `autofocus` | `false` | Determines whether the email field receives autofocus. |
+| `password_name` | `password` | Name attribute for the password field. |
+| `password_label` | `Password` | Password field label. |
+| `password_placeholder` | `Password` | Password field placeholder. |
+| `remember_name` | `remember` | Name attribute for the remember-me checkbox. |
+| `remember_value` | `1` | Value submitted by the remember-me checkbox. |
+| `remember_text` | `Remember Me` | Remember-me checkbox label. |
+| `remember_checked` | `false` | Determines whether the remember-me checkbox is checked. |
+| `submit_text` | `Sign In` | Login submit button text. |
+| `show_social` | `false` | Determines whether social authentication buttons are rendered. |
+| `facebook_url` | `#` | Facebook authentication URL. |
+| `facebook_text` | `Sign in using Facebook` | Facebook authentication button text. |
+| `google_url` | `#` | Google authentication URL. |
+| `google_text` | `Sign in using Google` | Google authentication button text. |
+| `forgot_password_url` | `#` | Forgot-password URL. |
+| `forgot_password_text` | `I forgot my password` | Forgot-password link text. |
+| `register_url` | `#` | Registration URL. |
 | `register_text` | `Create a new account` | Registration link text. |
 
-## Behavior and Notes
+---
 
-The logo is disabled by default with `show_logo=false`.
+# Usage
 
-Social authentication is disabled by default with `show_social=false`; both Facebook and Google links are rendered when the block is enabled.
+The Login component is included using Twig's `include` statement.
 
-The current login template defines `email_label` and `password_label`, but passes an empty `label` to the nested `input-group` components. Therefore these two parameters do not currently change the rendered labels.
-
-The email and password fields use the `components/form/input-group.twig` component. Password values are not repopulated by the nested component.
-
-The `csrf` value is rendered with `|raw` and is intended for already-generated CSRF markup.
-
-## Usage
+Example:
 
 ```twig
-{% include 'components/auth/login.twig' with {
-    show_logo: false,
-    show_social: true,
-    message: 'Sign in to manage your tasks.',
-    action: route('auth.attempt'),
-    method: 'POST',
-    csrf: csrf,
-    email_name: 'email',
-    email_placeholder: 'Email or username',
-    password_name: 'password',
-    password_placeholder: 'Password',
-    remember_name: 'remember',
-    remember_value: '1',
-    forgot_password_url: '#',
-    register_url: route('auth.register'),
-    register_text: 'Create a new account'
-} %}
+{% include
+    'components/auth/login.twig'
+    with {
+        logo_url:
+            route('home')
+
+        logo_bold:
+            'Pixel'
+
+        logo_text:
+            'Fix'
+
+        show_logo:
+            true
+
+        message:
+            'Sign in to your account'
+
+        action:
+            route('login')
+
+        method:
+            'post'
+
+        csrf:
+            csrf()
+
+        email_name:
+            'email'
+
+        password_name:
+            'password'
+
+        remember_name:
+            'remember'
+
+        submit_text:
+            'Sign In'
+    }
+    only
+%}
+```
+
+---
+
+## Social Authentication
+
+Set `show_social` to `true` to render the Facebook and Google authentication links.
+
+```twig
+{% include
+    'components/auth/login.twig'
+    with {
+        show_social:
+            true
+
+        facebook_url:
+            '/auth/facebook'
+
+        facebook_text:
+            'Sign in using Facebook'
+
+        google_url:
+            '/auth/google'
+
+        google_text:
+            'Sign in using Google'
+    }
+    only
+%}
+```
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/auth/login.twig'
+    with {
+        logo_url:
+            route('home')
+
+        logo_bold:
+            'Pixel'
+
+        logo_text:
+            'Fix'
+
+        show_logo:
+            true
+
+        message:
+            'Sign in to your account'
+
+        action:
+            route('login')
+
+        method:
+            'post'
+
+        csrf:
+            csrf()
+
+        email_name:
+            'email'
+
+        email_label:
+            'Email'
+
+        email_placeholder:
+            'Email address'
+
+        email_value:
+            ''
+
+        autofocus:
+            true
+
+        password_name:
+            'password'
+
+        password_label:
+            'Password'
+
+        password_placeholder:
+            'Password'
+
+        remember_name:
+            'remember'
+
+        remember_value:
+            '1'
+
+        remember_text:
+            'Remember Me'
+
+        remember_checked:
+            false
+
+        submit_text:
+            'Sign In'
+
+        show_social:
+            false
+
+        forgot_password_url:
+            route('password.request')
+
+        register_url:
+            route('register')
+    }
+    only
+%}
 ```

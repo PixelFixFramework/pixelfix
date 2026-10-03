@@ -1,17 +1,34 @@
 # Theme Header Item
 
-Renders the PixelFix color-scheme selector for Light, Dark, and Auto modes.
+Renders the light, dark, and automatic theme selection control in the application header.
 
-**Component:** `layout/header/theme.twig`
+**Component:** `components/layout/header/theme.twig`
 
-## Behavior and Notes
+---
 
-No configurable parameters are defined.
+## Parameters
 
-The current component exposes the values through `data-pixelfix-theme-value` and relies on the PixelFix theme behavior.
+This component does not accept explicit parameters.
 
-## Usage
+The component provides the theme values `light`, `dark`, and `auto` through
+`data-pixelfix-theme-value` attributes.
+
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/header/theme.twig' %}
+{% include
+    'components/layout/header/theme.twig'
+%}
 ```
+
+---
+
+## Theme Values
+
+| Value | Label |
+|---|---|
+| `light` | Light |
+| `dark` | Dark |
+| `auto` | Auto |

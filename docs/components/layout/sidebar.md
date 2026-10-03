@@ -1,71 +1,335 @@
-# Sidebar Component
+# Sidebar
 
-Renders a configurable PixelFix application sidebar with branding, searchable navigation, nested menu items, optional user information, and optional logout.
+Renders the PixelFix application sidebar with branding, searchable navigation, nested items, optional user information, logout, persistence, and responsive behavior.
 
-**Component:** `layout/sidebar.twig`
+**Component:** `components/layout/sidebar.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `brand` | `PixelFix` | Brand text. |
-| `logo` | `P` | Brand logo/short text. |
-| `items` | `[]` | Navigation item array. |
-| `user` | `null` | Optional user object used for the sidebar footer. |
-| `logout_url` | `null` | Optional logout URL. When set, a POST logout form is rendered. |
+| `brand` | `PixelFix` | Sidebar brand text. |
+| `logo` | `P` | Sidebar logo text. |
+| `items` | `[]` | Sidebar navigation item collection. |
+| `user` | `null` | User object used by the sidebar footer. |
+| `logout_url` | `null` | Logout form action. |
 | `logout_text` | `Logout` | Logout button text. |
-| `class` | `''` | Additional sidebar classes. |
+| `class` | `''` | Additional sidebar CSS classes. |
 | `id` | `pixelfix-sidebar` | Sidebar id. |
 | `brand_url` | `/` | Brand link URL. |
-| `search` | `true` | Whether to render the menu search box. |
+| `search` | `true` | Enables the sidebar menu filter. |
 | `search_placeholder` | `Filter menu…` | Search input placeholder. |
-| `search_empty_text` | `No matching pages.` | Message displayed when search has no matches. |
-| `breakpoint` | `991.98` | Breakpoint value written to `data-sidebar-breakpoint`. |
-| `persistence` | `false` | Enables persistence data attribute. |
-| `mini` | `false` | Adds the mini sidebar class and data attribute. |
-| `collapsed` | `false` | Adds the collapsed class. |
-| `without_hover` | `false` | Adds the without-hover class. |
-| `accordion` | `true` | Controls the sidebar accordion data attribute. |
-| `animation_speed` | `300` | Animation speed data value. |
+| `search_empty_text` | `No matching pages.` | Empty search result message. |
+| `breakpoint` | `991.98` | Responsive breakpoint used by sidebar behavior. |
+| `persistence` | `false` | Enables sidebar state persistence. |
+| `mini` | `false` | Enables mini sidebar mode. |
+| `collapsed` | `false` | Starts the sidebar collapsed. |
+| `without_hover` | `false` | Disables hover expansion behavior. |
+| `accordion` | `true` | Enables accordion behavior for nested navigation. |
+| `animation_speed` | `300` | Sidebar animation speed. |
 
-## Behavior and Notes
+---
 
-Navigation items are recursive and support `label`, `url`, `icon`, `active`, `open`, `disabled`, `badge`, `badge_class`, `header`, and `children`.
+## Navigation Item
 
-A navigation item with `header=true` renders a section header instead of a link.
+Each item may contain:
 
-An item with children renders a toggle and nested navigation tree.
+| Property | Default | Description |
+|---|---|---|
+| `label` | `''` | Item label. |
+| `url` | `#` | Destination URL. |
+| `icon` | `•` | Icon or text rendered before the label. |
+| `active` | `false` | Marks the item active. |
+| `disabled` | `false` | Renders the item as disabled. |
+| `open` | `false` | Opens the nested navigation tree. |
+| `header` | `false` | Renders the item as a navigation section header. |
+| `badge` | `null` | Optional badge text. |
+| `badge_class` | `''` | Additional CSS class applied to the badge. |
+| `children` | `[]` | Nested navigation items. |
 
-The sidebar navigation uses `url` directly; it does not resolve a route name.
+Child items use the same item structure recursively.
 
-When `logout_url` is supplied, the component renders `{{ csrf|raw }}` inside the POST form, so a `csrf` value must also be available in the rendering context.
+---
 
-The user object is expected to expose `name` and optionally `email` for the footer.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/layout/sidebar.twig' with {
-    brand: 'Task Manager',
-    logo: 'T',
-    brand_url: route('home'),
-    items: [
-        {
-            label: 'Dashboard',
-            url: '/dashboard',
-            icon: '▣',
-            active: true
-        },
-        {
-            label: 'Tasks',
-            url: '/tasks',
-            icon: '✓',
-            children: [
-                { label: 'All Tasks', url: '/tasks' },
-                { label: 'Completed', url: '/tasks/completed' }
-            ]
-        }
-    ],
-    search: true
-} %}
+{% set items = [
+    {
+        label: 'Dashboard',
+        icon: '⌂',
+        url: '/dashboard',
+        active: true
+    },
+    {
+        label: 'Users',
+        icon: '👥',
+        children: [
+            {
+                label: 'All Users',
+                url: '/users'
+            },
+            {
+                label: 'Create User',
+                url: '/users/create'
+            }
+        ]
+    }
+] %}
+
+{% include
+    'components/layout/sidebar.twig'
+    with {
+        brand:
+            'PixelFix',
+
+        logo:
+            'P',
+
+        items:
+            items,
+
+        brand_url:
+            '/dashboard',
+
+        search:
+            true,
+
+        accordion:
+            true
+    }
+    only
+%}
 ```
+
+---
+
+## Navigation Header
+
+Set `header` to `true` to render an item as a section heading.
+
+```twig
+{% set items = [
+    {
+        label: 'MAIN NAVIGATION',
+        header: true
+    },
+    {
+        label: 'Dashboard',
+        url: '/dashboard'
+    }
+] %}
+```
+
+---
+
+## Active and Disabled Items
+
+```twig
+{% set items = [
+    {
+        label: 'Dashboard',
+        url: '/dashboard',
+        active: true
+    },
+    {
+        label: 'Reports',
+        url: '/reports',
+        disabled: true
+    }
+] %}
+```
+
+---
+
+## Badges
+
+Use `badge` and `badge_class` to display a badge beside a navigation item.
+
+```twig
+{% set items = [
+    {
+        label: 'Messages',
+        url: '/messages',
+        badge: '4',
+        badge_class: 'bg-danger'
+    }
+] %}
+```
+
+---
+
+## Nested Navigation
+
+The `children` property creates a nested navigation tree.
+
+```twig
+{% set items = [
+    {
+        label: 'Administration',
+        open: true,
+        children: [
+            {
+                label: 'Users',
+                url: '/admin/users'
+            },
+            {
+                label: 'Roles',
+                url: '/admin/roles'
+            }
+        ]
+    }
+] %}
+```
+
+---
+
+## Search
+
+The sidebar search can be configured independently.
+
+```twig
+{% include
+    'components/layout/sidebar.twig'
+    with {
+        items:
+            items,
+
+        search:
+            true,
+
+        search_placeholder:
+            'Search navigation…',
+
+        search_empty_text:
+            'No matching pages.'
+    }
+    only
+%}
+```
+
+---
+
+## User and Logout
+
+The sidebar displays the user's name and email when `user` is supplied.
+
+```twig
+{% include
+    'components/layout/sidebar.twig'
+    with {
+        user:
+            user,
+
+        logout_url:
+            route('logout'),
+
+        logout_text:
+            'Sign out'
+    }
+    only
+%}
+```
+
+The logout form outputs the framework `csrf` value as raw HTML.
+
+---
+
+## Complete Example
+
+```twig
+{% set items = [
+    {
+        label: 'MAIN NAVIGATION',
+        header: true
+    },
+    {
+        label: 'Dashboard',
+        icon: '⌂',
+        url: '/dashboard',
+        active: true
+    },
+    {
+        label: 'Users',
+        icon: '👥',
+        badge: '12',
+        badge_class: 'bg-primary',
+        children: [
+            {
+                label: 'All Users',
+                url: '/users'
+            },
+            {
+                label: 'Create User',
+                url: '/users/create'
+            }
+        ]
+    },
+    {
+        label: 'Reports',
+        icon: '▣',
+        url: '/reports'
+    },
+    {
+        label: 'Disabled Page',
+        icon: '•',
+        url: '#',
+        disabled: true
+    }
+] %}
+
+{% include
+    'components/layout/sidebar.twig'
+    with {
+        brand:
+            'PixelFix',
+
+        logo:
+            'P',
+
+        items:
+            items,
+
+        user:
+            user,
+
+        logout_url:
+            route('logout'),
+
+        logout_text:
+            'Sign out',
+
+        brand_url:
+            '/dashboard',
+
+        search:
+            true,
+
+        search_placeholder:
+            'Filter menu…',
+
+        search_empty_text:
+            'No matching pages.',
+
+        persistence:
+            true,
+
+        mini:
+            false,
+
+        collapsed:
+            false,
+
+        without_hover:
+            false,
+
+        accordion:
+            true,
+
+        animation_speed:
+            300
+    }
+    only
+%}

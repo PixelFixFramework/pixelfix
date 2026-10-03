@@ -1,23 +1,54 @@
-# Spinner Component
+# Spinner
 
-Renders a Bootstrap-style spinner with a visually hidden loading label.
+Renders a Bootstrap loading spinner with contextual styling and optional small size.
 
-**Component:** `feedback/spinner.twig`
+**Component:** `components/feedback/spinner.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `type` | `primary` | Spinner text type appended to `text-`. |
-| `size` | `null` | Use `sm` for the small spinner variant. |
-| `label` | `Loading...` | Visually hidden status text. |
+| `type` | `primary` | Bootstrap text color applied to the spinner. |
+| `size` | `null` | Use `sm` for the small spinner size. |
+| `label` | `Loading...` | Accessible loading text. |
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/feedback/spinner.twig' with {
-    type: 'primary',
-    size: 'sm',
-    label: 'Loading tasks...'
-} %}
+{% include
+    'components/feedback/spinner.twig'
+    with {
+        type:
+            'primary'
+
+        size:
+            'sm'
+
+        label:
+            'Loading students...'
+    }
+    only
+%}
+```
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/feedback/spinner.twig'
+    with {
+        type:
+            'success',
+
+        label:
+            'Saving changes...'
+    }
+    only
+%}
 ```

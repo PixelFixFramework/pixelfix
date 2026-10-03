@@ -1,17 +1,24 @@
 # Fullscreen Header Item
 
-Renders the fullscreen toggle navigation item.
+Renders the fullscreen control in the application header.
 
-**Component:** `layout/header/fullscreen.twig`
+**Component:** `components/layout/header/fullscreen.twig`
 
-## Behavior and Notes
+---
 
-No configurable parameters are defined.
+## Parameters
 
-The component relies on the PixelFix fullscreen behavior attached to `data-pixelfix-toggle="fullscreen"`.
+This component does not accept explicit parameters.
 
-## Usage
+The control uses the `data-pixelfix-toggle="fullscreen"` attribute to integrate
+with the PixelFix fullscreen behavior.
+
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/header/fullscreen.twig' %}
+{% include
+    'components/layout/header/fullscreen.twig'
+%}
 ```

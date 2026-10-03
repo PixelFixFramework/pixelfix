@@ -1,39 +1,49 @@
-# Base Header Component
+# Header
 
-Provides the base PixelFix header markup and three Twig blocks for custom header content.
+Provides the base application header structure with start and end Twig blocks.
 
-**Component:** `layout/header.twig`
+**Component:** `components/layout/header.twig`
 
-## Behavior and Notes
+---
 
-The component defines no configurable input parameters.
+## Parameters
 
-The `header_start` block is rendered on the left after the default sidebar-toggle item.
+This component does not define explicit parameters.
 
-The `header_center` block is rendered in the center.
+The component is intended to be extended through Twig `embed` and its
+`header_start` and `header_end` blocks.
 
-The `header_end` block is rendered on the right.
+---
 
-When using Twig `embed`, these blocks can be overridden by the embedding template.
-
-## Usage
+# Usage
 
 ```twig
 {% embed 'components/layout/header.twig' %}
-    {% block header_start %}
-        <li class="pixelfix-nav-item">
-            Custom Start Item
-        </li>
-    {% endblock %}
 
-    {% block header_center %}
-        <span>Page Context</span>
+    {% block header_start %}
+
+        {% include
+            'components/layout/header/live-preview.twig'
+        %}
+
     {% endblock %}
 
     {% block header_end %}
-        <li class="pixelfix-nav-item">
-            Custom End Item
-        </li>
+
+        {% include
+            'components/layout/header/search.twig'
+        %}
+
     {% endblock %}
+
 {% endembed %}
 ```
+
+---
+
+## Header Blocks
+
+| Block | Purpose |
+|---|---|
+| `header_start` | Content rendered at the start of the navigation. |
+| `header_end` | Content rendered at the end of the navigation. |

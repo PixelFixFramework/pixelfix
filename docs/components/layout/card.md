@@ -1,8 +1,10 @@
-# Card Component
+# Card
 
-Renders a card with optional title, subtitle, body content, and footer.
+Renders a Bootstrap card with optional title, subtitle, content, footer, and additional classes.
 
-**Component:** `layout/card.twig`
+**Component:** `components/layout/card.twig`
+
+---
 
 ## Parameters
 
@@ -10,21 +12,33 @@ Renders a card with optional title, subtitle, body content, and footer.
 |---|---|---|
 | `title` | `null` | Optional card title. |
 | `subtitle` | `null` | Optional card subtitle. |
-| `content` | `''` | Card body content. Rendered as raw HTML. |
-| `footer` | `null` | Optional footer content. Rendered as raw HTML. |
-| `class` | `''` | Additional card classes. |
+| `content` | `''` | Card body content. |
+| `footer` | `null` | Optional footer content. |
+| `class` | `''` | Additional card CSS classes. |
 
-## Behavior and Notes
+---
 
-Both `content` and `footer` are rendered with `|raw`.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/layout/card.twig' with {
-    title: 'Task Summary',
-    subtitle: 'Current status',
-    content: '<p>All tasks are up to date.</p>',
-    footer: '<a href="/tasks">View Tasks</a>'
-} %}
+{% include
+    'components/layout/card.twig'
+    with {
+        title:
+            'Profile',
+
+        subtitle:
+            'Account details',
+
+        content:
+            '<p>John Doe</p>',
+
+        footer:
+            '<a href="/profile">View Profile</a>',
+
+        class:
+            'shadow-sm'
+    }
+    only
+%}
 ```

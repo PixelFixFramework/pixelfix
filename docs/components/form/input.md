@@ -1,43 +1,75 @@
-# Input Component
+# Input
 
-Renders a simple form input with an optional label, standard input attributes, old-value handling, and validation feedback.
+Renders a standard Bootstrap form input with old-input restoration and validation feedback.
 
-**Component:** `form/input.twig`
+**Component:** `components/form/input.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
 | `type` | `text` | HTML input type. |
-| `name` | `''` | Input name/id. |
-| `label` | `null` | Optional label. |
+| `name` | `''` | Input name and id. |
+| `label` | `null` | Optional field label. |
 | `placeholder` | `''` | Input placeholder. |
-| `required` | `false` | Adds the HTML `required` attribute. |
-| `class` | `''` | Additional input classes. |
-| `maxlength` | `null` | Optional HTML `maxlength`. |
-| `autofocus` | `false` | Adds the HTML `autofocus` attribute. |
-| `value` | `''` | Initial value before `old()` resolution. |
-| `validationMessage` | `null` | Custom fallback validation message. Note the exact camelCase parameter name. |
+| `required` | `false` | Adds the required attribute. |
+| `class` | `''` | Additional input CSS classes. |
+| `maxlength` | `null` | Maximum input length. |
+| `autofocus` | `false` | Adds autofocus. |
+| `value` | `''` | Initial field value. |
+| `validationMessage` | `null` | Custom validation message. |
 
-## Behavior and Notes
+---
 
-The component uses `validationMessage`, not `validation_message`.
-
-The field value is resolved using `old(name, value)`.
-
-Password inputs render an empty value attribute and are not repopulated.
-
-The component uses the first value in `errors()[name]` for validation feedback when errors exist.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/form/input.twig' with {
-    type: 'text',
-    name: 'title',
-    label: 'Title',
-    placeholder: 'Enter title',
-    value: '',
-    required: true
-} %}
+{% include
+    'components/form/input.twig'
+    with {
+        type:
+            'email',
+
+        name:
+            'email',
+
+        label:
+            'Email',
+
+        placeholder:
+            'Email address',
+
+        required:
+            true
+    }
+    only
+%}
+```
+
+---
+
+## Password Input
+
+Password values are not restored from the resolved old value.
+
+```twig
+{% include
+    'components/form/input.twig'
+    with {
+        type:
+            'password',
+
+        name:
+            'password',
+
+        label:
+            'Password',
+
+        required:
+            true
+    }
+    only
+%}
 ```

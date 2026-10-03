@@ -1,19 +1,28 @@
 # Documentation Header Item
 
-Renders the Documentation navigation item used by the default header.
+Renders the Documentation link in the application header.
 
-**Component:** `layout/header/documentation.twig`
+**Component:** `components/layout/header/documentation.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `documentation_url` | `#` | Documentation link URL. |
+| `documentation_url` | `#` | URL opened by the Documentation item. |
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/layout/header/documentation.twig' with {
-    documentation_url: '/docs'
-} %}
+{% include
+    'components/layout/header/documentation.twig'
+    with {
+        documentation_url:
+            '/docs'
+    }
+    only
+%}
 ```

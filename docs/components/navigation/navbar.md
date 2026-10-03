@@ -1,69 +1,150 @@
-# Navbar Component
+# Navbar
 
-Renders a Bootstrap-style responsive navigation bar with route-aware brand and links, dropdown children, optional search, configurable theme/background, and optional mobile offcanvas integration.
+Renders a Bootstrap navigation bar with brand routing, navigation items, dropdowns, optional search, fixed positioning, theming, and mobile offcanvas support.
 
-**Component:** `navigation/navbar.twig`
+**Component:** `components/navigation/navbar.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
 | `brand` | `PixelFix` | Brand text. |
-| `brand_url` | `#` | Brand URL when no `brand_route` is supplied. |
-| `brand_route` | `null` | Optional route name used to resolve the brand URL. |
-| `brand_route_params` | `[]` | Parameters passed to `brand_route`. |
-| `items` | `[]` | Navigation item array. |
-| `expand` | `lg` | Breakpoint used in `navbar-expand-*`. |
-| `theme` | `light` | Value written to `data-bs-theme`. |
-| `background` | `bg-light` | Bootstrap background class, a CSS color value, or another value that becomes `bg-{background}`. |
-| `style` | `null` | Optional inline style appended to the navbar. |
-| `fixed` | `null` | Use `top` or `bottom` for Bootstrap fixed positioning. |
-| `container` | `container` | Container class. |
-| `id` | `navbar` | Collapse target id. |
+| `brand_url` | `#` | Direct brand URL. |
+| `brand_route` | `null` | Named route used for the brand URL. |
+| `brand_route_params` | `[]` | Parameters passed to the brand route. |
+| `items` | `[]` | Navigation item collection. |
+| `expand` | `lg` | Bootstrap navbar expansion breakpoint. |
+| `theme` | `light` | Bootstrap navbar color scheme. |
+| `background` | `bg-light` | Bootstrap background class or CSS color value. |
+| `style` | `null` | Additional inline CSS. |
+| `fixed` | `null` | Fixed position: `top` or `bottom`. |
+| `container` | `container` | Bootstrap container class. |
+| `id` | `navbar` | Navbar collapse id. |
 | `search` | `null` | Optional search configuration object. |
-| `mobile_offcanvas` | `null` | Optional offcanvas id used by the mobile toggler instead of Bootstrap collapse. |
+| `mobile_offcanvas` | `null` | Offcanvas id used by the mobile toggler. |
 
-## Behavior and Notes
+---
 
-When `brand_route` is supplied, its resolved URL takes precedence over `brand_url`.
+## Navigation Item
 
-Top-level items support `label`, `url` or `route` plus optional `route_params`, `active`, `target`, `rel`, and `children`.
+A normal item may contain:
 
-Items with `children` render a dropdown. Each child can be a `header`, a `divider`, or a link with `label`, `url` or `route`, optional `route_params`, `active`, `target`, and `rel`.
+| Property | Default | Description |
+|---|---|---|
+| `label` | — | Item label. |
+| `url` | `#` | Direct URL. |
+| `route` | — | Named route. |
+| `route_params` | `[]` | Named route parameters. |
+| `active` | `false` | Marks the item active. |
+| `target` | — | Link target. |
+| `rel` | — | Link rel attribute. |
+| `children` | — | Presence of this property creates a dropdown. |
 
-The `background` value is treated specially: values beginning with `bg-` become classes; CSS color values beginning with `#`, `rgb(`, `rgba(`, `hsl(`, or `hsla(` become inline background color; other values become `bg-{background}`.
+Dropdown children may contain `label`, `url`, `route`, `route_params`, `active`,
+`target`, `rel`, `header`, and `divider`.
 
-`fixed` recognizes `top` and `bottom`; other values result in no fixed-position class.
+---
 
-The optional `search` object supports `route`, `route_params`, `action`, `role`, `method`, `type`, `name`, `placeholder`, `aria_label`, `button_class`, and `button_label`.
+## Search Object
 
-When `mobile_offcanvas` is set, the navbar toggler targets that offcanvas id; otherwise it targets the navbar collapse id.
+| Property | Default | Description |
+|---|---|---|
+| `route` | — | Named route used for search action. |
+| `route_params` | `[]` | Route parameters. |
+| `action` | `null` | Direct search action when no route is supplied. |
+| `role` | `search` | Form role. |
+| `method` | — | Form method when supplied. |
+| `type` | `search` | Search input type. |
+| `name` | — | Search input name. |
+| `placeholder` | `Search` | Search placeholder. |
+| `aria_label` | `Search` | Search input aria label. |
+| `button_class` | `btn-outline-success` | Search button classes. |
+| `button_label` | `Search` | Search button text. |
 
-## Usage
+---
+
+# Usage
 
 ```twig
-{% include 'components/navigation/navbar.twig' with {
-    brand: config('app.name'),
-    brand_route: 'home',
-    brand_route_params: [],
-    expand: 'lg',
-    theme: 'light',
-    background: 'bg-light',
-    container: 'container',
-    items: [
-        {
-            label: 'Home',
-            route: 'home',
-            active: true
-        },
-        {
-            label: 'Tasks',
-            children: [
-                { label: 'All Tasks', route: 'tasks.index' },
-                { divider: true },
-                { label: 'Create Task', route: 'tasks.create' }
-            ]
-        }
-    ]
-} %}
+{% set items = [
+    {
+        label: 'Dashboard',
+        route: 'dashboard'
+    },
+    {
+        label: 'Users',
+        children: [
+            {
+                label: 'All Users',
+                route: 'users.index'
+            },
+            {
+                label: 'Create User',
+                route: 'users.create'
+            }
+        ]
+    }
+] %}
+
+{% include
+    'components/navigation/navbar.twig'
+    with {
+        brand:
+            'PixelFix',
+
+        brand_route:
+            'home',
+
+        items:
+            items,
+
+        expand:
+            'lg',
+
+        theme:
+            'light',
+
+        background:
+            'bg-light',
+
+        container:
+            'container',
+
+        search:
+            {
+                route: 'search',
+                route_params: [],
+                method: 'get',
+                name: 'query',
+                placeholder: 'Search...',
+                button_label: 'Search'
+            }
+    }
+    only
+%}
+```
+
+---
+
+## Mobile Offcanvas
+
+Set `mobile_offcanvas` to the id of an existing Offcanvas component.
+
+```twig
+{% include
+    'components/navigation/navbar.twig'
+    with {
+        brand:
+            'PixelFix',
+
+        items:
+            items,
+
+        mobile_offcanvas:
+            'mobile-menu'
+    }
+    only
+%}
 ```

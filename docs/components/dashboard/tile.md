@@ -1,33 +1,75 @@
-# Dashboard Tile Component
+# Dashboard Tile
 
-Renders a dashboard summary tile with a value, label, optional Bootstrap icon, and footer link.
+Renders a dashboard summary tile with a value, label, optional icon, and footer link.
 
-**Component:** `dashboard/tile.twig`
+**Component:** `components/dashboard/tile.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `value` | `''` | Primary value shown in the tile. |
-| `label` | `''` | Text shown below the value. |
-| `icon` | `null` | Optional Bootstrap icon name. The template prefixes it with `bi `. |
-| `class` | `''` | Additional CSS classes for the tile. |
-| `url` | `#` | Footer link URL. |
+| `value` | `''` | Main value displayed by the tile. |
+| `label` | `''` | Label displayed below the value. |
+| `icon` | `null` | Optional icon class or markup rendered by the tile. |
+| `class` | `''` | Additional CSS class applied to the tile. |
+| `url` | `#` | URL used by the footer link. |
 | `footer_text` | `More info` | Footer link text. |
 
-## Behavior and Notes
+---
 
-The icon is rendered only when `icon` has a value. The footer link is always rendered.
-
-## Usage
+# Usage
 
 ```twig
-{% include 'components/dashboard/tile.twig' with {
-    value: '42',
-    label: 'Tasks',
-    icon: 'check2-square',
-    class: 'my-tile',
-    url: route('tasks.index'),
-    footer_text: 'View tasks'
-} %}
+{% include
+    'components/dashboard/tile.twig'
+    with {
+        value:
+            '128'
+
+        label:
+            'Registered Students'
+
+        icon:
+            'bi bi-people-fill'
+
+        class:
+            'bg-primary'
+
+        url:
+            '/students'
+
+        footer_text:
+            'View Students'
+    }
+    only
+%}
+```
+
+---
+
+## Complete Example
+
+```twig
+{% include
+    'components/dashboard/tile.twig'
+    with {
+        value:
+            'K 25,000'
+
+        label:
+            'Total Revenue'
+
+        icon:
+            'bi bi-cash-stack'
+
+        url:
+            '/reports/revenue'
+
+        footer_text:
+            'View Report'
+    }
+    only
+%}
 ```

@@ -1,38 +1,60 @@
-# Floating Select Component
+# Floating Select
 
-Renders a floating-label `<select>` with a placeholder option and automatic validation state.
+Renders a Bootstrap floating-label select with options and validation state.
 
-**Component:** `floating/select.twig`
+**Component:** `components/floating/select.twig`
+
+---
 
 ## Parameters
 
 | Parameter | Default | Description |
 |---|---|---|
-| `name` | Required | Select name/id. |
+| `name` | Required | Select name and id. |
 | `label` | `''` | Floating label text. |
-| `required` | `false` | Adds the HTML `required` attribute. |
-| `options` | `{}` | Map of option values to option text. |
-| `placeholder` | `Select` | Text in the initial empty option. |
-| `validation_message` | Contextual default | Custom validation message shown when there is no current field error. |
+| `required` | `false` | Adds the required attribute. |
+| `options` | `{}` | Associative array of option values and labels. |
+| `placeholder` | `Select` | Placeholder option text. |
+| `validation_message` | Derived | Custom validation message used when no server error exists. |
 
-## Behavior and Notes
+---
 
-The selected value is resolved from `old(name)`; there is no separate `value` parameter.
+# Options
 
-The option whose key matches `old(name)` is marked selected.
-
-Validation state is `is-invalid` for errors and `is-valid` when an old value is present.
-
-## Usage
+`options` is an associative array where each key is the option value and each
+value is the displayed option text.
 
 ```twig
-{% include 'components/floating/select.twig' with {
-    name: 'status',
-    label: 'Status',
-    options: {
-        draft: 'Draft',
-        published: 'Published'
-    },
-    required: true
+{% set countries = {
+    zm: 'Zambia',
+    za: 'South Africa',
+    bw: 'Botswana'
 } %}
+```
+
+---
+
+# Usage
+
+```twig
+{% include
+    'components/floating/select.twig'
+    with {
+        name:
+            'country',
+
+        label:
+            'Country',
+
+        options:
+            countries,
+
+        placeholder:
+            'Select country',
+
+        required:
+            true
+    }
+    only
+%}
 ```
