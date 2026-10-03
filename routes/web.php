@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-
 use PixelFix\Framework\Routing\Route;
 
 /*
