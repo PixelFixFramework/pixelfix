@@ -174,6 +174,43 @@ function initializeBootstrapValidation(
 }
 
 // =====================================================
+// BROWSER HISTORY SYNCHRONIZATION
+// =====================================================
+//
+// Browsers may restore a document from the back/forward
+// cache (bfcache) without making a new HTTP request.
+//
+// When this happens, PixelFix middleware does not execute.
+// Force the restored document through the server again so
+// the current authentication state and redirect rules are
+// evaluated by AuthMiddleware and GuestMiddleware.
+//
+// =====================================================
+
+function synchronizeBrowserHistory(
+	event
+) {
+
+	if (
+		!event.persisted
+	) {
+
+		return;
+	}
+
+	window.location.reload();
+}
+
+// =====================================================
+// PAGE RESTORE
+// =====================================================
+
+window.addEventListener(
+	'pageshow',
+	synchronizeBrowserHistory
+);
+
+// =====================================================
 // APPLICATION BOOT
 // =====================================================
 

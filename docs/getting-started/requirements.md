@@ -20,7 +20,7 @@ Install Composer through the official Composer installation process for your ope
 composer --version
 ```
 
-## Application web server
+## Application Web Server
 
 PixelFix applications expose a `public/` directory as the web root. The Task Manager application can be run with the PHP development server, while Apache can be configured to point its document root at `public/`.
 
@@ -32,7 +32,7 @@ php -S localhost:8000 -t public
 
 The framework also provides a `serve` console command for the development workflow.
 
-## Database drivers
+## Database Drivers
 
 Database support depends on the connection driver and the PHP extensions available in the environment. The application configuration includes connection definitions for MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, DBLIB, and MongoDB.
 
@@ -44,6 +44,6 @@ database/database.sqlite
 
 The application must still have the appropriate PHP database extension for the selected driver.
 
-## Development dependencies
+## Development Dependencies
 
-The framework's development dependencies include PHPUnit and Faker. Applications may add their own development dependencies as needed.
+The framework's development dependencies include Faker. Applications may add their own development dependencies as needed.

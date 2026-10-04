@@ -77,6 +77,13 @@ return [
 
         'password_timeout' => 10800,
 
+        'redirects' => [
+
+            'login' => '/login',
+
+            'home' => '/',
+        ],
+
         'remember' => [
 
             'cookie' => env(
