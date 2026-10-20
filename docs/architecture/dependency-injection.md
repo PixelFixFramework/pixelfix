@@ -77,3 +77,14 @@ Keep registration in `register()` and runtime initialization in `boot()` unless 
 ## Application code vs framework internals
 
 The container contains additional lifecycle and provider machinery. Application developers normally need only the public container helpers, constructor injection, and service-provider hooks. Internal compilation and resolution services are implementation details unless you are contributing to PixelFix itself.
+
+
+## A concrete example
+
+Suppose `TaskController` needs a service that sends notifications. Rather than constructing a notification client inside every controller method, declare the dependency in the controller constructor and let the container resolve it. This makes the dependency visible and lets tests provide a substitute when appropriate.
+
+Dependency injection helps separate *what a class needs* from *how that dependency is constructed*. It does not mean every value belongs in the container: simple local values, request input, and objects that are naturally created for one operation do not need global registration.
+
+## Troubleshooting resolution failures
+
+When the container cannot build a class, inspect the constructor. Confirm each class type is autoloadable and that the container knows how to create interfaces or abstract types. If a constructor needs a scalar such as a URL or API key, configure that value explicitly; PHP type information alone cannot tell the container which string to use.

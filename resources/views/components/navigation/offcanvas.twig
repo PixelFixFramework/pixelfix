@@ -1,78 +1,253 @@
 {# =====================================================
-   OFFCANVAS COMPONENT
+   PIXELFIX OFFCANVAS COMPONENT
    ===================================================== #}
 
-{% set offcanvasId = id %}
+{% set offcanvasId = id|default('pixelfix-offcanvas') %}
 {% set offcanvasTitle = title|default('Menu') %}
 {% set offcanvasContent = content|default('') %}
+{% set offcanvasFooter = footer|default(null) %}
 {% set offcanvasPlacement = placement|default('start') %}
-{% set offcanvasBackdrop = backdrop|default(true) %}
-{% set offcanvasScroll = scroll|default(false) %}
+
+{% set offcanvasClass = class|default('') %}
+{% set offcanvasHeaderClass = header_class|default('') %}
+{% set offcanvasTitleClass = title_class|default('') %}
+{% set offcanvasBodyClass = body_class|default('') %}
+{% set offcanvasFooterClass = footer_class|default('') %}
+{% set offcanvasCloseButtonClass = close_button_class|default('') %}
+
+{% set offcanvasTitleId = title_id|default(offcanvasId ~ 'Label') %}
+{% set offcanvasBodyId = body_id|default('') %}
+{% set offcanvasTabindex = tabindex is defined ? tabindex : -1 %}
+
+{% set offcanvasRole = role|default('dialog') %}
+{% set offcanvasAriaLabel = aria_label|default('') %}
+{% set offcanvasAriaLabelledby = aria_labelledby|default('') %}
+{% set offcanvasAriaDescribedby = aria_describedby|default('') %}
+{% set offcanvasAriaHidden = aria_hidden is defined ? aria_hidden : true %}
+{% set offcanvasAriaModal = aria_modal is defined ? aria_modal : null %}
+
+{% set offcanvasHeaderPartial = header_partial|default('') %}
+{% set offcanvasBodyPartial = body_partial|default(content_partial|default('')) %}
+{% set offcanvasFooterPartial = footer_partial|default('') %}
+
+{% set offcanvasEscapeContent = escape_content is defined and escape_content %}
+{% set offcanvasEscapeFooter = escape_footer is defined and escape_footer %}
+
+{% set offcanvasShow = show is defined ? show : true %}
+{% set offcanvasShowHeader = show_header is defined ? show_header : true %}
+{% set offcanvasShowTitle = show_title is defined ? show_title : true %}
+{% set offcanvasShowCloseButton = show_close_button is defined ? show_close_button : true %}
+{% set offcanvasShowBody = show_body is defined ? show_body : true %}
+{% set offcanvasCloseLabel = close_label|default('Close') %}
+
+{% set offcanvasBackdrop = backdrop is defined ? backdrop : true %}
+{% set offcanvasScroll = scroll is defined ? scroll : false %}
+{% set offcanvasKeyboard = keyboard is defined ? keyboard : true %}
+
+{% set offcanvasHeadingTags = [
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+] %}
+{% set offcanvasTitleTag = title_tag|default('h5') %}
+{% if offcanvasTitleTag not in offcanvasHeadingTags %}
+    {% set offcanvasTitleTag = 'h5' %}
+{% endif %}
 
 {# =====================================================
    VALIDATE PLACEMENT
    ===================================================== #}
 
-{% set placementClass = {
-
+{% set offcanvasPlacementClasses = {
     'start': 'offcanvas-start',
-
     'end': 'offcanvas-end',
-
     'top': 'offcanvas-top',
+    'bottom': 'offcanvas-bottom',
+} %}
+{% set offcanvasPlacementClass = offcanvasPlacementClasses[offcanvasPlacement]|default('offcanvas-start') %}
 
-    'bottom': 'offcanvas-bottom'
+{% if not offcanvasAriaLabelledby and offcanvasShowHeader and offcanvasShowTitle and offcanvasTitle is not empty %}
+    {% set offcanvasAriaLabelledby = offcanvasTitleId %}
+{% endif %}
 
-}[offcanvasPlacement]|default('offcanvas-start') %}
+{% set offcanvasShowFooter = (offcanvasFooter is not null and offcanvasFooter != '') or offcanvasFooterPartial %}
+{% if show_footer is defined %}
+    {% set offcanvasShowFooter = show_footer %}
+{% endif %}
 
 {# =====================================================
    OFFCANVAS
    ===================================================== #}
 
-<div
-    class="
-        offcanvas
-        {{ placementClass }}
-    "
-    tabindex="-1"
-    id="{{ offcanvasId }}"
-    aria-labelledby="{{ offcanvasId }}Label"
-    data-bs-scroll="{{ offcanvasScroll ? 'true' : 'false' }}"
-    data-bs-backdrop="{{ offcanvasBackdrop ? 'true' : 'false' }}"
->
+{% if offcanvasShow %}
 
-    {# =============================================
-       HEADER
-       ============================================= #}
+    <div
+        id="{{ offcanvasId }}"
+        class="offcanvas{% if offcanvasPlacementClass %} {{ offcanvasPlacementClass }}{% endif %}{% if offcanvasClass %} {{ offcanvasClass }}{% endif %}"
+        tabindex="{{ offcanvasTabindex }}"
+        role="{{ offcanvasRole }}"
+        aria-hidden="{{ offcanvasAriaHidden ? 'true' : 'false' }}"
+        {% if offcanvasAriaLabel %}
+            aria-label="{{ offcanvasAriaLabel }}"
+        {% endif %}
+        {% if offcanvasAriaLabelledby %}
+            aria-labelledby="{{ offcanvasAriaLabelledby }}"
+        {% endif %}
+        {% if offcanvasAriaDescribedby %}
+            aria-describedby="{{ offcanvasAriaDescribedby }}"
+        {% endif %}
+        {% if offcanvasAriaModal is not null %}
+            aria-modal="{{ offcanvasAriaModal ? 'true' : 'false' }}"
+        {% endif %}
+        data-bs-scroll="{{ offcanvasScroll ? 'true' : 'false' }}"
+        data-bs-backdrop="{{ offcanvasBackdrop ? 'true' : 'false' }}"
+        data-bs-keyboard="{{ offcanvasKeyboard ? 'true' : 'false' }}"
+    >
 
-    <div class="offcanvas-header">
+        {# =============================================
+           HEADER
+           ============================================= #}
 
-        <h5
-            class="offcanvas-title"
-            id="{{ offcanvasId }}Label"
-        >
+        {% if offcanvasShowHeader %}
 
-            {{ offcanvasTitle }}
+            {% if offcanvasHeaderPartial %}
 
-        </h5>
+                {% include
+                    offcanvasHeaderPartial
+                    with {
+                        offcanvasId: offcanvasId,
+                        offcanvasTitle: offcanvasTitle,
+                        offcanvasTitleId: offcanvasTitleId,
+                        offcanvasTitleTag: offcanvasTitleTag,
+                        offcanvasTitleClass: offcanvasTitleClass,
+                        offcanvasShowTitle: offcanvasShowTitle,
+                        offcanvasShowCloseButton: offcanvasShowCloseButton,
+                        offcanvasCloseLabel: offcanvasCloseLabel,
+                        offcanvasCloseButtonClass: offcanvasCloseButtonClass,
+                    }
+                    only
+                %}
 
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-        ></button>
+            {% elseif offcanvasShowTitle or offcanvasShowCloseButton %}
+
+                <div class="offcanvas-header{% if offcanvasHeaderClass %} {{ offcanvasHeaderClass }}{% endif %}">
+
+                    {% if offcanvasShowTitle %}
+
+                        <{{ offcanvasTitleTag }}
+                            id="{{ offcanvasTitleId }}"
+                            class="offcanvas-title{% if offcanvasTitleClass %} {{ offcanvasTitleClass }}{% endif %}"
+                        >
+
+                            {{ offcanvasTitle }}
+
+                        </{{ offcanvasTitleTag }}>
+
+                    {% endif %}
+
+                    {% if offcanvasShowCloseButton %}
+
+                        <button
+                            type="button"
+                            class="btn-close{% if offcanvasCloseButtonClass %} {{ offcanvasCloseButtonClass }}{% endif %}"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="{{ offcanvasCloseLabel }}"
+                        ></button>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+
+        {# =============================================
+           BODY
+           ============================================= #}
+
+        {% if offcanvasShowBody %}
+
+            <div
+                {% if offcanvasBodyId %}
+                    id="{{ offcanvasBodyId }}"
+                {% endif %}
+                class="offcanvas-body{% if offcanvasBodyClass %} {{ offcanvasBodyClass }}{% endif %}"
+            >
+
+                {% if offcanvasBodyPartial %}
+
+                    {% include
+                        offcanvasBodyPartial
+                        with {
+                            offcanvasId: offcanvasId,
+                            offcanvasTitle: offcanvasTitle,
+                            offcanvasContent: offcanvasContent,
+                            offcanvasFooter: offcanvasFooter,
+                        }
+                        only
+                    %}
+
+                {% elseif offcanvasEscapeContent %}
+
+                    {{ offcanvasContent|e }}
+
+                {% else %}
+
+                    {# Backward compatibility: content is trusted HTML unless escape_content is enabled. #}
+
+                    {{ offcanvasContent|raw }}
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+        {# =============================================
+           FOOTER
+           ============================================= #}
+
+        {% if offcanvasShowFooter %}
+
+            {% if offcanvasFooterPartial %}
+
+                {% include
+                    offcanvasFooterPartial
+                    with {
+                        offcanvasId: offcanvasId,
+                        offcanvasTitle: offcanvasTitle,
+                        offcanvasContent: offcanvasContent,
+                        offcanvasFooter: offcanvasFooter,
+                    }
+                    only
+                %}
+
+            {% else %}
+
+                <div class="offcanvas-footer{% if offcanvasFooterClass %} {{ offcanvasFooterClass }}{% endif %}">
+
+                    {% if offcanvasEscapeFooter %}
+
+                        {{ offcanvasFooter|e }}
+
+                    {% else %}
+
+                        {# Footer retains the trusted-HTML default. #}
+
+                        {{ offcanvasFooter|raw }}
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
 
     </div>
 
-    {# =============================================
-       BODY
-       ============================================= #}
-
-    <div class="offcanvas-body">
-
-        {{ offcanvasContent|raw }}
-
-    </div>
-
-</div>
+{% endif %}

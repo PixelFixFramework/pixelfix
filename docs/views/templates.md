@@ -1,50 +1,50 @@
 # Templates and Components
 
-PixelFix templates are ordinary Twig templates. The Task Manager demonstrates a component-oriented approach built with Twig includes and a shared application layout.
+PixelFix uses Twig for server-rendered views. A view is the template associated with a route or controller response; a component is a reusable Twig template that a view or another component can include.
 
-## Layout inheritance
+For a complete component-library walkthrough and a list of the component reference pages, see [Component Library: Beginner's Guide](../components/overview.md).
 
-A page can extend the application layout:
+## Extend a layout
+
+Use `extends` when a page should share a site's common HTML shell:
 
 ```twig
-{% extends "layouts/app.twig" %}
+{% extends 'layouts/app.twig' %}
 
-{% block title %}
-    Tasks
-{% endblock %}
+{% block title %}record Details{% endblock %}
 
 {% block content %}
-    ...
+    <h1>{{ record.title }}</h1>
 {% endblock %}
 ```
 
-## Includes
+The layout defines the block names. The child view provides the page-specific content.
 
-Reusable UI pieces are included with Twig's `include` syntax:
+## Include a component
+
+Use `include` to reuse a component:
 
 ```twig
-{% include 'components/form/input.twig' with {
-    name: 'email',
-    label: 'Email',
-    required: true
-} %}
+{% include 'components/feedback/alert.twig' with {
+    type: 'success',
+    message: 'Record saved.'
+} only %}
 ```
 
-The Task Manager uses this pattern for form controls, navigation, cards, feedback messages, tables, and pagination.
+The `with` map passes parameters to the included template. `only` limits the included component to the explicitly passed values instead of exposing every variable from the surrounding template. This makes the component's required inputs clearer and reduces accidental coupling.
 
-## Passing data
+## Create versus import
 
-Controllers pass data to views as an associative array:
+- `php pixel make:view records.index` creates a generic page view.
+- `php pixel make:view auth.login --preset=login` creates a login view and ensures its reusable component dependencies are available.
+- `php pixel make:view auth --auth-bundle` creates the four standard authentication views and resolves their component dependencies.
+- `php pixel make:component records.summary` creates a new generic component.
+- `php pixel make:component --import dashboard.tile` imports a pre-authored framework component and its fixed dependencies.
 
-```php
-return view(
-    'tasks/show',
-    ['task' => $task]
-);
-```
+Generic views do not automatically import components. Authentication presets and the authentication bundle are explicit exceptions: they declare the required component roots, and the shared artifact pipeline imports missing templates and deduplicates shared dependencies. Existing component files are handled by the normal component-import conflict and overwrite policy.
 
-The keys become Twig variables.
+Views can be organized anywhere beneath `resources/views/`. Use `--as=admin.profile` for dot-separated nested destinations or `--path=admin/profile.twig` for slash-separated paths. The final generated file must stay inside the view root.
 
-## Keep templates presentational
+## Keep presentation logic simple
 
-Business rules should remain in application classes. Templates should primarily compose markup, iterate over supplied data, display validation state, and select presentation behavior.
+Templates should decide how to present data, not perform database updates or enforce authorization. Prepare data in controllers/services, authorize actions on the server, and use Twig for layout, conditions, loops, and reusable presentation.

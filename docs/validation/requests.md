@@ -2,14 +2,14 @@
 
 Form Requests combine request data, authorization, validation rules, custom messages, and lifecycle hooks into a dedicated request class.
 
-The base class is `PixelFix\\Framework\\Http\\Requests\\FormRequest`.
+The base class is `PixelFix\Framework\Http\Requests\FormRequest`.
 
 ## Creating a Form Request
 
 Use the generator:
 
 ```bash
-php pixelfix make:request StoreTaskRequest
+php pixel make:request StoreTaskRequest
 ```
 
 The generated application convention places requests under `app/Http/Requests`.
@@ -213,12 +213,12 @@ The framework's HTTP exception handling can expose validation state to browser r
 The Task Manager uses dedicated requests for task creation and update. `StoreTaskRequest` currently requires:
 
 ```php
-[
+$rules = [
     'title' => 'required|string|max:255',
     'description' => 'required|string',
     'status' => 'required|in:pending,in_progress,completed',
     'due_date' => 'required|date',
-]
+];
 ```
 
 Its `authorize()` method requires an authenticated user:

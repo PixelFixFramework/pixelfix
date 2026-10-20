@@ -1,6 +1,6 @@
 # Model Reference
 
-`PixelFix\\Framework\\Database\\Models\\Model` is the framework's ORM base class. Application models normally extend it and configure their table, writable attributes, hidden attributes, casts, relationships, and optional traits.
+`PixelFix\Framework\Database\Models\Model` is the framework's ORM base class. Application models normally extend it and configure their table, writable attributes, hidden attributes, casts, relationships, and optional traits.
 
 ## Basic model definition
 

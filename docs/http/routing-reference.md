@@ -1,6 +1,6 @@
 # Routing API Reference
 
-PixelFix routing is exposed through `PixelFix\\Framework\\Routing\\Route` and its pending/group/resource builders.
+PixelFix routing is exposed through `PixelFix\Framework\Routing\Route` and its pending/group/resource builders.
 
 ## HTTP route declarations
 
@@ -82,7 +82,10 @@ Use the resource API when conventional CRUD routing matches the application; exp
 Parameters can use FastRoute-compatible expressions:
 
 ```php
-'/tasks/{task:\\d+}'
+Route::get(
+    '/tasks/{task:\d+}',
+    [TaskController::class, 'show']
+)->name('tasks.show');
 ```
 
 This restricts the `task` parameter to digits.

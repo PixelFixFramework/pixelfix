@@ -3,21 +3,75 @@
    ===================================================== #}
 
 {% set brand = brand|default('PixelFix') %}
-{% set brandUrl = brand_url|default('#') %}
-{% set brandRoute = brand_route|default(null) %}
-{% set brandRouteParams = brand_route_params|default([]) %}
+{% set brandClass = brand_class|default('') %}
+{% set showBrand = show_brand is not defined or show_brand %}
+
+{% if brand_url is defined %}
+    {% set brandUrl = brand_url %}
+{% elseif brand_href is defined %}
+    {% set brandUrl = brand_href %}
+{% else %}
+    {% set brandUrl = null %}
+{% endif %}
+
+{% set brandRoute = brand_route|default(brand_url_route|default(brand_route_name|default(null))) %}
+{% if brand_route_params is defined %}
+    {% set brandRouteParams = brand_route_params %}
+{% elseif brand_route_parameters is defined %}
+    {% set brandRouteParams = brand_route_parameters %}
+{% elseif brand_url_route_parameters is defined %}
+    {% set brandRouteParams = brand_url_route_parameters %}
+{% elseif brand_parameters is defined %}
+    {% set brandRouteParams = brand_parameters %}
+{% else %}
+    {% set brandRouteParams = [] %}
+{% endif %}
+
+{% if brandRoute %}
+    {% set resolvedBrandUrl = route(brandRoute, brandRouteParams) %}
+{% elseif brandUrl is not same as(null) and brandUrl is not same as('') %}
+    {% set resolvedBrandUrl = brandUrl %}
+{% else %}
+    {% set resolvedBrandUrl = null %}
+{% endif %}
 
 {% set items = items|default([]) %}
-{% set expand = expand|default('lg') %}
+{% if expand is defined %}
+    {% set navbarExpand = expand %}
+{% else %}
+    {% set navbarExpand = 'lg' %}
+{% endif %}
+{% set expandClass = '' %}
+{% if navbarExpand is not same as(false) and navbarExpand is not same as(null) and navbarExpand != '' %}
+    {% set expandClass = 'navbar-expand-' ~ navbarExpand %}
+{% endif %}
+
 {% set theme = theme|default('light') %}
 {% set background = background|default('bg-light') %}
-{% set style = style|default(null) %}
+{% set navbarStyle = style|default(null) %}
 {% set fixed = fixed|default(null) %}
-{% set container = container|default('container') %}
-{% set navbarId = id|default('navbar') %}
+{% if container_class is defined %}
+    {% set containerClass = container_class %}
+{% else %}
+    {% set containerClass = container|default('container') %}
+{% endif %}
+{% set navbarId = id|default(collapse_id|default('navbar')) %}
+{% set navId = nav_id|default(null) %}
+{% set navLabel = aria_label|default('Main navigation') %}
+{% set navbarClass = class|default(navbar_class|default('')) %}
 {% set search = search|default(null) %}
-
 {% set mobileOffcanvas = mobile_offcanvas|default(null) %}
+{% set navItemsClass = nav_items_class|default('') %}
+{% set showToggler = show_toggler is not defined or show_toggler %}
+{% set togglerClass = toggler_class|default('') %}
+{% set togglerIconClass = toggler_icon_class|default('navbar-toggler-icon') %}
+{% set togglerLabel = toggler_label|default(mobileOffcanvas ? 'Open navigation menu' : 'Toggle navigation') %}
+{% set togglerTitle = toggler_title|default(null) %}
+{% set brandTarget = brand_target|default(null) %}
+{% set brandRel = brand_rel|default(null) %}
+{% if brandTarget == '_blank' and not brandRel %}
+    {% set brandRel = 'noopener noreferrer' %}
+{% endif %}
 
 
 {# =====================================================
@@ -28,63 +82,19 @@
 {% set backgroundStyle = '' %}
 
 {% if background starts with 'bg-' %}
-
     {% set backgroundClass = background %}
-
 {% elseif background starts with '#' %}
-
-    {% set backgroundStyle =
-        'background-color: ' ~ background ~ ';'
-    %}
-
+    {% set backgroundStyle = 'background-color: ' ~ background ~ ';' %}
 {% elseif background starts with 'rgb(' %}
-
-    {% set backgroundStyle =
-        'background-color: ' ~ background ~ ';'
-    %}
-
+    {% set backgroundStyle = 'background-color: ' ~ background ~ ';' %}
 {% elseif background starts with 'rgba(' %}
-
-    {% set backgroundStyle =
-        'background-color: ' ~ background ~ ';'
-    %}
-
+    {% set backgroundStyle = 'background-color: ' ~ background ~ ';' %}
 {% elseif background starts with 'hsl(' %}
-
-    {% set backgroundStyle =
-        'background-color: ' ~ background ~ ';'
-    %}
-
+    {% set backgroundStyle = 'background-color: ' ~ background ~ ';' %}
 {% elseif background starts with 'hsla(' %}
-
-    {% set backgroundStyle =
-        'background-color: ' ~ background ~ ';'
-    %}
-
+    {% set backgroundStyle = 'background-color: ' ~ background ~ ';' %}
 {% else %}
-
-    {% set backgroundClass =
-        'bg-' ~ background
-    %}
-
-{% endif %}
-
-
-{# =====================================================
-   BRAND URL
-   ===================================================== #}
-
-{% if brandRoute %}
-
-    {% set resolvedBrandUrl = route(
-        brandRoute,
-        brandRouteParams
-    ) %}
-
-{% else %}
-
-    {% set resolvedBrandUrl = brandUrl %}
-
+    {% set backgroundClass = 'bg-' ~ background %}
 {% endif %}
 
 
@@ -94,7 +104,7 @@
 
 {% set fixedClass = {
     'top': 'fixed-top',
-    'bottom': 'fixed-bottom'
+    'bottom': 'fixed-bottom',
 }[fixed]|default('') %}
 
 
@@ -103,69 +113,72 @@
    ===================================================== #}
 
 <nav
-    class="
-        navbar
-        navbar-expand-{{ expand }}
-        {{ backgroundClass }}
-        {{ fixedClass }}
-    "
+    {% if navId %}id="{{ navId }}"{% endif %}
+    class="navbar {{ expandClass }} {{ backgroundClass }} {{ fixedClass }} {{ navbarClass }}"
     data-bs-theme="{{ theme }}"
-    {% if backgroundStyle or style %}
-        style="
-            {{ backgroundStyle }}
-            {% if style %}
-                {{ style }}
-            {% endif %}
-        "
+    aria-label="{{ navLabel }}"
+    {% if backgroundStyle or navbarStyle %}
+        style="{{ backgroundStyle }}{% if navbarStyle %} {{ navbarStyle }}{% endif %}"
     {% endif %}
 >
 
-    <div class="{{ container }}">
+    <div class="{{ containerClass }}">
 
         {# =============================================
            BRAND
            ============================================= #}
 
-        <a
-            class="navbar-brand"
-            href="{{ resolvedBrandUrl }}"
-        >
-
-            {{ brand }}
-
-        </a>
+        {% if showBrand %}
+            {% if resolvedBrandUrl is not same as(null) %}
+                {% include 'components/navigation/link.twig' with {
+                    href: resolvedBrandUrl,
+                    text: brand,
+                    class: 'navbar-brand ' ~ brandClass,
+                    target: brandTarget,
+                    rel: brandRel,
+                    title: brand_title|default(''),
+                    aria_label: brand_aria_label|default('')
+                } only %}
+            {% else %}
+                <span class="navbar-brand {{ brandClass }}">{{ brand }}</span>
+            {% endif %}
+        {% endif %}
 
 
         {# =============================================
            TOGGLER
            ============================================= #}
 
-        <button
-            class="navbar-toggler"
-            type="button"
-
+        {% if showToggler %}
             {% if mobileOffcanvas %}
-
-                data-bs-toggle="offcanvas"
-                data-bs-target="#{{ mobileOffcanvas }}"
-                aria-controls="{{ mobileOffcanvas }}"
-                aria-expanded="false"
-                aria-label="Open navigation menu"
-
+                {% set mobileOffcanvasId = mobileOffcanvas starts with '#' ? mobileOffcanvas|slice(1) : mobileOffcanvas %}
+                <button
+                    class="navbar-toggler {{ togglerClass }}"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#{{ mobileOffcanvasId }}"
+                    aria-controls="{{ mobileOffcanvasId }}"
+                    aria-expanded="false"
+                    aria-label="{{ togglerLabel }}"
+                    {% if togglerTitle %}title="{{ togglerTitle }}"{% endif %}
+                >
+                    <span class="{{ togglerIconClass }}"></span>
+                </button>
             {% else %}
-
-                data-bs-toggle="collapse"
-                data-bs-target="#{{ navbarId }}"
-                aria-controls="{{ navbarId }}"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-
+                <button
+                    class="navbar-toggler {{ togglerClass }}"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#{{ navbarId }}"
+                    aria-controls="{{ navbarId }}"
+                    aria-expanded="false"
+                    aria-label="{{ togglerLabel }}"
+                    {% if togglerTitle %}title="{{ togglerTitle }}"{% endif %}
+                >
+                    <span class="{{ togglerIconClass }}"></span>
+                </button>
             {% endif %}
-        >
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
+        {% endif %}
 
 
         {# =============================================
@@ -173,7 +186,7 @@
            ============================================= #}
 
         <div
-            class="collapse navbar-collapse"
+            class="collapse navbar-collapse {{ collapse_class|default('') }}"
             id="{{ navbarId }}"
         >
 
@@ -181,179 +194,158 @@
                NAVIGATION ITEMS
                ========================================= #}
 
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 {{ navItemsClass }}">
 
                 {% for item in items %}
-
-                    {# =================================
-                       RESOLVE ITEM URL
-                       ================================= #}
-
-                    {% if item.route is defined and item.route %}
-
-                        {% set itemUrl = route(
-                            item.route,
-                            item.route_params|default([])
-                        ) %}
-
+                    {% set itemLabel = item.label|default('') %}
+                    {% set itemChildren = item.children|default([]) %}
+                    {% set hasChildren = itemChildren|length > 0 %}
+                    {% set itemActive = item.active|default(false) %}
+                    {% if item.open is defined %}
+                        {% set itemOpen = item.open %}
                     {% else %}
+                        {% set itemOpen = itemActive %}
+                    {% endif %}
+                    {% set itemDisabled = item.disabled|default(false) %}
+                    {% set itemUrl = null %}
 
-                        {% set itemUrl = item.url|default('#') %}
+                    {% if not hasChildren and not itemDisabled %}
+                        {% set itemRoute = item.route|default(item.url_route|default(item.route_name|default(null))) %}
+                        {% if item.route_params is defined %}
+                            {% set itemRouteParams = item.route_params %}
+                        {% elseif item.route_parameters is defined %}
+                            {% set itemRouteParams = item.route_parameters %}
+                        {% elseif item.url_route_parameters is defined %}
+                            {% set itemRouteParams = item.url_route_parameters %}
+                        {% elseif item.parameters is defined %}
+                            {% set itemRouteParams = item.parameters %}
+                        {% else %}
+                            {% set itemRouteParams = [] %}
+                        {% endif %}
 
+                        {% if itemRoute %}
+                            {% set itemUrl = route(itemRoute, itemRouteParams) %}
+                        {% elseif item.url is defined %}
+                            {% set itemUrl = item.url %}
+                        {% elseif item.href is defined %}
+                            {% set itemUrl = item.href %}
+                        {% endif %}
+
+                        {% if itemUrl is same as('') %}
+                            {% set itemUrl = null %}
+                        {% endif %}
                     {% endif %}
 
-
-                    {# =================================
-                       DROPDOWN
-                       ================================= #}
-
-                    {% if item.children is defined %}
-
-                        <li class="nav-item dropdown">
-
-                            <a
-                                href="#"
-                                class="
-                                    nav-link
-                                    dropdown-toggle
-                                    {% if item.active|default(false) %}
-                                        active
-                                    {% endif %}
-                                "
-                                role="button"
+                    {% if hasChildren %}
+                        {% set dropdownId = navbarId ~ '-dropdown-' ~ loop.index %}
+                        <li class="nav-item dropdown {{ item.item_class|default('') }}">
+                            <button
+                                type="button"
+                                class="nav-link dropdown-toggle {{ item.link_class|default('') }} {{ itemActive ? 'active' : '' }} {{ itemDisabled ? 'disabled' : '' }}"
                                 data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
+                                aria-haspopup="true"
+                                aria-expanded="{{ itemOpen ? 'true' : 'false' }}"
+                                aria-controls="{{ dropdownId }}"
+                                {% if itemActive %}aria-current="page"{% endif %}
+                                {% if itemDisabled %}disabled aria-disabled="true"{% endif %}
+                                {% if item.title|default(null) %}title="{{ item.title }}"{% endif %}
+                            >{{ itemLabel }}</button>
 
-                                {{ item.label }}
-
-                            </a>
-
-
-                            <ul class="dropdown-menu">
-
-                                {% for child in item.children %}
-
-                                    {# =====================
-                                       HEADER
-                                       ===================== #}
-
+                            <ul class="dropdown-menu {{ item.menu_class|default('') }}" id="{{ dropdownId }}">
+                                {% for child in itemChildren %}
                                     {% if child.header is defined %}
-
-                                        <li>
-
-                                            <h6 class="dropdown-header">
-                                                {{ child.header }}
-                                            </h6>
-
-                                        </li>
-
-
-                                    {# =====================
-                                       DIVIDER
-                                       ===================== #}
-
+                                        <li><h6 class="dropdown-header">{{ child.header }}</h6></li>
                                     {% elseif child.divider|default(false) %}
-
-                                        <li>
-
-                                            <hr class="dropdown-divider">
-
-                                        </li>
-
-
-                                    {# =====================
-                                       LINK
-                                       ===================== #}
-
+                                        <li><hr class="dropdown-divider"></li>
                                     {% else %}
+                                        {% set childLabel = child.label|default('') %}
+                                        {% set childDisabled = child.disabled|default(false) %}
+                                        {% set childActive = child.active|default(false) %}
+                                        {% set childUrl = null %}
 
-                                        {# =================
-                                           RESOLVE CHILD URL
-                                           ================= #}
+                                        {% if not childDisabled %}
+                                            {% set childRoute = child.route|default(child.url_route|default(child.route_name|default(null))) %}
+                                            {% if child.route_params is defined %}
+                                                {% set childRouteParams = child.route_params %}
+                                            {% elseif child.route_parameters is defined %}
+                                                {% set childRouteParams = child.route_parameters %}
+                                            {% elseif child.url_route_parameters is defined %}
+                                                {% set childRouteParams = child.url_route_parameters %}
+                                            {% elseif child.parameters is defined %}
+                                                {% set childRouteParams = child.parameters %}
+                                            {% else %}
+                                                {% set childRouteParams = [] %}
+                                            {% endif %}
 
-                                        {% if child.route is defined and child.route %}
+                                            {% if childRoute %}
+                                                {% set childUrl = route(childRoute, childRouteParams) %}
+                                            {% elseif child.url is defined %}
+                                                {% set childUrl = child.url %}
+                                            {% elseif child.href is defined %}
+                                                {% set childUrl = child.href %}
+                                            {% endif %}
 
-                                            {% set childUrl = route(
-                                                child.route,
-                                                child.route_params|default([])
-                                            ) %}
-
-                                        {% else %}
-
-                                            {% set childUrl = child.url|default('#') %}
-
+                                            {% if childUrl is same as('') %}
+                                                {% set childUrl = null %}
+                                            {% endif %}
                                         {% endif %}
 
-
                                         <li>
-
-                                            <a
-                                                class="
-                                                    dropdown-item
-                                                    {% if child.active|default(false) %}
-                                                        active
-                                                    {% endif %}
-                                                "
-                                                href="{{ childUrl }}"
-                                                {% if child.target is defined and child.target %}
-                                                    target="{{ child.target }}"
+                                            {% if childUrl is not same as(null) and not childDisabled %}
+                                                {% set childTarget = child.target|default(null) %}
+                                                {% set childRel = child.rel|default(null) %}
+                                                {% if childTarget == '_blank' and not childRel %}
+                                                    {% set childRel = 'noopener noreferrer' %}
                                                 {% endif %}
-                                                {% if child.rel is defined and child.rel %}
-                                                    rel="{{ child.rel }}"
-                                                {% endif %}
-                                            >
-
-                                                {{ child.label }}
-
-                                            </a>
-
+                                                {% include 'components/navigation/link.twig' with {
+                                                    href: childUrl,
+                                                    text: childLabel,
+                                                    class: 'dropdown-item ' ~ child.item_class|default('') ~ ' ' ~ (childActive ? 'active' : ''),
+                                                    aria_current: childActive ? 'page' : '',
+                                                    target: childTarget,
+                                                    rel: childRel,
+                                                    title: child.title|default(''),
+                                                    aria_label: child.aria_label|default('')
+                                                } only %}
+                                            {% else %}
+                                                <span
+                                                    class="dropdown-item {{ child.item_class|default('') }} {{ childActive ? 'active' : '' }} {{ childDisabled ? 'disabled' : '' }}"
+                                                    {% if childActive %}aria-current="page"{% endif %}
+                                                    {% if childDisabled %}aria-disabled="true"{% endif %}
+                                                >{{ childLabel }}</span>
+                                            {% endif %}
                                         </li>
-
                                     {% endif %}
-
                                 {% endfor %}
-
                             </ul>
-
                         </li>
-
-
-                    {# =================================
-                       STANDARD LINK
-                       ================================= #}
-
                     {% else %}
-
-                        <li class="nav-item">
-
-                            <a
-                                class="
-                                    nav-link
-                                    {% if item.active|default(false) %}
-                                        active
-                                    {% endif %}
-                                "
-                                {% if item.active|default(false) %}
-                                    aria-current="page"
+                        <li class="nav-item {{ item.item_class|default('') }}">
+                            {% if itemUrl is not same as(null) and not itemDisabled %}
+                                {% set itemTarget = item.target|default(null) %}
+                                {% set itemRel = item.rel|default(null) %}
+                                {% if itemTarget == '_blank' and not itemRel %}
+                                    {% set itemRel = 'noopener noreferrer' %}
                                 {% endif %}
-                                href="{{ itemUrl }}"
-                                {% if item.target is defined and item.target %}
-                                    target="{{ item.target }}"
-                                {% endif %}
-                                {% if item.rel is defined and item.rel %}
-                                    rel="{{ item.rel }}"
-                                {% endif %}
-                            >
-
-                                {{ item.label }}
-
-                            </a>
-
+                                {% include 'components/navigation/link.twig' with {
+                                    href: itemUrl,
+                                    text: itemLabel,
+                                    class: 'nav-link ' ~ item.link_class|default('') ~ ' ' ~ (itemActive ? 'active' : ''),
+                                    aria_current: itemActive ? 'page' : '',
+                                    target: itemTarget,
+                                    rel: itemRel,
+                                    title: item.title|default(''),
+                                    aria_label: item.aria_label|default('')
+                                } only %}
+                            {% else %}
+                                <span
+                                    class="nav-link {{ item.link_class|default('') }} {{ itemActive ? 'active' : '' }} {{ itemDisabled ? 'disabled' : '' }}"
+                                    {% if itemActive %}aria-current="page"{% endif %}
+                                    {% if itemDisabled %}aria-disabled="true"{% endif %}
+                                >{{ itemLabel }}</span>
+                            {% endif %}
                         </li>
-
                     {% endif %}
-
                 {% endfor %}
 
             </ul>
@@ -364,58 +356,65 @@
                ========================================= #}
 
             {% if search %}
-
-                {# =====================================
-                   RESOLVE SEARCH ACTION
-                   ===================================== #}
-
-                {% if search.route is defined and search.route %}
-
-                    {% set searchAction = route(
-                        search.route,
-                        search.route_params|default([])
-                    ) %}
-
+                {% set searchRoute = search.route|default(search.url_route|default(search.route_name|default(null))) %}
+                {% if search.route_params is defined %}
+                    {% set searchRouteParams = search.route_params %}
+                {% elseif search.route_parameters is defined %}
+                    {% set searchRouteParams = search.route_parameters %}
+                {% elseif search.url_route_parameters is defined %}
+                    {% set searchRouteParams = search.url_route_parameters %}
+                {% elseif search.parameters is defined %}
+                    {% set searchRouteParams = search.parameters %}
                 {% else %}
-
-                    {% set searchAction = search.action|default(null) %}
-
+                    {% set searchRouteParams = [] %}
                 {% endif %}
 
+                {% if searchRoute %}
+                    {% set searchAction = route(searchRoute, searchRouteParams) %}
+                {% elseif search.form_action is defined %}
+                    {% set searchAction = search.form_action %}
+                {% elseif search.action is defined %}
+                    {% set searchAction = search.action %}
+                {% elseif search.url is defined %}
+                    {% set searchAction = search.url %}
+                {% elseif search.href is defined %}
+                    {% set searchAction = search.href %}
+                {% else %}
+                    {% set searchAction = null %}
+                {% endif %}
 
                 <form
-                    class="d-flex"
+                    {% if search.id|default(null) %}id="{{ search.id }}"{% endif %}
+                    class="d-flex {{ search.form_class|default('') }}"
                     role="{{ search.role|default('search') }}"
-                    {% if searchAction %}
-                        action="{{ searchAction }}"
-                    {% endif %}
-                    {% if search.method is defined %}
-                        method="{{ search.method }}"
-                    {% endif %}
+                    {% if searchAction is not same as(null) and searchAction is not same as('') %}action="{{ searchAction }}"{% endif %}
+                    method="{{ search.method|default('get') }}"
+                    {% if search.aria_label|default(null) %}aria-label="{{ search.aria_label }}"{% endif %}
                 >
-
                     <input
-                        class="form-control me-2"
+                        {% if search.input_id|default(null) %}id="{{ search.input_id }}"{% endif %}
+                        class="form-control me-2 {{ search.input_class|default('') }}"
                         type="{{ search.type|default('search') }}"
                         {% if search.name is defined %}
-                            name="{{ search.name }}"
+                            {% if search.name is not same as('') %}name="{{ search.name }}"{% endif %}
+                        {% else %}
+                            name="query"
                         {% endif %}
                         placeholder="{{ search.placeholder|default('Search') }}"
-                        aria-label="{{ search.aria_label|default('Search') }}"
+                        aria-label="{{ search.aria_label|default(search.input_aria_label|default('Search')) }}"
+                        {% if search.required|default(false) %}required{% endif %}
+                        {% if search.autocomplete is defined %}autocomplete="{{ search.autocomplete }}"{% endif %}
+                        {% if search.disabled|default(false) %}disabled{% endif %}
                     >
 
-
-                    <button
-                        class="btn {{ search.button_class|default('btn-outline-success') }}"
-                        type="submit"
-                    >
-
-                        {{ search.button_label|default('Search') }}
-
-                    </button>
-
+                    {% if search.show_button is not defined or search.show_button %}
+                        <button
+                            class="btn {{ search.button_class|default('btn-outline-success') }}"
+                            type="submit"
+                            {% if search.button_title|default(null) %}title="{{ search.button_title }}"{% endif %}
+                        >{{ search.button_label|default('Search') }}</button>
+                    {% endif %}
                 </form>
-
             {% endif %}
 
         </div>

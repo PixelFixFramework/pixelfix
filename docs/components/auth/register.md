@@ -1,195 +1,66 @@
-# Register
+# Registration Component
 
-Renders the application registration form with configurable identity fields, password confirmation, terms acceptance, social authentication, and login links.
+The Page 10 registration component renders a branded registration form, optional login/register pill tabs, username, email and password fields, optional password confirmation, an optional terms checkbox, submit button, and optional login footer. It composes shared form input, checkbox, button, and navigation components where supported by the template.
 
-**Component:** `components/auth/register.twig`
+## Minimal use
 
----
+```twig
+{% include 'components/auth/register.twig' with {
+    action_route: 'auth.store',
+    login_url: route('auth.login'),
+    register_url: route('auth.register'),
+} only %}
+```
 
-## Parameters
+Supply named route destinations from the calling view. When neither `action_route` nor `action` is supplied, the form action is empty. Login and registration URLs default to `#`. If `action_route` is supplied, the route name must exist at render time.
 
-| Parameter | Default | Description |
+## Defaults and options
+
+| Option | Default | Purpose |
 |---|---|---|
-| `logo_url` | `#` | URL used by the authentication logo. |
-| `logo_bold` | `''` | Bold portion of the logo text. |
-| `logo_text` | `''` | Logo text displayed beside the bold portion. |
-| `show_logo` | `false` | Determines whether the logo is rendered. |
-| `message` | `Register a new membership` | Message displayed above the registration form. |
-| `action` | `#` | Form submission URL. |
-| `method` | `post` | Form submission method. |
-| `csrf` | `''` | Raw CSRF markup rendered inside the form. |
-| `name_name` | `name` | Name attribute for the full-name field. |
-| `name_label` | `Full Name` | Full-name field label. |
-| `name_placeholder` | `Full Name` | Full-name field placeholder. |
-| `name_value` | `''` | Initial full-name value. |
-| `email_name` | `email` | Name attribute for the email field. |
-| `email_label` | `Email` | Email field label. |
-| `email_placeholder` | `Email` | Email field placeholder. |
-| `email_value` | `''` | Initial email value. |
-| `password_name` | `password` | Name attribute for the password field. |
-| `password_label` | `Password` | Password field label. |
-| `password_placeholder` | `Password` | Password field placeholder. |
-| `show_confirm_password` | `false` | Determines whether the password confirmation field is rendered. |
-| `confirm_password_name` | `password_confirmation` | Name attribute for the confirmation field. |
-| `confirm_password_label` | `Confirm Password` | Confirmation field label. |
-| `confirm_password_placeholder` | `Confirm Password` | Confirmation field placeholder. |
-| `terms_name` | `terms` | Name attribute for the terms checkbox. |
-| `terms_value` | `1` | Value submitted by the terms checkbox. |
-| `terms_checked` | `false` | Determines whether the terms checkbox is checked. |
-| `terms_url` | `#` | URL used by the terms link. |
-| `terms_text` | `terms` | Text displayed for the terms link. |
-| `submit_text` | `Register` | Registration submit button text. |
-| `show_social` | `false` | Determines whether social registration buttons are rendered. |
-| `facebook_url` | `#` | Facebook registration URL. |
-| `facebook_text` | `Sign up using Facebook` | Facebook registration button text. |
-| `google_url` | `#` | Google registration URL. |
-| `google_text` | `Sign up using Google` | Google registration button text. |
-| `login_url` | `#` | Login URL. |
-| `login_text` | `I already have an account` | Login link text. |
+| `brand` | `config('app.name')` or `Your application` | Accessible brand text |
+| `csrf` | empty string | Raw CSRF markup inserted into the form |
+| `logo_text` | brand | Text beside the logo |
+| `logo_url` | empty | Optional linked-logo destination |
+| `logo_image_url` | `asset('images/pixelfix-logo.svg')` | Logo image URL |
+| `logo_alt` | brand | Image alternative text |
+| `tagline` | `A fresh start begins here.` | Header tagline |
+| `title` | `Create your account` | Form heading |
+| `message` | empty | Optional explanatory text beneath the heading |
+| `action_route` / `action_route_parameters` | not set / `[]` | Named form action and route parameters |
+| `action` | empty | Explicit form target if no route is supplied |
+| `method` | `post` | Form submission method |
+| `show_labels` | `false` | Visible field labels or visually-hidden labels |
+| `show_brand` | `true` | Show the branded header |
+| `show_tabs` | `true` | Show the login/register pill tabs |
+| `login_url` / `register_url` | `#` / `#` | Destinations for the two pills |
+| `login_tab_text` / `register_tab_text` | `Login` / `Create account` | Pill labels |
+| `show_login_link` | `true` | Show the login footer if its URL is truthy |
+| `login_prompt` / `login_text` | `Already have an account?` / `Login` | Footer copy |
+| `show_confirm_password` | `false` | Show or hide password confirmation |
+| `submit_text` | `Create account` | Submit button label |
 
----
+Field options include `name_name`, `name_id`, `name_label`, `name_placeholder`, `name_value`; `email_name`, `email_id`, `email_label`, `email_placeholder`, `email_value`; `password_name`, `password_id`, `password_label`, `password_placeholder`; and `confirm_password_name`, `confirm_password_id`, `confirm_password_label`, `confirm_password_placeholder`. The defaults are username (`name`, `register-name`, `Username`, `Username`), email (`email`, `register-email`, `Email address`, `Email address`), password (`password`, `register-password`, `Password`, `Create Password`), and confirmation (`password_confirmation`, `register-password-confirmation`, `Confirm password`, `Confirm password`). The username input receives autofocus by default through `autofocus|default(true)`.
 
-# Usage
+## Optional password confirmation
 
-The Register component is included using Twig's `include` statement.
-
-Example:
+Confirmation is hidden by default. Enable it explicitly when the application's form and server-side validation expect `password_confirmation`:
 
 ```twig
-{% include
-    'components/auth/register.twig'
-    with {
-        logo_url:
-            route('home')
-
-        logo_bold:
-            'Pixel'
-
-        logo_text:
-            'Fix'
-
-        show_logo:
-            true
-
-        message:
-            'Create your account'
-
-        action:
-            route('register')
-
-        method:
-            'post'
-
-        csrf:
-            csrf()
-
-        name_name:
-            'name'
-
-        email_name:
-            'email'
-
-        password_name:
-            'password'
-
-        show_confirm_password:
-            true
-
-        terms_url:
-            '/terms'
-
-        terms_text:
-            'Terms and Conditions'
-
-        submit_text:
-            'Register'
-
-        login_url:
-            route('login')
-    }
-    only
-%}
+{% include 'components/auth/register.twig' with {
+    action_route: 'auth.store',
+    show_confirm_password: true,
+    login_url: route('auth.login'),
+    register_url: route('auth.register'),
+} only %}
 ```
 
----
+If the confirmation field is displayed, it is rendered as required. The server must validate the password confirmation independently.
 
-## Password Confirmation
+## Optional terms acceptance
 
-Set `show_confirm_password` to `true` to render the confirmation field.
+`show_terms` and `terms_required` both default to `false`. The terms checkbox renders when `show_terms` or `terms_url` is truthy. Options include `terms_name` (`terms`), `terms_value` (`1`), `terms_text` (`Terms and Privacy Policy`), `terms_prefix` (`I agree to the `), `terms_label`, `terms_url`, and `terms_link_text`. Supplying `terms_url` builds a linked label; use an actual application route/URL. The default checkbox is not required unless the caller sets `terms_required: true`.
 
-```twig
-{% include
-    'components/auth/register.twig'
-    with {
-        show_confirm_password:
-            true
+## Layout and security
 
-        confirm_password_name:
-            'password_confirmation'
-
-        confirm_password_label:
-            'Confirm Password'
-
-        confirm_password_placeholder:
-            'Confirm Password'
-    }
-    only
-%}
-```
-
----
-
-## Complete Example
-
-```twig
-{% include
-    'components/auth/register.twig'
-    with {
-        logo_url:
-            route('home')
-
-        logo_bold:
-            'Pixel'
-
-        logo_text:
-            'Fix'
-
-        show_logo:
-            true
-
-        message:
-            'Register a new membership'
-
-        action:
-            route('register')
-
-        method:
-            'post'
-
-        csrf:
-            csrf()
-
-        name_value:
-            ''
-
-        email_value:
-            ''
-
-        show_confirm_password:
-            true
-
-        terms_url:
-            route('terms')
-
-        terms_text:
-            'Terms and Conditions'
-
-        show_social:
-            false
-
-        login_url:
-            route('login')
-    }
-    only
-%}
-```
+The component's pill tabs and active states remain part of the component. Pass destinations/copy through `with { ... }` rather than rebuilding the tab markup in each view. The CSRF field must be supplied using the application's normal CSRF rendering contract. Client-side `required` attributes do not replace server validation, unique-identity checks, password policy, or authorization decisions.

@@ -1,77 +1,65 @@
 # Database Connections
 
-Database connections are configured under the application's `database.connections` configuration and selected with `database.default`.
+A database connection tells PixelFix which database server or database file to use and which PHP driver should communicate with it. The application can define more than one named connection, then select a default for ordinary model queries.
 
-## Example configuration
+## 1. Configure the connection
 
-```php
-'database' => [
-    'default' => env('DB_CONNECTION', 'mysql'),
+In this starter, the active configuration is in `config/config.php`. Environment variables are loaded before configuration, so credentials can live in `.env` rather than being committed to source code. A MySQL-style connection typically needs a host, port, database name, username, password, and driver.
 
-    'connections' => [
-        'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('MYSQL_HOST', '127.0.0.1'),
-            'port' => env('MYSQL_PORT', 3306),
-            'database' => env('MYSQL_DATABASE', ''),
-            'user' => env('MYSQL_USER', ''),
-            'password' => env('MYSQL_PASSWORD', ''),
-        ],
-    ],
-],
+Example environment values (replace them with values for your own machine):
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_manager
+DB_USERNAME=task_manager_user
+DB_PASSWORD=replace-this-locally
 ```
 
-## Connection capabilities
+The active connection array must read the corresponding environment variables. Environment variable names alone do not create a connection; they must be consumed by `config/config.php`.
 
-The connection layer tracks driver capabilities for features such as:
+## 2. Enable the matching PHP driver
 
-```php
-$connection->supportsSavepoints();
-$connection->supportsAdvisoryLocks();
-$connection->supportsForUpdate();
-$connection->supportsForShare();
-$connection->supportsSkipLocked();
-$connection->supportsNoWait();
+The database server and the PHP client driver are different things. For MySQL/MariaDB, enable `pdo_mysql`; for SQLite, enable `pdo_sqlite`; PostgreSQL needs `pdo_pgsql`; SQL Server uses a supported SQL Server driver/configuration. Restart the relevant PHP process after changing extensions.
+
+Check the command-line PHP runtime:
+
+```powershell
+php -m
 ```
 
-It also exposes transaction state and connection metadata.
+The extensions used by the terminal may differ from those used by Apache, so verify both environments if only one of them can connect.
 
-## Transactions
+## 3. Choose a connection
 
-Use the connection or database manager transaction wrapper:
+The database manager resolves the default connection from the application's configuration. Models and query builders use that connection unless the application explicitly selects another configured connection. See [Connections Reference](connections-reference.md) for the APIs and configuration shape exposed by the current version.
 
-```php
-return db()->transaction(function () {
-    // database work
-});
+## 4. Verify before migrating
+
+Confirm the connection settings and driver first. Then inspect migration status:
+
+```powershell
+php pixel migrate:status
 ```
 
-The connection supports nested transaction levels where the underlying driver supports the required savepoint behavior.
+If the database is new, run migrations after reviewing them:
 
-## Raw SQL
-
-When the Query Builder is not sufficient, execute a statement with bindings:
-
-```php
-db()->statement(
-    'UPDATE tasks SET status = ? WHERE id = ?',
-    ['completed', $id]
-);
+```powershell
+php pixel migrate
 ```
 
-Use parameter bindings instead of interpolating untrusted input into SQL strings.
+A connection failure usually means a wrong host/credential/database name, a stopped database server, or a missing PHP extension. Do not use a destructive migration command as a troubleshooting shortcut when the database contains important data.
 
-## Connection inspection
 
-The connection exposes runtime information such as:
+## How to troubleshoot a failed connection
 
-```php
-$connection->driver();
-$connection->databaseName();
-$connection->serverVersion();
-$connection->healthCheck();
-$connection->metadata();
-$connection->diagnostics();
-```
+A database connection requires more than correct credentials. Check these items in order:
 
-These APIs are primarily useful for diagnostics and framework-level tooling.
+1. The active configuration reads the environment variables you changed.
+2. The database server or local database file exists and is reachable.
+3. The hostname, port, database name, username, and password match the database.
+4. PHP has the matching PDO driver enabled (for example, `pdo_mysql` for MySQL/MariaDB or `pdo_sqlite` for SQLite).
+5. The operating-system account running PHP has access to the SQLite directory/file or network endpoint.
+
+A message such as “could not find driver” usually means the PHP driver is missing, not that the database password is wrong. A connection-refused message points more often to a server, host, port, firewall, or service-state problem.

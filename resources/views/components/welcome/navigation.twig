@@ -1,0 +1,674 @@
+    {# =====================================================
+       NAVIGATION
+       ===================================================== #}
+
+    {% include 'components/navigation/navbar.twig' with {
+
+        brand:
+            config('app.name'),
+
+        brand_url:
+            route('home'),
+
+        expand:
+            'lg',
+
+        theme:
+            'light',
+
+        background:
+            'body-tertiary',
+
+        container:
+            'container-fluid',
+
+        id:
+            'navbarSupportedContent',
+
+        mobile_offcanvas:
+            'mobileNavigation',
+
+        items: [
+
+            {
+                label:
+                    'Home',
+
+                url:
+                    route('home'),
+
+                active:
+                    true
+            },
+
+            {
+                label:
+                    'About',
+
+                url:
+                    'https://github.com/PixelFixFramework/pixelfix/blob/main/docs/getting-started/introduction.md#introduction',
+
+                target:
+                    '_blank',
+
+                rel:
+                    'noopener noreferrer'
+
+            },
+
+            {
+                label:
+                    'Resources',
+
+                children: [
+
+                    {
+                        label:
+                            'Demo Tutorial',
+
+                        url:
+                            'https://github.com/PixelFixFramework/pixelfix',
+
+                        target:
+                            '_blank',
+
+                        rel:
+                            'noopener noreferrer'
+                    },
+
+                   {
+                        label:
+                            'Documentation',
+
+                        url:
+                            'https://github.com/PixelFixFramework/pixelfix/tree/main#-documentation',
+
+                        target:
+                            '_blank',
+
+                        rel:
+                            'noopener noreferrer'
+                    },
+
+                    {
+                        divider:
+                            true
+                    },
+
+                    {
+                        label:
+                            'Repo Contributors',
+
+                        url:
+                            'https://github.com/PixelFixFramework/pixelfix/graphs/contributors',
+
+                        target:
+                            '_blank',
+
+                        rel:
+                            'noopener noreferrer'
+                    }
+
+                ]
+            },
+
+            {
+                label:
+                    'Contact Us',
+
+                url:
+                    'https://github.com/PixelFixFramework/pixelfix#pixelfix-application',
+
+                target:
+                    '_blank',
+
+                rel:
+                    'noopener noreferrer'
+            }
+
+        ],
+
+        search: {
+
+            role:
+                'search',
+
+            type:
+                'search',
+
+            placeholder:
+                'Search',
+
+            aria_label:
+                'Search',
+
+            button_label:
+                'Search',
+
+            button_class:
+                'btn-outline-success'
+
+        }
+
+    } only %}
+
+    {# =====================================================
+       MOBILE NAVIGATION CONTENT
+       ===================================================== #}
+
+    {% set mobileNavigation %}
+
+        <div
+            class="
+                d-flex
+                flex-column
+                h-100
+            "
+        >
+
+            {# =================================================
+               MOBILE BRAND INTRO
+               ================================================= #}
+
+            <div class="mb-4">
+
+                <div
+                    class="
+                        d-flex
+                        align-items-center
+                        gap-3
+                        p-3
+                        rounded-4
+                        bg-primary
+                        bg-gradient
+                        text-white
+                        shadow-sm
+                    "
+                >
+
+                    <div
+                        class="
+                            d-flex
+                            align-items-center
+                            justify-content-center
+                            rounded-3
+                            bg-white
+                            bg-opacity-25
+                            flex-shrink-0
+                        "
+                        style="
+                            width: 3rem;
+                            height: 3rem;
+                        "
+                    >
+
+                        <i class="bi bi-boxes fs-4"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="fw-bold">
+                            {{ config('app.name') }}
+                        </div>
+
+                        <div class="small opacity-75">
+                            PHP Application Framework
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {# =================================================
+               NAVIGATION
+               ================================================= #}
+
+            <nav
+                class="nav flex-column gap-1"
+                aria-label="Mobile navigation"
+            >
+
+                {# =============================================
+                   HOME
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    route:
+                        'home',
+
+                    class:
+                        'btn text-start text-decoration-none px-3 py-3 rounded-3 bg-primary-subtle text-primary fw-semibold shadow-sm',
+
+                    icon:
+                        'bi bi-house-door',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Home'
+
+                } only %}
+
+                {# =============================================
+                   ABOUT
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix/blob/main/docs/getting-started/introduction.md#introduction',
+
+                    target:
+                        '_blank',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-info-circle',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'About'
+
+                } only %}
+
+                {# =============================================
+                   EXPLORE
+                   ============================================= #}
+
+                <div class="mt-3 mb-1">
+
+                    <div
+                        class="
+                            px-3
+                            small
+                            text-uppercase
+                            fw-semibold
+                            text-secondary
+                            letter-spacing-1
+                        "
+                    >
+                        Explore
+                    </div>
+
+                </div>
+
+                {# =============================================
+                   TUTORIAL
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix',
+
+                    target:
+                        '_blank',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-mortarboard',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Tutorial'
+
+                } only %}
+
+                {# =============================================
+                   DOCUMENTATION
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix/tree/main#-documentation',
+
+                    target:
+                        '_blank',
+
+                    rel:
+                        'noopener noreferrer',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-book',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Documentation'
+
+                } only %}
+
+                {# =============================================
+                   DEMO APPLICATION
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix',
+
+                    target:
+                        '_blank',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-window-stack',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Demo Application'
+
+                } only %}
+
+                {# =============================================
+                   PRICING
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        '#',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-credit-card',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Pricing'
+
+                } only %}
+
+                {# =============================================
+                   CONTACT
+                   ============================================= #}
+
+                {% include 'components/form/button.twig' with {
+
+                    tag:
+                        'a',
+
+                    href:
+                        'https://github.com/PixelFixFramework/pixelfix#pixelfix-application',
+
+                    target:
+                        '_blank',
+
+                    class:
+                        'btn btn-link text-start text-decoration-none px-3 py-3 rounded-3 text-body',
+
+                    icon:
+                        'bi bi-envelope',
+
+                    icon_class:
+                        'me-3',
+
+                    text:
+                        'Contact Us'
+
+                } only %}
+
+            </nav>
+
+            {# =================================================
+               SEARCH
+               ================================================= #}
+
+            <div class="mt-4 pt-4 border-top">
+
+                <form
+                    class="position-relative"
+                    role="search"
+                >
+
+                    <i
+                        class="
+                            bi
+                            bi-search
+                            position-absolute
+                            top-50
+                            start-0
+                            translate-middle-y
+                            ms-3
+                            text-secondary
+                        "
+                    ></i>
+
+                    <input
+                        class="
+                            form-control
+                            rounded-pill
+                            ps-5
+                            pe-5
+                            py-2
+                            bg-body-tertiary
+                        "
+                        type="search"
+                        placeholder="Search PixelFix..."
+                        aria-label="Search PixelFix"
+                    >
+
+                    <button
+                        class="
+                            btn
+                            btn-primary
+                            btn-sm
+                            rounded-circle
+                            position-absolute
+                            top-50
+                            end-0
+                            translate-middle-y
+                            me-1
+                        "
+                        type="submit"
+                        aria-label="Search"
+                        style="
+                            width: 2rem;
+                            height: 2rem;
+                        "
+                    >
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            {# =================================================
+               PROMOTIONAL CARD
+               ================================================= #}
+
+            <div class="mt-auto pt-4">
+
+                <div
+                    class="
+                        rounded-4
+                        bg-dark
+                        text-white
+                        p-4
+                        shadow-sm
+                        position-relative
+                        overflow-hidden
+                    "
+                >
+
+                    <div
+                        class="
+                            position-absolute
+                            top-0
+                            end-0
+                            opacity-25
+                        "
+                    >
+                        <i
+                            class="
+                                bi
+                                bi-stars
+                                display-4
+                            "
+                        ></i>
+                    </div>
+
+                    <div class="position-relative">
+
+                        <div
+                            class="
+                                d-inline-flex
+                                align-items-center
+                                gap-2
+                                small
+                                text-white-50
+                                mb-2
+                            "
+                        >
+                            <span
+                                class="
+                                    rounded-circle
+                                    bg-success
+                                "
+                                style="
+                                    width: .5rem;
+                                    height: .5rem;
+                                "
+                            ></span>
+
+                            Framework ready
+
+                        </div>
+
+                        <h6 class="fw-bold mb-2">
+                            Build with PixelFix
+                        </h6>
+
+                        <p class="small text-white-50 mb-3">
+
+                            Modern PHP applications with
+                            a clean and extensible foundation.
+
+                        </p>
+
+                        {% include 'components/form/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                '#',
+
+                            class:
+                                'btn btn-light btn-sm rounded-pill px-3',
+
+                            icon:
+                                'bi bi-arrow-up-right',
+
+                            icon_class:
+                                'ms-1',
+
+                            text:
+                                'Explore'
+
+                        } only %}
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="
+                        d-flex
+                        align-items-center
+                        justify-content-between
+                        mt-3
+                        px-1
+                        small
+                        text-secondary
+                    "
+                >
+                    <span>
+                        {{ config('app.name') }}
+                    </span>
+
+                    <span>
+                        <i class="bi bi-circle-fill text-success me-1"></i>
+                        Ready
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% endset %}
+
+    {# =====================================================
+       MOBILE OFFCANVAS
+       ===================================================== #}
+
+    {% include 'components/navigation/offcanvas.twig' with {
+
+        id:
+            'mobileNavigation',
+
+        title:
+            config('app.name'),
+
+        placement:
+            'start',
+
+        backdrop:
+            true,
+
+        scroll:
+            false,
+
+        content:
+            mobileNavigation
+
+    } only %}

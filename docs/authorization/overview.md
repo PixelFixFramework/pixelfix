@@ -21,7 +21,7 @@ Gate::define(
 );
 ```
 
-The gate receives the currently authenticated user as the first argument.
+The gate receives the currently authenticated user as the first argument. This example assumes the application has a `role` attribute; add a role column and assign roles securely before relying on a role check.
 
 Check the result without throwing:
 
@@ -70,7 +70,7 @@ Policies group authorization rules around a model.
 Generate a policy with:
 
 ```bash
-php pixelfix make:policy TaskPolicy
+php pixel make:policy TaskPolicy
 ```
 
 A typical policy contains methods named after application abilities:
@@ -102,14 +102,14 @@ $policies->policy(
 );
 ```
 
-PixelFix also supports policy convention discovery. By default it looks for a policy under `App\\Policies\\` named after the model basename with a `Policy` suffix.
+PixelFix also supports policy convention discovery. By default it looks for a policy under `App\Policies\` named after the model basename with a `Policy` suffix.
 
 For example:
 
 ```text
-App\\Models\\Task
+App\Models\Task
         ↓
-App\\Policies\\TaskPolicy
+App\Policies\TaskPolicy
 ```
 
 Explicit registration is preferable when an application wants a clear and stable mapping.
@@ -209,7 +209,8 @@ The default model ownership field is `user_id`, and the user identifier is taken
 The `can` middleware evaluates an ability through the gate manager. It is available as a built-in middleware alias:
 
 ```php
-->middleware('can:access-admin')
+Route::get('/admin', [AdminController::class, 'index'])
+    ->middleware('can:access-admin');
 ```
 
 Use it when the authorization rule naturally belongs at the route boundary. For resource-specific checks, a controller policy call can be clearer because it passes the concrete model instance directly.
@@ -238,8 +239,8 @@ Gate::authorize('access-admin');
 Task authorization is model-based. `PolicyServiceProvider` registers:
 
 ```php
-Task::class => TaskPolicy::class
-User::class => UserPolicy::class
+$policies->policy(Task::class, TaskPolicy::class);
+$policies->policy(User::class, UserPolicy::class);
 ```
 
 `TaskPolicy` then restricts `view`, `update`, `delete`, `restore`, and `forceDelete` by comparing the task owner to the authenticated user.

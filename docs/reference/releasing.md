@@ -1,75 +1,45 @@
 # Release and Publishing Guide
 
-This guide describes the release-facing metadata that is present in the current PixelFix framework repository. It is intentionally limited to what the repository currently declares.
+This page is for maintainers preparing a PixelFix framework release. Application developers normally do not need these steps to build a feature.
 
-## Framework package
+## Package identity
 
-The framework identifies itself as:
+The framework package is `pixelfix/framework`, defined in `composer.json`. The package targets PHP `^8.2` and declares its runtime dependencies there. Keep the package metadata, license, repository links, and version/tag aligned when preparing a release.
 
-```text
-pixelfix/framework
-```
+## Validate the source and examples
 
-The current `composer.json` declares:
+Before publishing, confirm the framework test runner succeeds in an environment with the required PHP extensions and database drivers. Run:
 
-```text
-PHP: ^8.2
-License: MIT
-Type: library
-```
-
-Its runtime dependencies currently include FastRoute, Symfony VarDumper, Twig, and Dotenv. MongoDB support is an optional Composer suggestion rather than a mandatory dependency.
-
-## Repository metadata
-
-The current package metadata points its homepage, source, and issue tracker to the repository configured in `composer.json`. Keep those values synchronized with the repository used for the release.
-
-Before publishing a release, verify at minimum:
-
-1. `composer.json` package identity and metadata.
-2. `composer.lock` is current when the project expects a committed lock file.
-3. The framework test suite passes.
-4. The CLI entry points still boot and list commands.
-5. The public documentation matches the current source tree and command signatures.
-6. The README installation instructions match the actual distribution workflow.
-
-## Framework tests
-
-The framework exposes its test suite through the Composer script:
-
-```bash
+```powershell
+composer validate
 composer test
 ```
 
-The script runs the repository's custom test runner.
+If the test run depends on SQLite, verify that the PHP process running the test suite has `pdo_sqlite` enabled. A driver-missing failure is an environment problem, not proof that the feature is correct or incorrect; rerun in the supported environment before releasing.
 
-## Application generation
+## Verify the public console
 
-The framework currently contains an application generator and exposes it through:
+Use the generated application's launcher and check only commands supported by the current source:
 
-```bash
-php pixelfix new my-app
+```powershell
+php pixel help
+php pixel help make:model
+php pixel help migrate
+php pixel help route:list
 ```
 
-The generator creates the application from the framework's application stubs. It refuses reserved names and refuses to create an application inside the framework repository.
+Compare the output with the Command Reference and ensure documentation does not list hidden commands, removed commands, or signatures from an older version.
 
-Application distribution can evolve independently from the framework package, so release documentation should describe the workflow supported by the current generator and repository rather than assuming a separate application package always exists.
+## Documentation checklist
 
-## Documentation release checklist
+- A beginner can follow the installation path without invoking an internal or hidden framework command.
+- API examples explain what each important method returns and what it does.
+- Destructive database operations include warnings.
+- File paths and namespaces match the source tree.
+- Code examples use the current request, model, response, and Twig APIs.
+- Component documentation reflects the bundled templates and their real dependencies.
+- Links work after application stubs have been copied into the generated documentation tree.
 
-Before tagging or publishing a framework release, run a documentation consistency pass:
+## Publish the package
 
-```bash
-php pixelfix help
-php pixelfix help make:model
-php pixelfix help migrate
-php pixelfix help route:list
-```
-
-Then confirm that examples use the current launcher, current option names, and current class namespaces.
-
-## Packagist and Composer distribution
-
-Composer distribution depends on the package metadata and repository configuration. When the release process is connected to Packagist or another Composer registry, make sure the published package name remains `pixelfix/framework` unless the package metadata is intentionally changed in the same release.
-
-Do not document a different Composer package name unless the repository's `composer.json` has been updated accordingly.
+Publishing follows the repository's configured Composer/Packagist process. Verify `composer.json`, package version, tag, and release notes before publishing. Do not describe a different package name or claim a package is publicly available until the registry and repository reflect that release.

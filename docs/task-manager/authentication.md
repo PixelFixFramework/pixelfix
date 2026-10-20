@@ -1,64 +1,44 @@
-# Task Manager: Authentication
+# Task Manager Authentication: Registration, Login, and Logout
 
-The Task Manager uses PixelFix's session guard and database user provider.
+The Task Manager uses PixelFix's session-based authentication. A user submits credentials, the framework checks them through the configured guard and user provider, and a successful login stores the authenticated identity in the session. The application does not store a plain-text password.
 
-## User model
+## Registration flow
 
-`app/Models/User.php` implements the authentication contract and uses the framework's authenticatable trait:
+`GET /register` renders the registration form. `POST /register` is handled by `AuthController::register()` and follows this sequence:
 
-```php
-class User extends Model implements AuthenticatableContract
-{
-    use SoftDeletes;
-    use Authenticatable;
-}
-```
+1. `RegisterUserRequest` checks that the submitted fields are valid.
+2. The controller calls `$request->validated()` to obtain only fields that passed validation.
+3. It removes `password_confirmation`, because this is only a confirmation field and is not a database column.
+4. It hashes the password with `password_hash($data['password'], PASSWORD_DEFAULT)`.
+5. It creates the `User` record and redirects to the login page with a success message.
 
-The model marks `password` and `remember_token` as hidden attributes.
+The password hash is what is stored in the database. During login, the framework verifies a submitted password against that hash; the application must never compare or store plain-text passwords itself.
 
-## Registration
+## Login flow
 
-The registration flow is implemented in `AuthController::register()`:
-
-```text
-RegisterUserRequest
-        ↓
-validated data
-        ↓
-password hash
-        ↓
-User::create()
-        ↓
-flash success
-        ↓
-auth.login
-```
-
-The confirmation field is removed before persistence and the password is hashed with PHP's `password_hash()` using `PASSWORD_DEFAULT`.
-
-## Login
-
-The login flow uses `LoginRequest` followed by:
+`GET /login` displays the form; `POST /login` receives it. `LoginRequest` validates the submitted email and password fields, and the controller calls:
 
 ```php
-$result = auth()->attempt([
+$authenticated = auth()->attempt([
     'email' => $credentials['email'],
     'password' => $credentials['password'],
 ]);
 ```
 
-Invalid credentials cause an error message and a redirect back to the login page. Successful authentication redirects to `tasks.index`.
+`auth()->attempt()` returns a boolean: `true` means the credentials were accepted and the guard has authenticated the user; `false` means login did not succeed. On failure, the application shows a generic error message and redirects back to the login form. On success, it flashes a message and redirects to the intended URL, falling back to `tasks.index`.
+
+Never tell a user whether the email or password alone was wrong. A generic invalid-credentials message reveals less information about registered accounts.
 
 ## Logout
 
-Logout delegates to the framework guard:
+Logout is a state-changing operation, so the application exposes it as `POST /logout` inside the `web` middleware group. The action calls `auth()->logout()`, flashes a confirmation, and redirects to the welcome page. A logout link should submit a form with a CSRF token rather than use a plain GET link.
 
-```php
-auth()->logout();
-```
+## Guests and signed-in users
 
-The application then flashes a success message and redirects to the welcome page.
+The routes use `guest` middleware for login and registration pages and `auth` middleware for task pages. This provides a route-level boundary, but it does not replace task ownership checks. `TaskPolicy` still has to decide whether the current user may view or change a particular task.
 
-## Route protection
+## Important setup checks
 
-The current Task Manager places all browser routes in the `web` middleware group, which provides session and CSRF handling. Individual task actions then perform object-level authorization through `TaskPolicy`.
+If login always fails, check that the `users` table exists, the email lookup returns the expected user, and the password was created with a compatible password hash. If a form submission is rejected before the controller runs, check `LoginRequest` or `RegisterUserRequest` and the CSRF field (`{{ csrf|raw }}` in Twig).
+
+See [Authentication Guards](../authentication/guards.md), [Authentication Providers](../authentication/providers.md), and [Validation](validation.md) for the framework-level details.

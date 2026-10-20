@@ -1,6 +1,6 @@
 # Query Builder Reference
 
-`PixelFix\\Framework\\Database\\Query\\QueryBuilder` provides fluent SQL query construction and execution. Model queries are normally obtained through `Model::query()`, while table-oriented queries can use `table()` or `forTable()`.
+`PixelFix\Framework\Database\Query\QueryBuilder` provides fluent SQL query construction and execution. Model queries are normally obtained through `Model::query()`, while table-oriented queries can use `table()` or `forTable()`.
 
 ## Starting a query
 

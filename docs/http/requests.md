@@ -1,86 +1,36 @@
 # HTTP Requests
 
-PixelFix represents an incoming HTTP request with `PixelFix\Framework\Http\Requests\Request`.
+A request object represents the incoming HTTP request: its input fields, URL, headers, method, route parameters, and uploaded files. Controllers and Form Requests use it to inspect what the browser or client sent.
 
-## Request input
-
-The request combines query-string and POST input into its normalized input collection.
+## Read input
 
 ```php
-$request->input('email');
-$request->all();
-$request->only(['email', 'name']);
-$request->except(['password']);
-$request->has('email');
-$request->filled('email');
+$title = $request->input('title');
+$status = $request->input('status', 'pending');
 ```
 
-For more explicit access, PixelFix also exposes query and POST collections:
+`input()` reads a submitted value. The second argument is a fallback used when the field is absent. Do not treat a fallback as validation; validate required fields and allowed values before persisting them.
 
-```php
-$request->query('page');
-$request->post('email');
-$request->allQuery();
-$request->allPost();
-```
+## Route parameters and query strings
 
-## Route parameters
+Route parameters are part of the URL path (for example, `/tasks/42`). Query-string values follow `?` (for example, `/tasks?page=2`). Both can be used for lookup and filtering, but route parameters and user input must still be checked before use.
 
-After routing, route parameters are available through the request:
+## Request method and headers
 
-```php
-$id = $request->route('id');
-```
-
-This is particularly useful for custom request classes that need route context during validation or authorization.
-
-## HTTP metadata
-
-Common request information includes:
-
-```php
-$request->getMethod();
-$request->getUri();
-$request->path();
-$request->header('Accept');
-$request->ip();
-```
+The request exposes HTTP metadata such as method, path, headers, and content type. This helps controllers distinguish a browser form submission from a JSON API request and choose an appropriate response.
 
 ## JSON requests
 
-PixelFix detects JSON requests and decodes a JSON object payload. JSON input is merged into the request data and can then be accessed with the same input helpers.
+For an API client that sends JSON, confirm that the request uses the correct JSON content type and that the application reads the parsed payload through the request API supported by the installed version. Validate the parsed data just as you would validate an HTML form.
 
-```php
-$data = $request->all();
-```
+## Method spoofing for HTML forms
 
-You can inspect the request with:
-
-```php
-$request->isJson();
-$request->expectsJson();
-$request->json('field');
-$request->isApi();
-```
-
-## Method spoofing
-
-HTML forms can submit POST data with an `_method` field to represent `PUT`, `PATCH`, or `DELETE`:
-
-```html
-<input type="hidden" name="_method" value="DELETE">
-```
-
-`getMethod()` normalizes the method before routing continues.
+HTML forms normally submit GET or POST. PixelFix supports a method-spoofing convention for other state-changing methods when the web middleware recognizes the corresponding hidden field. Use it for update/delete forms and keep CSRF protection enabled.
 
 ## Uploaded files
 
-File helpers include:
+Uploaded files are supplied by the request/file upload API. Check upload errors, size and allowed content type, choose a safe server-generated name, and store the file outside the public root unless it is intentionally public. Never trust a client-supplied filename as a filesystem path.
 
-```php
-$request->file('avatar');
-$request->hasFile('avatar');
-$request->allFiles();
-```
+## Prefer validated data
 
-Validation rules can then be used to validate uploaded files.
+After validation through a Form Request, use `$request->validated()` or the specific validated data API rather than writing arbitrary request fields into a model. Validation protects data shape; authorization protects which records the user may change.

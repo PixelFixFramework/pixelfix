@@ -1,74 +1,69 @@
 # Task Manager Quick Start
 
-The Task Manager is the concrete reference application used throughout the PixelFix documentation.
+This guide assumes you have already received the Task Manager project. It shows how to prepare that existing project; it is not the command for creating a new PixelFix application. Use the separate PixelFix Installer to create projects.
 
 ## 1. Install dependencies
 
-From the Task Manager project root:
+Open a terminal in the Task Manager root—the directory containing `composer.json`—and run:
 
-```bash
+```powershell
 composer install
 ```
 
-The application defines a local path repository for a sibling PixelFix framework checkout and can therefore be developed directly against a working framework tree.
+Composer installs PHP dependencies and runs the project's configured setup scripts. If the framework repository is private, your GitHub account and Composer credentials must have permission to download it.
 
 ## 2. Configure the environment
 
-Copy the example environment file when needed:
+The project includes `.env.example`. If the application does not yet have a local `.env`, copy the example:
 
-```bash
-cp .env.example .env
+```powershell
+Copy-Item .env.example .env
 ```
 
-The application can use SQLite for local development. Check the current `config/config.php` and `.env` before changing database settings.
+Open `.env` and `config/config.php` and check the database settings. Never commit passwords, private tokens, or machine-specific secrets. Make sure the PHP CLI has the PDO driver required by the selected database.
 
 ## 3. Prepare the database
 
-Run:
+From the project root, run:
 
-```bash
+```powershell
 php pixel migrate
 php pixel db:seed
 ```
 
+`migrate` applies the pending migration files to create or update the database schema. `db:seed` runs the configured seeders to insert sample data. Run migrations first so seeders have tables to write into. Do not run seeders against a production database unless you understand exactly what they insert.
+
+If SQLite reports that a driver is unavailable, enable `pdo_sqlite` for the PHP executable used in this terminal. A database GUI or web-server PHP configuration does not necessarily enable the same driver for CLI PHP.
+
 ## 4. Start the application
 
-Use the framework launcher:
+The project exposes the framework's local development server:
 
-```bash
+```powershell
 php pixel serve
 ```
 
-Or use PHP directly:
+Alternatively, PHP's built-in server can serve the public directory:
 
-```bash
+```powershell
 php -S localhost:8000 -t public
 ```
 
-## 5. Explore the feature flow
+Use the address printed by the server. Stop it with `Ctrl+C` when finished.
 
-Start with:
+## 5. Explore the application
 
-```text
-/
-/register
-/login
-/tasks/index
-/tasks/create
-/tasks/{id}
-/tasks/{id}/edit
-```
+Visit `/` first. Create an account at `/register`, sign in at `/login`, then open `/tasks/index` and create a task at `/tasks/create`. Task routes require authentication. Task creation validates the title, description, status, and due date; successful creation associates the task with the currently signed-in user.
 
-The public route definitions are in `routes/web.php`.
+Try viewing, editing, and deleting your task. If you test access control, use two accounts and check that one user cannot access the other user's task. A single account does not test the ownership boundary.
 
-## 6. Trace a request
+## 6. Trace one request
 
-The most useful first request to trace is:
+A useful next step is `GET /tasks/{task}`. Follow it through `routes/web.php`, the `web` and `auth` middleware, `TaskController::show()`, record lookup, `TaskPolicy`, the model/database query, the Twig page, and the HTTP response. The [Trace a Request](trace-a-request.md) guide walks through each step.
 
-```text
-GET /tasks/{id}
-```
+## Troubleshooting checklist
 
-It exercises routing, the web middleware group, controller dispatch, task lookup, policy authorization, model/database access, Twig rendering, and the final response.
-
-Continue with [Trace a Task Manager Request](trace-a-request.md).
+- `php pixel` is not recognized: run it from the project root and verify the launcher file is present.
+- Database connection fails: verify `.env`, `config/config.php`, the database service, database file permissions, and the CLI PDO driver.
+- Login fails: confirm the user exists and its password is a password hash created by the registration flow.
+- Task route is denied: confirm you are signed in and viewing a task owned by that account.

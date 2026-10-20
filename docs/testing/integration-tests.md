@@ -1,28 +1,39 @@
-# Integration Tests
+# Integration Tests: Verify That Framework Pieces Work Together
 
-Integration tests exercise multiple framework components together. PixelFix's `tests/Integration` directory contains tests for interactions such as routing, database behavior, authentication, providers, and framework lifecycle features.
+A unit test checks one small piece in isolation. An integration test verifies that multiple pieces cooperate correctly. For example, a test might boot the application, resolve a service from the container, run a model query against a configured database, and confirm the result.
 
-## When to use integration tests
+## When to write one
 
-Use an integration test when the behavior depends on collaboration between services that would be misleading to isolate. Examples include:
+Use integration tests when a defect could occur between layers rather than inside one isolated method. Typical examples include:
 
-- a route passing through middleware and reaching a controller
-- a model operation reaching the configured database connection
-- a provider registering services into the application container
-- authentication resolving a user through a guard and provider
+- an application provider registering the expected service into the container;
+- routing and middleware cooperating to dispatch an action;
+- a model using the configured connection and SQL grammar;
+- authentication resolving a user through the guard and user provider;
+- a migration and model agreeing about database columns.
 
-## Application access
+## Access the booted application
 
-`TestCase` exposes the current application instance through its protected `$app` property after setup. The application container can then resolve framework services normally.
+PixelFix's base test case bootstraps an application for the test. The application container is available through `$this->app`:
 
 ```php
-$db = $this->app->make(
-    PixelFix\Framework\Database\Infrastructure\DatabaseManager::class
-);
+use PixelFix\Framework\Database\Infrastructure\DatabaseManager;
+
+$db = $this->app->make(DatabaseManager::class);
 ```
 
-## Keeping integration tests deterministic
+`make(DatabaseManager::class)` asks the container for the service registered under that class. This is preferable to manually constructing a second database manager when the test needs to inspect the application’s configured database service.
 
-Reset shared framework state between tests. The base `TestCase` resets route state and session state automatically. Tests that modify other global state should clean that state themselves.
+The example resolves the service; it does not run a query or create data by itself. Add setup and assertions for the behavior being tested, and ensure the database test environment is configured.
 
-Where a test needs temporary files or directories, use the helpers supplied by the base test case so teardown can remove them reliably.
+## Keep tests deterministic
+
+A deterministic test yields the same result when run alone or with the rest of the suite. Avoid relying on another test's rows, timestamps, current session, or working directory. The base `TestCase` resets route and session state, but a test that modifies other global state must clean it up itself.
+
+Use the temporary-file and directory helpers provided by the test case when working with the filesystem. When a test creates database records, use a dedicated test database or explicit cleanup strategy so it does not alter developer data.
+
+## Important limitation
+
+PixelFix's current `TestCase` is not a built-in HTTP simulation client; examples that call Laravel-style `$this->get()` or `$this->assertRedirect()` will not work unless your project adds that functionality. Test the actual service integration with the provided tools, or invoke the real application runtime for end-to-end HTTP coverage.
+
+See [Testing Overview](overview.md), [Database Testing](database-testing.md), and [Feature Tests](feature-tests.md).

@@ -64,3 +64,12 @@ The helper delegates to the framework validator and returns the validated payloa
 ## Custom rule objects
 
 The validation package contains a `RuleInterface` contract for rule objects. Use a rule object when a validation condition is domain-specific or cannot be expressed clearly with the built-in string rules.
+
+
+## Read a validation rule as a requirement
+
+For example, `required|string|max:120` says the value must be supplied, must be a string, and must not exceed the allowed length. Combining rules expresses the conditions an input must satisfy before the controller trusts it. A rule failure should result in a validation response or error bag; it should not allow invalid data to be saved.
+
+Validation is different from authorization. A valid `user_id` can still belong to another user, so it may be syntactically valid but not authorized. Validate data shape first, then enforce ownership and permission where the action requires it.
+
+When adding a rule, test one valid value and at least one invalid value. For boundaries such as maximum length, test the largest accepted value and the next value beyond it. This catches mistakes that a happy-path-only test will miss.

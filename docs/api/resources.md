@@ -1,18 +1,18 @@
 # API Resources
 
-PixelFix provides API resources for transforming application data into explicit JSON response shapes.
+An API resource defines exactly which parts of a model are returned to an API client. This is useful when a database model contains internal columns that should not be exposed, or when you want the public JSON format to remain stable even if the table changes later.
 
-## Creating a resource
+If you only need a quick internal endpoint, you can return `response()->json($users)`. For a public API, prefer a resource that explicitly selects its fields. See [Returning JSON from a Route or Controller](../http/json-responses.md) for the basic response pattern.
 
-Generate a resource with:
+## 1. Create a resource
 
-```bash
-php pixelfix make:resource UserResource
+Run this command from the root of an existing application:
+
+```powershell
+php pixel make:resource UserResource
 ```
 
-Generated resources live under `app/Http/Resources` and extend `JsonResource`.
-
-A resource implements `toArray()`:
+The generator creates a starting class in `app/Http/Resources`. Open the generated file and implement `toArray()`. The example below exposes an identifier, display name, and email address but does not expose a password hash or internal fields:
 
 ```php
 <?php
@@ -25,106 +25,165 @@ class UserResource extends JsonResource
 {
     public function toArray(): array
     {
+        $user = $this->resource();
+
         return [
-            'id' => $this->resource()->id,
-            'name' => $this->resource()->name,
-            'email' => $this->resource()->email,
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
         ];
     }
 }
 ```
 
-The wrapped resource is available with `resource()`.
+`resource()` returns the original model or value wrapped by the resource. `toArray()` returns the public representation. Each key in the array becomes a key in the JSON response. Only add fields that the caller is allowed to see.
 
-## Returning a resource
+## 2. Return one resource
 
-A resource can be returned directly from a controller. PixelFix's response factory recognizes `JsonResource` and `ResourceCollection` instances and converts them to JSON responses.
+Use the resource in a route or controller:
 
 ```php
-public function show(User $user)
-{
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use PixelFix\Framework\Routing\Route;
+
+Route::get('/users/{id}', function (int|string $id) {
+    $user = User::find($id);
+
+    if ($user === null) {
+        return response()->json([
+            'message' => 'User not found.',
+        ], 404);
+    }
+
     return new UserResource($user);
+});
+```
+
+The response factory recognizes a `JsonResource` and converts it into JSON. By default, the resource wraps its data under `data`, so the response will look like:
+
+```json
+{
+    "data": {
+        "id": 7,
+        "name": "Ada Lovelace",
+        "email": "ada@example.com"
+    }
 }
 ```
 
-You can also create an explicit response:
+The values above are illustrative; the actual values come from the selected user. Use `response()` on the resource if you need to set the status or headers explicitly:
 
 ```php
-return (new UserResource($user))->response();
+return (new UserResource($user))->response(
+    200,
+    ['Cache-Control' => 'no-store']
+);
 ```
 
-`response()` accepts an HTTP status and additional headers.
+## 3. Return a collection
 
-## Collections
-
-Create a collection from an iterable with:
+Pass an iterable of models to the static `collection()` method:
 
 ```php
+$users = User::all();
+
 return UserResource::collection($users);
 ```
 
-The default JSON shape is:
+Each model is passed through `UserResource::toArray()`, so the same field selection is applied to every item. The default output shape is:
 
 ```json
 {
     "data": [
         {
             "id": 1,
-            "name": "Ada"
+            "name": "Ada Lovelace",
+            "email": "ada@example.com"
+        },
+        {
+            "id": 2,
+            "name": "Grace Hopper",
+            "email": "grace@example.com"
         }
     ],
     "meta": []
 }
 ```
 
-Additional collection metadata can be added with `additional()`:
+Resource collections in this framework include a `data` list and a `meta` object. The empty `meta` object is expected when no additional metadata is supplied.
+
+## 4. Add metadata
+
+Use `additional()` to attach metadata that describes the response without mixing it into individual user records:
 
 ```php
 return UserResource::collection($users)
     ->additional([
         'request_id' => $requestId,
+        'source' => 'users-index',
     ]);
 ```
 
-## Conditional fields
+Metadata is merged into the collection's `meta` field. Use it for details such as a trace identifier or information the API contract defines; do not treat it as a substitute for pagination links or permissions.
 
-Resources provide protected helpers for conditional output:
+## 5. Include a field conditionally
+
+A resource may include an attribute only when a condition is true. For example, the following includes a user's email only when the current authenticated user is viewing their own record:
 
 ```php
 return [
-    'id' => $this->resource()->id,
-    'name' => $this->resource()->name,
-    'admin_note' => $this->when(
-        auth()->user()?->role === 'admin',
-        $this->resource()->admin_note
+    'id' => $user->id,
+    'name' => $user->name,
+    'email' => $this->when(
+        (string) auth()->user()?->getAuthIdentifier() === (string) $user->id,
+        $user->email
     ),
 ];
 ```
 
-`mergeWhen()` conditionally merges an array of attributes into the resource output.
+The protected `when()` helper returns the value when the condition is true and `null` otherwise. Null values are filtered from the final resource output. Use authorization rules as well as conditional serialization; hiding a value in the response does not itself protect an operation on that data.
 
-Null attributes are filtered from the final resource output, and resource instances nested inside arrays are resolved recursively.
+`mergeWhen()` conditionally merges a group of fields into the resource's array.
 
-## Hidden fields and wrapping
+## 6. Resource wrapping and hidden fields
 
-`JsonResource` supports a protected `$hidden` array for removing fields from the resource output. Resources are wrapped with `data` by default.
-
-A derived resource may change the static wrapping key:
+Resources are wrapped under the `data` key by default. A resource subclass can change the wrapping key by defining:
 
 ```php
-protected static ?string $wrap = 'user';
+<?php
+
+namespace App\Http\Resources;
+
+use PixelFix\Framework\Http\Resources\JsonResource;
+
+class UserResource extends JsonResource
+{
+    protected static ?string $wrap = 'user';
+
+    public function toArray(): array
+    {
+        $user = $this->resource();
+
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+        ];
+    }
+}
 ```
 
-Resource-level metadata is stored in the protected `$meta` array and is included alongside the wrapped data when present.
+A resource can also define a protected `$hidden` list to remove keys from the representation after `toArray()` returns. Prefer selecting safe fields directly in `toArray()`; it is easier to review than building a large representation and trying to remove secrets afterward.
 
-## Pagination
+Model `$hidden` and `$visible` settings are useful for model serialization generally. Resource field selection is often the clearest contract for public APIs.
 
-Paginated resource collections combine transformed records with pagination metadata and links. See [Pagination](pagination.md).
+## 7. Resources and pagination
 
-## Resource responses
+A paginated endpoint needs to transform the current page's records and communicate pagination state. See [Pagination](pagination.md) for the paginator API and how to combine pagination metadata with public response representations.
 
-`ResourceResponse` is the response type used when a resource or resource collection is explicitly converted into a response. It serializes JSON with an `application/json` content type by default.
+## Common mistakes
 
-## Scope of the API
-
-The resource abstraction is intentionally small: define the representation in `toArray()`, compose resources and collections, and return them from HTTP handlers. Lower-level serialization remains a framework concern.
+- **Returning the model without checking its fields:** serialization can include model attributes you did not intend to publish. Use a resource for public endpoints.
+- **Forgetting the `data` wrapper:** a resource is wrapped by default; clients should read the `data` key.
+- **Using a resource as authorization:** resources choose output fields; policies/gates decide whether an operation is allowed.
+- **Calling `json_encode()` inside `toArray()`:** return PHP arrays and values. PixelFix encodes the final resource response.

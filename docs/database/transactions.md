@@ -122,3 +122,12 @@ $connection->transaction(function () use ($userData, $taskData) {
 ```
 
 Keep external side effects outside the transaction unless they are deliberately coordinated with the commit boundary.
+
+
+## Example: create a task and its audit row
+
+Imagine one user action must insert a task and an audit record. If the task insert succeeds but the audit insert fails, leaving only half the operation may be incorrect. Wrap the related operations in one transaction so that either the complete operation commits or its database changes are rolled back.
+
+Keep the transaction focused on database work. Avoid long network calls or waiting for user interaction inside a transaction because they can hold locks longer than necessary. If you catch an exception inside the transaction callback, rethrow it when the whole operation should roll back; swallowing it may make the transaction appear successful.
+
+A transaction does not automatically roll back changes made to external services such as an email provider or a remote API. Those side effects need their own retry or compensation strategy.

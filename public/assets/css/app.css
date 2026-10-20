@@ -446,9 +446,11 @@ textarea::placeholder {
 .pixelfix-nav-item.dropdown
 .dropdown-menu-lg {
 
-    width: 280px;
-
     min-width: 280px;
+
+    max-width: 300px;
+
+    padding: 0;
 
 }
 
@@ -468,14 +470,12 @@ textarea::placeholder {
 
     padding: .5rem 1rem;
 
-    font-size: .875rem;
-
 }
 
 .pixelfix-nav-item.dropdown
 .dropdown-item .fs-7 {
 
-    font-size: .75rem;
+    font-size: .875rem;
 
 }
 
@@ -483,6 +483,8 @@ textarea::placeholder {
 .dropdown-footer {
 
     padding: .5rem 1rem;
+
+    font-size: .875rem;
 
     text-align: center;
 
@@ -495,6 +497,58 @@ textarea::placeholder {
 
 }
 
+
+/* Match the messages dropdown dimensions exactly. */
+.pixelfix-notifications-menu {
+    width: 280px;
+    min-width: 280px;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Keep notification preview rows aligned with AdminLTE's dropdown-item layout.
+   Long task titles truncate rather than overflowing the dropdown. */
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-content {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-icon {
+    flex: 0 0 auto;
+}
+
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--bs-body-color);
+    font-size: .875rem;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-time {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: var(--bs-secondary-color);
+    font-size: .75rem !important;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-static {
+    cursor: default;
+    pointer-events: none;
+}
+
+.pixelfix-nav-item.dropdown .pixelfix-notification-preview-static:hover {
+    background: transparent;
+    color: var(--bs-body-color);
+}
 
 /* =====================================================
    HEADER MESSAGES
@@ -1068,6 +1122,21 @@ textarea::placeholder {
 
     font-size: 20px;
     font-weight: 700;
+
+}
+
+.pixelfix-sidebar-brand-logo--image {
+
+    background: transparent;
+
+}
+
+.pixelfix-sidebar-logo-image {
+
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
 
 }
 
@@ -3073,4 +3142,64 @@ body.pixelfix-sidebar-open
 
     }
 
+}
+
+/* =====================================================
+   ZEBRA DIALOG WIDTH
+   ===================================================== */
+
+.ZebraDialog {
+    width: 400px;
+    max-width: calc(100vw - 2rem) !important;
+}
+
+/* =====================================================
+   ZEBRA DIALOG + BOOTSTRAP BUTTONS
+   ===================================================== */
+.ZebraDialog_Buttons a {
+    outline: none !important;
+}
+
+.ZebraDialog_Buttons a.btn {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 0;
+    margin-right: .5rem !important;
+    padding: .375rem .75rem;
+    outline: none;
+    border: 5px solid transparent;
+    border-radius: .375rem;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    text-transform: none;
+    vertical-align: middle;
+}
+
+.ZebraDialog_Buttons a.btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.ZebraDialog_Buttons a.btn-secondary:hover,
+.ZebraDialog_Buttons a.btn-secondary:focus {
+    color: #fff;
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+.ZebraDialog_Buttons a.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.ZebraDialog_Buttons a.btn-danger:hover,
+.ZebraDialog_Buttons a.btn-danger:focus {
+    color: #fff;
+    background-color: #bb2d3b;
+    border-color: #b02a37;
 }

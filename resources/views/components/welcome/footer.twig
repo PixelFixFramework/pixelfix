@@ -1,0 +1,93 @@
+    {# =====================================================
+       FOOTER LINKS
+       ===================================================== #}
+
+    {% set footerLinks %}
+
+        {% include 'components/form/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                'https://github.com/PixelFixFramework/pixelfix/blob/main/docs/getting-started/introduction.md#introduction',
+
+            target:
+                '_blank',
+
+            rel:
+                'noopener noreferrer',
+
+            class:
+                'text-decoration-none me-3',
+
+            text:
+                'About'
+
+        } only %}
+
+        {% include 'components/form/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                'https://github.com/PixelFixFramework/pixelfix#pixelfix-application',
+
+            target:
+                '_blank',
+
+            rel:
+                'noopener noreferrer',
+
+            class:
+                'text-decoration-none me-3',
+
+            text:
+                'Contact'
+
+        } only %}
+
+        {% include 'components/form/button.twig' with {
+
+            tag:
+                'a',
+
+            href:
+                'https://github.com/PixelFixFramework/pixelfix/graphs/contributors',
+
+            target:
+                '_blank',
+
+            rel:
+                'noopener noreferrer',
+
+            class:
+                'text-decoration-none',
+
+            text:
+                'Contributors'
+
+        } only %}
+
+    {% endset %}
+
+    {# =====================================================
+       FOOTER
+       ===================================================== #}
+
+    {% include 'components/layout/footer.twig' with {
+
+        footer_company_name:
+            config('app.name'),
+
+        footer_company_url:
+            route('home'),
+
+        container:
+            'py-3',
+
+        footer_right:
+            footerLinks
+
+    } only %}

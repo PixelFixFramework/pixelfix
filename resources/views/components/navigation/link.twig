@@ -1,0 +1,9 @@
+{# Reusable accessible navigation link component. #}
+{% set href = href|default('#') %}
+{% set text = text|default('') %}
+{% set content_html = content_html|default('') %}
+{% set class = class|default('') %}
+{% set aria_label = aria_label|default('') %}
+{% set target = target|default('') %}
+{% set rel = rel|default('') %}
+<a href="{{ href|e('html_attr') }}"{% if class %} class="{{ class|e('html_attr') }}"{% endif %}{% if aria_label %} aria-label="{{ aria_label|e('html_attr') }}"{% endif %}{% if target %} target="{{ target|e('html_attr') }}"{% endif %}{% if rel %} rel="{{ rel|e('html_attr') }}"{% endif %}>{% if content_html %}{{ content_html|raw }}{% else %}{{ text }}{% endif %}</a>

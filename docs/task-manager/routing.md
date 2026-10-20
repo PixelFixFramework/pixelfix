@@ -1,81 +1,54 @@
-# Task Manager: Routing
+# Task Manager Routing: URLs, Actions, and Middleware
 
-The Task Manager keeps its browser routes in `routes/web.php`. The routes are wrapped in the framework's `web` middleware group:
+Routes connect an HTTP method and URL to the code that handles the request. The Task Manager's browser routes are in `routes/web.php` and are grouped under the `web` middleware. This group provides browser-oriented behavior such as session handling and CSRF protection. Authentication-specific routes also use `guest` or `auth` middleware.
 
-```php
-Route::middleware('web')
-    ->group(function () {
-        // Browser routes...
-    });
-```
+## Public and authentication routes
 
-This gives the routes session and CSRF middleware through the framework's predefined group.
+| Method | Path | Name | Purpose |
+|---|---|---|---|
+| `GET` | `/` | `home` | Display the welcome page |
+| `GET` | `/register` | `auth.register` | Display registration form |
+| `POST` | `/register` | `auth.store` | Validate and create an account |
+| `GET` | `/login` | `auth.login` | Display login form |
+| `POST` | `/login` | `auth.attempt` | Check credentials |
+| `POST` | `/logout` | `auth.logout` | End the session |
 
-## Public routes
-
-The application exposes the welcome page and authentication pages:
-
-```text
-GET  /           → HomeController@index
-GET  /register   → AuthController@showRegistration
-POST /register   → AuthController@register
-GET  /login      → AuthController@showLogin
-POST /login      → AuthController@login
-POST /logout     → AuthController@logout
-```
-
-Each route has a named route used by the views and controllers.
+The register/login pages are inside the `guest` group, so signed-in users are redirected away from them. Logout and task pages are inside the authenticated group.
 
 ## Task routes
 
-The task surface is deliberately explicit:
+| Method | Path | Name | Purpose |
+|---|---|---|---|
+| `GET` | `/tasks/index` | `tasks.index` | List the current user's tasks |
+| `GET` | `/tasks/create` | `tasks.create` | Show the create form |
+| `POST` | `/tasks` | `tasks.store` | Create a task |
+| `GET` | `/tasks/{task}` | `tasks.show` | Show one task |
+| `GET` | `/tasks/{task}/edit` | `tasks.edit` | Show the edit form |
+| `PUT` | `/tasks/{task}` | `tasks.update` | Save edits |
+| `DELETE` | `/tasks/{task}` | `tasks.destroy` | Delete a task |
 
-```text
-GET    /tasks/index           → tasks.index
-GET    /tasks/create          → tasks.create
-POST   /tasks                 → tasks.store
-GET    /tasks/{task}          → tasks.show
-GET    /tasks/{task}/edit     → tasks.edit
-PUT    /tasks/{task}          → tasks.update
-DELETE /tasks/{task}          → tasks.destroy
-```
+The parameter pattern `\d+` restricts `{task}` to digits. It prevents a URL such as `/tasks/not-a-number` from matching these routes, but it does not prove that the database record exists or that the current user owns it. The controller still looks up the record and `TaskPolicy` performs ownership authorization.
 
-The `{task}` parameter is constrained to digits with:
+## Named routes avoid hard-coded URLs
 
-```php
-'/tasks/{task:\\d+}'
-```
-
-The explicit parameter name is useful because the controller uses it consistently across the show, edit, update, and destroy actions.
-
-## Generating URLs
-
-Views and controllers use the route names rather than hard-coded URLs:
+Use the route name in a Twig template:
 
 ```twig
-{{ route('tasks.index') }}
+<a href="{{ route('tasks.index') }}">My tasks</a>
 ```
+
+Or redirect from a controller:
 
 ```php
-return redirect_to_route(
-    'tasks.show',
-    [$task->id]
-);
+return redirect_to_route('tasks.show', [$task->id]);
 ```
 
-## Authorization route
+If a path changes, update the route definition and keep callers using its stable name. If you see a 404, run `php pixel route:list --live` from the application root and check the method, path, name, and middleware.
 
-The application also demonstrates a gate-based route:
+## Gate-protected route
 
-```php
-Route::get(
-    '/admin-test',
-    function () {
-        Gate::authorize('access-admin');
+The reference app also includes `/admin-test`, which calls `Gate::authorize('access-admin')` before returning the success text. This demonstrates route-level gate authorization. The task endpoints use model-policy authorization because those decisions depend on the specific task being accessed.
 
-        return 'Admin access granted.';
-    }
-)->name('admin.test');
-```
+## Browser form requirements
 
-The route illustrates that authorization can be enforced directly in a route endpoint, while task operations use model policies in the controller.
+A state-changing form should use the intended HTTP method, post to its named route, include the CSRF field (`{{ csrf|raw }}`), and submit field names expected by the Form Request. In PixelFix, `routes/api.php` does not automatically mean every path is prefixed with `/api`; use the route's actual declared path unless you explicitly configure a prefix.

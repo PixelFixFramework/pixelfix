@@ -24,12 +24,8 @@ Task::query()->upsert(
 
 The signature is:
 
-```php
-upsert(
-    array $records,
-    array|string $uniqueBy,
-    ?array $updateColumns = null
-): int
+```text
+upsert(array $records, array|string $uniqueBy, ?array $updateColumns = null): int
 ```
 
 ## Unique columns
@@ -37,13 +33,13 @@ upsert(
 `$uniqueBy` identifies the conflict key used by the target grammar. It may be a single string or an array:
 
 ```php
-'email'
+$uniqueBy = 'email';
 ```
 
 or:
 
 ```php
-['tenant_id', 'email']
+$uniqueBy = ['tenant_id', 'email'];
 ```
 
 The builder rejects an empty unique-column list.

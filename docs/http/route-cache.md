@@ -1,67 +1,36 @@
 # Route Inspection and Caching
 
-PixelFix provides console commands for inspecting, compiling, and clearing route state.
+Route inspection helps you confirm which URL patterns the application has loaded. Route caching stores a prepared representation of the route table so deployments with stable routes can load that information efficiently. It does not change the business logic inside a controller.
 
-## Inspect live routes
+## Inspect the routes loaded by the application
 
-```bash
-php pixelfix route:list --live
+```powershell
+php pixel route:list --live
 ```
 
-The router can also be inspected through the registered route collection.
+Use the live view after adding or editing a route. Check the HTTP method, path, route name, action, and middleware. If a route is missing from this output, confirm that the file containing its declaration is loaded by the application's route configuration.
 
-## Inspect cached routes
+## Inspect the cached route set
 
-```bash
-php pixelfix route:list --cached
+```powershell
+php pixel route:list --cached
 ```
 
-Use this when diagnosing a mismatch between route definitions and the currently compiled route set.
+The cached output represents the current route cache, which may be older than the files you just edited. A difference between live and cached lists is a clue that the route cache needs to be rebuilt or cleared.
 
-## Build the route cache
+## Build and clear the cache
 
-```bash
-php pixelfix route:cache
+```powershell
+php pixel route:cache
+php pixel route:clear
 ```
 
-The route cache compiler transforms the registered route definitions into a compiled route representation used by the runtime.
+`route:cache` prepares the cached representation from the application's current route definitions. `route:clear` removes the cache so the application can rebuild routes from source. Use these as part of a deliberate deployment or troubleshooting workflow; do not assume that changing a route file automatically refreshes an existing cache.
 
-## Clear the route cache
+## A safe development workflow
 
-```bash
-php pixelfix route:clear
-```
-
-After changing route definitions, clearing/rebuilding the cache is useful when the application is using cached routes.
-
-## Development workflow
-
-A simple development sequence is:
-
-```text
-change routes
-    ↓
-inspect live routes
-    ↓
-run the application
-    ↓
-compile route cache for deployment/use
-```
-
-Avoid assuming that a cached route set has automatically changed merely because the source route file changed.
+During active development, inspect live routes. Before deploying a stable route set, build the cache only if your deployment process uses it. If you add `/reports` and receive a 404, first inspect `route:list --live`. If the route appears live but not cached, clear/rebuild the cache and inspect again. If it does not appear live either, investigate route registration and syntax instead of changing the controller blindly.
 
 ## Named routes
 
-Routes can be named and generated through:
-
-```php
-->name('tasks.show');
-```
-
-Then:
-
-```php
-route('tasks.show', [$task->id]);
-```
-
-The named route registry is therefore part of both application navigation and route inspection.
+Route names are stable identifiers used by `route('tasks.index')` in Twig and `redirect_to_route('tasks.index')` in PHP. If you rename a route, update its callers and rebuild any cache that your application uses. See [Routing](routing.md) and [Routing Reference](routing-reference.md).

@@ -3,7 +3,7 @@
    ===================================================== #}
 
 {% set footerCurrentYear =
-    "now"|date('Y')
+    current_year|default("now"|date('Y'))
 %}
 
 {% set footerCompanyName =
@@ -11,72 +11,225 @@
 %}
 
 {% set footerCompanyUrl =
-    footer_company_url|default('#')
+    footer_company_url|default(
+        footer_company_href|default('')
+    )
 %}
+
+{% set footerCompanyRoute =
+    footer_company_route|default(
+        footer_company_url_route|default(
+            footer_company_route_name|default('')
+        )
+    )
+%}
+
+{% set footerCompanyRouteParameters =
+    footer_company_route_parameters|default(
+        footer_company_url_route_parameters|default(
+            footer_company_parameters|default([])
+        )
+    )
+%}
+
+{# A named route takes precedence over a configured direct URL. #}
+{% if footerCompanyRoute %}
+
+    {% set footerCompanyUrl =
+        route(
+            footerCompanyRoute,
+            footerCompanyRouteParameters
+        )
+    %}
+
+{% endif %}
 
 {% set footerRight =
     footer_right|default(null)
 %}
 
-{% set container =
-    container|default('container-fluid')
+{% set footerRightPartial =
+    footer_right_partial|default('')
 %}
+
+{% set footerEscapeRight =
+    escape_footer_right|default(false)
+%}
+
+{% set footerContainer =
+    container_class|default(
+        container|default('container-fluid')
+    )
+%}
+
+{% set footerClass =
+    footer_class|default('')
+%}
+
+{% set footerId =
+    footer_id|default(id|default(''))
+%}
+
+{% set footerAriaLabel =
+    footer_aria_label|default(
+        aria_label|default('')
+    )
+%}
+
+{% set footerContentClass =
+    footer_content_class|default('')
+%}
+
+{% set footerCopyrightClass =
+    footer_copyright_class|default('')
+%}
+
+{% set footerCompanyLinkClass =
+    footer_company_link_class|default('text-decoration-none')
+%}
+
+{% set footerRightClass =
+    footer_right_class|default('')
+%}
+
+{% set footerCompanyTarget =
+    footer_company_target|default(
+        target|default('')
+    )
+%}
+
+{% set footerCompanyRel =
+    footer_company_rel|default(
+        rel|default('')
+    )
+%}
+
+{% set footerRightsText =
+    rights_reserved_text|default('All rights reserved.')
+%}
+
+{% if show is defined %}
+
+    {% set footerShow = show %}
+
+{% elseif show_footer is defined %}
+
+    {% set footerShow = show_footer %}
+
+{% else %}
+
+    {% set footerShow = true %}
+
+{% endif %}
 
 
 {# =====================================================
    FOOTER
    ===================================================== #}
 
-<footer class="pixelfix-footer">
+{% if footerShow %}
 
-    <div class="{{ container }}">
+    <footer
+        {% if footerId %}
+            id="{{ footerId|e('html') }}"
+        {% endif %}
+        {% if footerAriaLabel %}
+            aria-label="{{ footerAriaLabel|e('html') }}"
+        {% endif %}
+        class="pixelfix-footer {{ footerClass|e('html') }}"
+    >
 
-        <div class="pixelfix-footer-content">
+        <div class="{{ footerContainer|e('html') }}">
 
-
-            {# =================================================
-               COPYRIGHT
-               ================================================= #}
-
-            <div class="pixelfix-footer-copyright">
-
-                <strong>
-
-                    Copyright &copy;
-
-                    {{ footerCurrentYear }}
-
-                    <a
-                        href="{{ footerCompanyUrl }}"
-                        class="text-decoration-none"
-                    >{{ footerCompanyName }}</a>.
-
-                </strong>
-
-                <span>
-                    All rights reserved.
-                </span>
-
-            </div>
+            <div class="pixelfix-footer-content {{ footerContentClass|e('html') }}">
 
 
-            {# =================================================
-               RIGHT CONTENT
-               ================================================= #}
+                {# =================================================
+                   COPYRIGHT
+                   ================================================= #}
 
-            {% if footerRight %}
+                <div class="pixelfix-footer-copyright {{ footerCopyrightClass|e('html') }}">
 
-                <div class="pixelfix-footer-right">
+                    <strong>
 
-                    {{ footerRight|raw }}
+                        Copyright &copy;
+
+                        {{ footerCurrentYear|e('html') }}
+
+                        {% if footerCompanyUrl %}
+
+                            {% include 'components/navigation/link.twig' with {
+                                href: footerCompanyUrl,
+                                text: footerCompanyName,
+                                class: footerCompanyLinkClass,
+                                target: footerCompanyTarget,
+                                rel: footerCompanyRel|default(footerCompanyTarget == '_blank' ? 'noopener noreferrer' : '')
+                            } only %}
+
+                        {% else %}
+
+                            {{ footerCompanyName }}
+
+                        {% endif %}.
+
+                    </strong>
+
+                    <span>
+                        {{ footerRightsText }}
+                    </span>
 
                 </div>
 
-            {% endif %}
 
+                {# =================================================
+                   RIGHT CONTENT
+                   ================================================= #}
+
+                {% if footerRightPartial or (footerRight is not null and footerRight != '') %}
+
+                    <div class="pixelfix-footer-right {{ footerRightClass|e('html') }}">
+
+                        {% if footerRightPartial %}
+
+                            {% include
+                                footerRightPartial
+                                with {
+                                    footerCurrentYear:
+                                        footerCurrentYear,
+
+                                    footerCompanyName:
+                                        footerCompanyName,
+
+                                    footerCompanyUrl:
+                                        footerCompanyUrl,
+
+                                    footerRight:
+                                        footerRight,
+                                }
+                                only
+                            %}
+
+                        {% elseif footerEscapeRight %}
+
+                            {{ footerRight|e('html') }}
+
+                        {% else %}
+
+                            {# Backward compatibility: footer_right remains trusted HTML by default. #}
+
+                            {{ footerRight|raw }}
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
 
         </div>
 
-    </div>
+    </footer>
 
-</footer>
+{% endif %}

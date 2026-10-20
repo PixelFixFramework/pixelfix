@@ -1,230 +1,117 @@
 # Command-Line Reference
 
-PixelFix exposes its console through the `pixelfix` launcher. The repository also contains a small `pixel` wrapper that invokes the same launcher.
+Run application commands from the project root using `php pixel <command>`. Do not assume a command exists because another PHP framework has it; the list below is based on the commands shipped in this PixelFix source version.
 
-Use either form from a framework/application root where the launcher is available:
+## Find commands and options
 
-```bash
-php pixelfix help
+```powershell
 php pixel help
+php pixel help make:model
+php pixel route:list --help
 ```
 
-## Application commands
+The help output is the quickest way to confirm the exact syntax in the version installed in your project.
 
-### `new`
+## Run and inspect the application
 
-```bash
-php pixelfix new {name}
+```powershell
+php pixel serve
+php pixel serve:status
+php pixel serve:restart
+php pixel serve:stop
+php pixel route:list
+php pixel route:cache
+php pixel route:clear
 ```
 
-Creates a new PixelFix application.
+Route caching is primarily useful when the route definitions are stable. Clear or rebuild the cache after changing route files.
 
-### `serve`
+## Managed runtime, scheduling, queues and WebSockets
 
-```bash
-php pixelfix serve {--host=127.0.0.1} {--port=8000} {--open}
+```powershell
+php pixel dev
+php pixel dev --queues=default,notifications
+php pixel schedule:run
+php pixel schedule:work
+php pixel queue:work notifications
+php pixel websockets:serve
+php pixel websockets:relay
 ```
 
-Starts the PixelFix development server.
+Use `dev` for the local supervised runtime. The scheduler appears only when scheduled operations have been registered, queue workers run for `database` or `redis` queue drivers, and WebSocket server/relay processes run when WebSockets are enabled. `schedule:run` performs one due-task check; `schedule:work` is a long-running loop. For production, arrange a scheduler invocation or supervised worker in the deployment environment. See the dedicated [scheduling](../scheduling/overview.md), [queue](../queue/overview.md), and [WebSocket](../websockets/overview.md) references.
 
-### Development server controls
+## Database commands
 
-```bash
-php pixelfix serve:status
-php pixelfix serve:restart
-php pixelfix serve:stop
+```powershell
+php pixel migrate
+php pixel migrate:status
+php pixel migrate:rollback
+php pixel migrate:reset
+php pixel migrate:refresh
+php pixel migrate:fresh
+php pixel db:seed
+php pixel db:seed --list
 ```
 
-## Routing commands
+Read [Migrations](../database/migrations.md) and [Seeders](../database/seeders.md) before running destructive or data-changing operations. `migrate:fresh` rebuilds the schema and may destroy data.
 
-```bash
-php pixelfix route:list {--cached} {--live}
-php pixelfix route:cache
-php pixelfix route:clear
+## Generators
+
+```powershell
+php pixel make:model record
+php pixel make:model record --all
+php pixel make:user --auth --all
+php pixel make:controller RecordController --resource --model=record
+php pixel make:request StoreRecordRequest --model=record
+php pixel make:middleware EnsureActiveUser
+php pixel make:policy RecordPolicy --model=record
+php pixel make:provider ReportingServiceProvider
+php pixel make:migration create_records_table
+php pixel make:factory RecordFactory --model=record
+php pixel make:seeder RecordSeeder --model=record
+php pixel make:resource RecordResource
+php pixel make:view records.index
+php pixel make:view analytics --as=reports.analytics
+php pixel make:view analytics --path=reports/analytics.twig
+php pixel make:view auth.login --preset=login
+php pixel make:view auth --auth-bundle --dry-run
+php pixel make:component records.summary
+php pixel make:test RecordTest
+php pixel make:event OrderPlacedEvent
+php pixel make:job Reports/GenerateMonthlyReportJob
+php pixel make:listener SendReceiptListener --event=OrderPlacedEvent --create-event
+php pixel make:mailable OrderReceiptMailable
+php pixel make:notification OrderPlacedNotification --channels=database,broadcast,mail --queued --queue=notifications
+php pixel make:service InvoiceReminderService
+php pixel make:websocket-handler PrivateChannelHandler
+php pixel make:provider EventServiceProvider
+php pixel make:provider ScheduleServiceProvider
 ```
 
-`route:list` can inspect cached or live route state; the cache commands compile or clear the route cache.
+The generator writes a starting artifact using PixelFix conventions. After generation, open the file and implement the actual application behavior.
 
-## Migration commands
+## Import bundled components
 
-```bash
-php pixelfix migrate {migration?} {--force} {--f} {--dry-run} {--d}
-php pixelfix migrate:status {migration?}
-php pixelfix migrate:rollback {migration?} {--reverse} {--r} {--force} {--f}
-php pixelfix migrate:reset {--force} {--f}
-php pixelfix migrate:refresh {--force} {--f}
-php pixelfix migrate:fresh {--force} {--f}
+```powershell
+php pixel make:component --import auth.login
+php pixel make:component --import dashboard.tile --dry-run
+php pixel make:component --import dashboard.tile --as=employee.ui
+php pixel make:component --import dashboard.tile --path=components/employee/ui
+php pixel make:component --import --group=form
 ```
 
-`migrate:fresh` is destructive during development because it rebuilds the schema from scratch. Use it only when losing existing data is acceptable.
+`make:component --import` copies existing component templates from PixelFix's bundled component catalog. It resolves fixed dependencies by default and reuses already-present dependencies rather than prompting to replace them. Use `--dry-run` to preview the import before writing files.
 
-### Seeding
+`make:view` supports `--as` with dot-separated directories and `--path` with forward-slash-separated destinations, both confined to `resources/views/`. `--preset=login`, `register`, `forgot-password`, or `reset-password` creates one authentication page and resolves its component dependencies. `--auth-bundle` creates all four pages and their required missing components in one artifact collection.
 
-```bash
-php pixelfix db:seed {seeder?} {--class=} {--force} {--fresh} {--list|-l} {--dry-run|-d}
-```
+## Flags commonly used by generators
 
-The seed command can select a seeder, list available seeders, run in dry-run mode, or perform a fresh database workflow where supported by the command.
+- `--dry-run` previews the operation without writing the generated files.
+- `--force` permits overwriting an existing destination, bypassing confirmation where the command supports it.
+- `--no-interaction` disables prompts. Use it in automated scripts only when you understand how conflicts are handled.
 
-## Generator commands
+Not every command supports every flag. The per-command help output is authoritative.
 
-### Model
+## Separate project installer
 
-```bash
-php pixelfix make:model {name} \
-    {--auth} \
-    {--all|-a} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-`--all` generates the related artifact set supported by the current model generator. `--auth` adds the authentication-oriented model setup supported by the command.
-
-### Controller
-
-```bash
-php pixelfix make:controller {name} \
-    {--resource|-r} \
-    {--model|-m=} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Request
-
-```bash
-php pixelfix make:request {name} \
-    {--model|-m=} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Middleware
-
-```bash
-php pixelfix make:middleware {name} \
-    {--alias=} \
-    {--no-register} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Migration
-
-```bash
-php pixelfix make:migration {name} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Factory
-
-```bash
-php pixelfix make:factory {name} \
-    {--model|-m=} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Seeder
-
-```bash
-php pixelfix make:seeder {name} \
-    {--model|-m=} \
-    {--factory=} \
-    {--no-register} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Policy
-
-```bash
-php pixelfix make:policy {name} \
-    {--model|-m=} \
-    {--no-register} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Provider
-
-```bash
-php pixelfix make:provider {name} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Resource
-
-```bash
-php pixelfix make:resource {name} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Test
-
-```bash
-php pixelfix make:test {name} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-### Command
-
-```bash
-php pixelfix make:command {name}
-```
-
-### User/authentication scaffold
-
-```bash
-php pixelfix make:user \
-    {--auth} \
-    {--all|-a} \
-    {--force|-f} \
-    {--dry-run|-d} \
-    {--no-interaction|-n}
-```
-
-## Maintenance commands
-
-```bash
-php pixelfix ide:generate
-php pixelfix stub:publish {--force} {--f}
-php pixelfix help {command?}
-```
-
-## Generator architecture
-
-All `make:*` commands use the framework's generator infrastructure. The current artifact pipeline is:
-
-```text
-Definition
-    ↓
-Discovery
-    ↓
-Validation
-    ↓
-Planning
-    ↓
-Generation
-    ↓
-Workflow
-    ↓
-Display
-```
-
-The individual discovery, planning, resolution, and display services are implementation details unless you are extending PixelFix itself. Application developers generally consume the generator through CLI commands and generated artifacts.
+Creating a new application is handled by the standalone PixelFix Installer, not the application's console. The installer has its own executable and documentation. Once an application exists, use `php pixel` for the commands listed in this reference.

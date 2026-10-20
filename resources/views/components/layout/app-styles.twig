@@ -1,0 +1,64 @@
+    {# =====================================================
+       BOOTSTRAP
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/bootstrap.min.css') }}"
+    >
+
+
+    {# =====================================================
+       BOOTSTRAP ICONS
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/bootstrap-icons.min.css') }}"
+    >
+
+
+    {# =====================================================
+       TOASTR
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/toastr.min.css') }}"
+    >
+
+
+    {# =====================================================
+       ZEBRA DIALOG
+       ===================================================== #}
+
+    {% set zebra_theme = config('ui.zebra_theme') %}
+
+    {% if zebra_theme not in ['classic', 'flat', 'materialize'] %}
+        {% set zebra_theme = 'flat' %}
+    {% endif %}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/zebra/' ~ zebra_theme ~ '/zebra_dialog.min.css') }}"
+    >
+
+
+    {# =====================================================
+       OVERLAYSCROLLBARS
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/overlayscrollbars.min.css') }}"
+    >
+
+
+    {# =====================================================
+       APPLICATION
+       ===================================================== #}
+
+    <link
+        rel="stylesheet"
+        href="{{ asset('css/app.css') }}"
+    >

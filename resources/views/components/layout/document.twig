@@ -1,0 +1,19 @@
+{% set documentTitle = page_title|default(config('app.name')|default('PixelFix')) %}
+{% set documentContent = page_content|default('') %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ documentTitle|raw }}</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/pixelfix-logo.svg') }}">
+    {% include 'components/layout/app-styles.twig' %}
+</head>
+<body>
+    {{ documentContent|raw }}
+
+    {% include 'components/layout/app-debug-panel.twig' %}
+    {% include 'components/layout/app-scripts.twig' %}
+</body>
+</html>

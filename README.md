@@ -22,16 +22,38 @@ Phone: (+260) 976-032-099 | (+260) 969-889-084
 
 # 📚 Documentation
 
+## New to PixelFix? Start here
+
+- [Learning Path for New PixelFix Developers](./docs/getting-started/learning-path.md)
+- [Build Your First PixelFix Page](./docs/getting-started/first-application.md)
+- [Glossary for Beginners](./docs/reference/glossary.md)
+
+Read the learning path in order if this is your first MVC framework. The reference pages are available when you need a specific option or method.
+
 The PixelFix documentation is organized into the sections below.
 
 ## Getting Started
 
+- [Learning Path](./docs/getting-started/learning-path.md)
 - [Introduction](./docs/getting-started/introduction.md)
 - [Requirements](./docs/getting-started/requirements.md)
 - [Installation](./docs/getting-started/installation.md)
 - [First Application](./docs/getting-started/first-application.md)
 - [Application Structure](./docs/getting-started/application-structure.md)
 - [Configuration](./docs/getting-started/configuration.md)
+
+## Practical Developer Guides
+
+Use these after the first-page tutorial. Each one explains the concepts, files to edit, expected results, security implications, and tests for a real task.
+
+- [Build Authorization from Zero](./docs/guides/authorization-from-zero.md)
+- [Build a JSON API](./docs/guides/building-a-json-api.md)
+- [Build a Complete Feature](./docs/guides/production-feature-walkthrough.md)
+- [Test Real Workflows](./docs/guides/testing-real-workflows.md)
+- [Performance and Scale](./docs/guides/performance-and-scale.md)
+- [Production Readiness](./docs/guides/production-readiness.md)
+- [Debugging by Symptom](./docs/guides/debugging-by-symptom.md)
+- [Reading Source and Tests](./docs/guides/source-and-tests.md)
 
 ## Architecture
 
@@ -50,6 +72,7 @@ The PixelFix documentation is organized into the sections below.
 - [Controllers](./docs/http/controllers.md)
 - [Requests](./docs/http/requests.md)
 - [Responses](./docs/http/responses.md)
+- [Returning JSON from a Route or Controller](./docs/http/json-responses.md)
 - [Response Reference](./docs/http/response-reference.md)
 - [Middleware](./docs/http/middleware.md)
 - [Middleware Reference](./docs/http/middleware-reference.md)
@@ -119,11 +142,14 @@ The PixelFix documentation is organized into the sections below.
 
 ## Components
 
+Start with the [Component Library Guide](./docs/components/overview.md) to learn how to import, compose, and troubleshoot components.
+
 ### Authentication Components
 
 - [Login](./docs/components/auth/login.md)
 - [Register](./docs/components/auth/register.md)
-
+- [Forgot Password](./docs/components/auth/forgot-password.md)
+- [Reset Password](./docs/components/auth/reset-password.md)
 ### Dashboard Components
 
 - [Tile](./docs/components/dashboard/tile.md)
@@ -213,12 +239,25 @@ The PixelFix documentation is organized into the sections below.
 ## Reference
 
 - [CLI Reference](./docs/reference/cli.md)
+- [Capability Matrix: What Is Built In?](./docs/reference/capability-matrix.md)
+- [Cache](./docs/cache/overview.md)
+- [Events](./docs/events/overview.md)
+- [Mail](./docs/mail/overview.md)
+- [Notifications](./docs/notifications/overview.md)
+- [Queues](./docs/queue/overview.md)
+- [Rate Limiting](./docs/rate-limiting/overview.md)
+- [Redis](./docs/redis/overview.md)
+- [Scheduling](./docs/scheduling/overview.md)
+- [Broadcasting](./docs/broadcasting/overview.md)
+- [WebSockets](./docs/websockets/overview.md)
+- [Framework Package Boundary](./docs/reference/framework-package.md)
 - [Configuration Reference](./docs/reference/configuration.md)
 - [Conventions](./docs/reference/conventions.md)
 - [Environment](./docs/reference/environment.md)
 - [Helpers](./docs/reference/helpers.md)
 - [Releasing](./docs/reference/releasing.md)
 - [Troubleshooting](./docs/reference/troubleshooting.md)
+- [Glossary](./docs/reference/glossary.md)
 
 ## Task Manager
 
@@ -234,6 +273,8 @@ The PixelFix documentation is organized into the sections below.
 - [Routing](./docs/task-manager/routing.md)
 - [Testing](./docs/task-manager/testing.md)
 - [Trace a Request](./docs/task-manager/trace-a-request.md)
+- [Task Manager Component Architecture](./docs/task-manager/component-architecture.md)
+- [Task Manager Scheduled Reminders](./docs/task-manager/scheduled-reminders.md)
 - [Validation](./docs/task-manager/validation.md)
 - [Views](./docs/task-manager/views.md)
 - [Features](./docs/task-manager/features.md)
@@ -249,9 +290,25 @@ The PixelFix documentation is organized into the sections below.
 - Composer
 - Git
 
-## Create an Application
+## Working in This Application
 
-PixelFix applications are distributed through Packagist as the `pixelfix/pixelfix` project package.
+Run the following commands from this application's root directory. They operate on the application that is already open; they do not create another project.
 
-```bash
-composer create-project pixelfix/pixelfix my-app
+```powershell
+# Display the commands available to this application.
+php pixel help
+
+# Run this application's tests.
+php tests/run.php
+```
+
+To create a model or view, use the relevant public generator shown by `php pixel help`, for example:
+
+```powershell
+php pixel make:model Task
+php pixel make:view tasks.index
+```
+
+`make:view` creates a generic Twig view. Build the page by including or extending components in the view; generating a view does not automatically import the components it references. See [Build Your First PixelFix Page](./docs/getting-started/first-application.md) and [Returning JSON from a Route or Controller](./docs/http/json-responses.md) for worked examples.
+
+To create a separate new application, use the standalone PixelFix installer documentation for the version you have installed. Project creation is a separate workflow from the commands available inside an existing application.

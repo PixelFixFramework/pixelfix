@@ -1,49 +1,55 @@
 # Requirements
 
-## PHP
+This page explains what must be installed before you can run a PixelFix application and why each requirement matters.
 
-PixelFix requires:
+## PHP 8.2 or later
 
-```text
-PHP 8.2 or later
+PixelFix requires PHP 8.2 or later. The version used by your terminal may differ from the version used by Apache, so check both when a web application behaves differently from a command-line check.
+
+```powershell
+php -v
 ```
 
-The framework declares this requirement in its Composer package definition as `^8.2`.
+The first line should report PHP 8.2 or a later compatible version.
 
 ## Composer
 
-Composer is required to install the framework and its PHP dependencies.
+Composer downloads PHP packages and installs the application's dependencies. Check that it is available:
 
-Install Composer through the official Composer installation process for your operating system, then verify it with:
-
-```bash
+```powershell
 composer --version
 ```
 
-## Application Web Server
+If Windows says the command is not recognized, install Composer and make sure its executable is on `PATH`, then open a new terminal.
 
-PixelFix applications expose a `public/` directory as the web root. The Task Manager application can be run with the PHP development server, while Apache can be configured to point its document root at `public/`.
+## Web server
 
-For local development, the built-in PHP server can be used without a separate web server:
+The public web root must be the application's `public/` directory. For local development, start PixelFix's development server from the application root:
 
-```bash
-php -S localhost:8000 -t public
+```powershell
+php pixel serve
 ```
 
-The framework also provides a `serve` console command for the development workflow.
+You can also use PHP's built-in server directly:
 
-## Database Drivers
-
-Database support depends on the connection driver and the PHP extensions available in the environment. The application configuration includes connection definitions for MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, DBLIB, and MongoDB.
-
-SQLite is particularly convenient for local development because it can use a file such as:
-
-```text
-database/database.sqlite
+```powershell
+php -S 127.0.0.1:8000 -t public
 ```
 
-The application must still have the appropriate PHP database extension for the selected driver.
+Do not expose the project root as the document root. Directly exposing `app/`, `config/`, `.env`, `vendor/`, or other private files can disclose source code or secrets.
 
-## Development Dependencies
+## Database and PHP extensions
 
-The framework's development dependencies include Faker. Applications may add their own development dependencies as needed.
+Install the PHP extension for the database you intend to use. Examples include `pdo_mysql` for MySQL/MariaDB and `pdo_sqlite` for SQLite. SQL Server and PostgreSQL require their corresponding PHP drivers. A database server being installed does not mean PHP has the correct driver enabled.
+
+You can inspect the terminal's PHP extensions with:
+
+```powershell
+php -m
+```
+
+For a small local tutorial, SQLite can be convenient if `pdo_sqlite` is enabled. MySQL or MariaDB are common choices for shared development and production.
+
+## Before continuing
+
+You need a working PHP CLI, Composer, an application directory, and a configured database driver if your application uses a database. Continue to [Installation](installation.md) and then [Build Your First PixelFix Page](first-application.md).

@@ -1,6 +1,6 @@
 # Routing
 
-PixelFix routes HTTP requests to application callables or controller actions. Routes are normally defined under `routes/web.php` and `routes/api.php` and use the `PixelFix\\Framework\\Routing\\Route` facade-style API.
+PixelFix routes HTTP requests to application callables or controller actions. Routes are normally defined under `routes/web.php` and `routes/api.php` and use the `PixelFix\Framework\Routing\Route` facade-style API.
 
 ## Defining a route
 
@@ -33,13 +33,50 @@ Route::get('/health', function () {
 });
 ```
 
+## Return JSON from a route
+
+A route can return a JSON response when the caller needs data rather than a Twig page. For example, assuming the application has an `App\Models\User` model:
+
+```php
+use App\Models\User;
+use PixelFix\Framework\Routing\Route;
+
+Route::get('/users', function () {
+    $users = User::all();
+
+    return response()->json($users);
+});
+```
+
+`User::all()` retrieves the records. `response()->json($users)` creates a JSON response with status `200` by default and the content type `application/json; charset=UTF-8`. The JSON body is generated from the model collection; the exact fields depend on the model's serialization settings.
+
+A route defined with URI `/users` responds at `/users`. PixelFix loads `routes/api.php` directly and does **not** silently prepend `/api`; define `/api/users` explicitly or add a route group prefix if that is the URL you want.
+
+You can return a status code and error payload when needed:
+
+```php
+Route::get('/users/{id}', function (int|string $id) {
+    $user = User::find($id);
+
+    if ($user === null) {
+        return response()->json([
+            'message' => 'User not found.',
+        ], 404);
+    }
+
+    return response()->json($user);
+});
+```
+
+The second argument to `response()->json()` is the HTTP status. Use a meaningful status so a client can distinguish success from a missing record or a rejected request. Avoid returning private user fields; use `$hidden`/`$visible` on the model or an API resource that explicitly selects the fields exposed to clients. See [Returning JSON from a Route or Controller](json-responses.md) for a complete walkthrough.
+
 ## Named routes
 
 Names are registered with `name()` and are used to generate URLs without hard-coding paths.
 
 ```php
 Route::get(
-    '/tasks/{task:\\d+}',
+    '/tasks/{task:\d+}',
     [TaskController::class, 'show']
 )->name('tasks.show');
 ```
@@ -66,12 +103,12 @@ Parameters are written inside braces. PixelFix supports FastRoute-style paramete
 
 ```php
 Route::get(
-    '/tasks/{task:\\d+}',
+    '/tasks/{task:\d+}',
     [TaskController::class, 'show']
 );
 ```
 
-The `\\d+` expression restricts the parameter to digits.
+The `\d+` expression restricts the parameter to digits.
 
 Inside the request, route parameters are available through `Request::route()`:
 
@@ -138,10 +175,8 @@ Route::get(
 Multiple middleware definitions can be supplied as an array:
 
 ```php
-->middleware([
-    'auth',
-    'csrf',
-])
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'csrf']);
 ```
 
 Middleware aliases and groups are resolved by the framework's `MiddlewareRegistry`.
@@ -174,7 +209,8 @@ The predefined `api` group is currently registered as an empty group.
 Middleware definitions can contain comma-separated parameters:
 
 ```php
-->middleware('can:update,task')
+Route::put('/tasks/{task}', [TaskController::class, 'update'])
+    ->middleware('can:update,task');
 ```
 
 The middleware registry parses the alias and parameters before the middleware is instantiated and executed.
@@ -258,8 +294,12 @@ Route::scopeBindings();
 A pending route can opt into or out of scoped bindings with:
 
 ```php
-->withScopedBindings()
-->withoutScopedBindings()
+Route::get('/users/{user}/tasks/{task}', [TaskController::class, 'show'])
+    ->withScopedBindings();
+
+// If the route should not use scoped bindings:
+Route::get('/tasks/{task}', [TaskController::class, 'show'])
+    ->withoutScopedBindings();
 ```
 
 ## Conditional route configuration
@@ -299,12 +339,12 @@ Route::middleware('web')
         )->name('tasks.index');
 
         Route::get(
-            '/tasks/{task:\\d+}',
+            '/tasks/{task:\d+}',
             [TaskController::class, 'show']
         )->name('tasks.show');
 
         Route::put(
-            '/tasks/{task:\\d+}',
+            '/tasks/{task:\d+}',
             [TaskController::class, 'update']
         )->name('tasks.update');
     });

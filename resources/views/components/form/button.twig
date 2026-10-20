@@ -10,12 +10,20 @@
 {% set buttonRouteParameters = route_parameters|default([]) %}
 {% set buttonId = id|default(null) %}
 {% set buttonAriaLabel = aria_label|default(null) %}
+{% set buttonAriaCurrent = aria_current|default(null) %}
 {% set buttonTitle = title|default(null) %}
 {% set buttonTarget = target|default(null) %}
 {% set buttonRel = rel|default(null) %}
+{% set buttonStyle = style|default(null) %}
 {% set buttonIcon = icon|default(null) %}
 {% set buttonIconClass = icon_class|default('me-1') %}
-{% set buttonContent = content|default('') %}
+{% set buttonText = text|default('Button') %}
+{% set buttonContentPartial = content_partial|default('') %}
+{% set buttonContentPartialContext = content_partial_context|default({}) %}
+{% set buttonDisabled = disabled|default(false) %}
+{% set buttonName = name|default(null) %}
+{% set buttonValue = value|default(null) %}
+{% set buttonForm = form|default(null) %}
 
 {% if buttonRoute %}
 
@@ -26,23 +34,49 @@
 
 {% endif %}
 
+{# Add the safe default relation when opening a new tab. #}
+{% if buttonTarget == '_blank' and not buttonRel %}
+
+    {% set buttonRel = 'noopener noreferrer' %}
+
+{% endif %}
+
 {% if buttonTag == 'a' %}
 
     <a
         {% if buttonId %}id="{{ buttonId }}"{% endif %}
-        href="{{ buttonHref|default('#') }}"
+        {% if buttonHref %}href="{{ buttonHref }}"{% endif %}
         class="{{ buttonClass }}"
         {% if buttonAriaLabel %}aria-label="{{ buttonAriaLabel }}"{% endif %}
+        {% if buttonAriaCurrent %}aria-current="{{ buttonAriaCurrent|e('html_attr') }}"{% endif %}
         {% if buttonTitle %}title="{{ buttonTitle }}"{% endif %}
         {% if buttonTarget %}target="{{ buttonTarget }}"{% endif %}
         {% if buttonRel %}rel="{{ buttonRel }}"{% endif %}
+        {% if buttonStyle %}style="{{ buttonStyle|e('html_attr') }}"{% endif %}
+        {% if buttonDisabled %}aria-disabled="true" tabindex="-1"{% endif %}
     >
 
         {% if buttonIcon %}
-            <i class="{{ buttonIcon }} {{ buttonIconClass }}"></i>
+            <i
+                class="{{ buttonIcon }}{% if buttonIconClass %} {{ buttonIconClass }}{% endif %}"
+                aria-hidden="true"
+            ></i>
         {% endif %}
 
-        {{ buttonContent|raw }}
+        {% if buttonContentPartial %}
+
+            {% set buttonPartialContext = {
+                text: buttonText,
+                icon: buttonIcon,
+                icon_class: buttonIconClass,
+            }|merge(buttonContentPartialContext) %}
+            {% include buttonContentPartial with buttonPartialContext only %}
+
+        {% else %}
+
+            {{ buttonText }}
+
+        {% endif %}
 
     </a>
 
@@ -52,15 +86,36 @@
         {% if buttonId %}id="{{ buttonId }}"{% endif %}
         type="{{ buttonType }}"
         class="{{ buttonClass }}"
+        {% if buttonName %}name="{{ buttonName }}"{% endif %}
+        {% if buttonValue is not null %}value="{{ buttonValue }}"{% endif %}
+        {% if buttonForm %}form="{{ buttonForm }}"{% endif %}
         {% if buttonAriaLabel %}aria-label="{{ buttonAriaLabel }}"{% endif %}
         {% if buttonTitle %}title="{{ buttonTitle }}"{% endif %}
+        {% if buttonStyle %}style="{{ buttonStyle|e('html_attr') }}"{% endif %}
+        {% if buttonDisabled %}disabled aria-disabled="true"{% endif %}
     >
 
         {% if buttonIcon %}
-            <i class="{{ buttonIcon }} {{ buttonIconClass }}"></i>
+            <i
+                class="{{ buttonIcon }}{% if buttonIconClass %} {{ buttonIconClass }}{% endif %}"
+                aria-hidden="true"
+            ></i>
         {% endif %}
 
-        {{ buttonContent|raw }}
+        {% if buttonContentPartial %}
+
+            {% set buttonPartialContext = {
+                text: buttonText,
+                icon: buttonIcon,
+                icon_class: buttonIconClass,
+            }|merge(buttonContentPartialContext) %}
+            {% include buttonContentPartial with buttonPartialContext only %}
+
+        {% else %}
+
+            {{ buttonText }}
+
+        {% endif %}
 
     </button>
 

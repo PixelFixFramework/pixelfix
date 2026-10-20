@@ -1,164 +1,67 @@
 # Application Structure
 
-A PixelFix application separates framework bootstrapping, application code, web assets, data access, views, routes, and tests into predictable directories.
+A PixelFix application keeps application code, configuration, templates, assets, and runtime files in separate places. Knowing where each type of file belongs makes the framework easier to learn and prevents accidental exposure of private files.
 
 ```text
 project/
-â”œâ”€â”€ app/
-â”‚   â”œâ”€â”€ Http/
-â”‚   â”‚   â”œâ”€â”€ Controllers/
-â”‚   â”‚   â””â”€â”€ Requests/
-â”‚   â”œâ”€â”€ Models/
-â”‚   â”œâ”€â”€ Policies/
-â”‚   â””â”€â”€ Providers/
-â”œâ”€â”€ bootstrap/
-â”œâ”€â”€ config/
-â”œâ”€â”€ database/
-â”‚   â”œâ”€â”€ factories/
-â”‚   â”œâ”€â”€ migrations/
-â”‚   â””â”€â”€ seeders/
-â”œâ”€â”€ docs/
-â”œâ”€â”€ public/
-â”œâ”€â”€ resources/
-â”‚   â””â”€â”€ views/
-â”œâ”€â”€ routes/
-â”œâ”€â”€ storage/
-â”œâ”€â”€ tests/
-â”œâ”€â”€ .env
-â”œâ”€â”€ composer.json
-â”œâ”€â”€ pixel
-â””â”€â”€ pixelfix
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   └── Requests/
+│   ├── Models/
+│   ├── Policies/
+│   └── Providers/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   └── seeders/
+├── docs/
+├── public/
+├── resources/
+│   └── views/
+├── routes/
+├── storage/
+├── tests/
+├── .env
+├── composer.json
+├── pixel
+└── pixelfix
 ```
 
-## `app/`
+## Where application code belongs
 
-Application source code belongs here.
+- `app/Http/Controllers/` contains methods that respond to matched routes. Controllers coordinate the request and response; they should not contain every database or presentation detail.
+- `app/Http/Requests/` contains Form Request classes that validate input and may authorize a request before a controller uses its validated data.
+- `app/Models/` contains ORM models and relationships, such as `User` and `Task`.
+- `app/Policies/` contains authorization rules, often answering whether a user may view, update, delete, restore, or permanently delete a model.
+- `app/Providers/` contains services that the application registers or initializes during boot.
 
-### `app/Http/Controllers/`
+## Bootstrap and configuration
 
-HTTP controllers contain application actions that are invoked by routes.
+`bootstrap/` builds the application and registers the lifecycle bootstrappers. `config/config.php` is the active configuration file in this starter. It reads values from `.env` through helpers such as `env()` and exposes them through `config()`.
 
-The Task Manager application includes `HomeController`, `AuthController`, `TaskController`, and `UserController`.
+Keep passwords, API keys, and environment-specific credentials in `.env` or your deployment environment, not in committed PHP source files.
 
-### `app/Http/Requests/`
+## Database files
 
-Form Request classes encapsulate request validation and expose validated data to controllers.
+- `database/migrations/` describes changes to the schema, such as creating a `tasks` table.
+- `database/factories/` describes how to create sample model attributes.
+- `database/seeders/` inserts predictable starter or demonstration records.
 
-The Task Manager application uses dedicated requests such as `LoginRequest`, `RegisterUserRequest`, `StoreTaskRequest`, and `UpdateTaskRequest`.
+A migration describes a structure change; a seeder inserts data. They solve different problems.
 
-### `app/Models/`
+## Public and private files
 
-Application models represent application data and interact with PixelFix's ORM.
+`public/` is the web server's document root. The front controller is `public/index.php`; public stylesheets, scripts, and images can be served from `public/assets/`. The web server should not serve the project root because `.env`, source files, tests, and dependencies are not public assets.
 
-The Task Manager application defines `User` and `Task` models.
+`resources/views/` contains Twig layouts, pages, and components. Route files under `routes/` declare URL-to-action mappings. `storage/` contains runtime files such as logs, compiled views, sessions, and generated metadata; these should not normally be committed as source.
 
-### `app/Policies/`
+## The two launchers
 
-Policies contain model-oriented authorization rules.
+The generated application contains `pixel` and `pixelfix` launchers. For normal application work, this documentation uses `php pixel <command>` from the application root. Creating a new project is handled by the separate installer, not by the application's command launcher.
 
-The Task Manager application defines `UserPolicy` and `TaskPolicy`.
+## Tests
 
-### `app/Providers/`
-
-Application service providers register or boot application-specific services and integrations. Providers are discovered and loaded as part of application bootstrap.
-
-## `bootstrap/`
-
-The application bootstrap file creates the `Application` object and defines the bootstrapper pipeline.
-
-A current generated application performs these steps in order:
-
-```text
-LoadEnvironment
-      â†“
-LoadConfiguration
-      â†“
-CoreBootstraper
-      â†“
-ProvidersBootstraper
-      â†“
-BootConsole
-      â†“
-Application::boot()
-```
-
-The bootstrap pipeline prepares the container, configuration, framework services, application providers, and console before the application is considered booted.
-
-## `config/`
-
-Application configuration is defined here. In the current implementation, `config/config.php` is the configuration source loaded by `LoadConfiguration`.
-
-The Task Manager configuration groups values under keys such as:
-
-```text
-app
-`
-auth
-`
-database
-`
-```
-
-Additional configuration sections may be added by applications.
-
-## `database/`
-
-Database-specific artifacts live here:
-
-```text
-database/
-â”œâ”€â”€ factories/
-â”œâ”€â”€ migrations/
-â””â”€â”€ seeders/
-```
-
-Migrations define schema changes, factories define model data generation, and seeders populate application data.
-
-## `public/`
-
-`public/` is the application's web-accessible directory. The application front controller is `public/index.php`, and static assets are normally published or stored under `public/assets/`.
-
-The web server should use this directory as the document root rather than exposing the application root.
-
-## `resources/`
-
-Application presentation resources live here. The Task Manager application uses Twig templates under:
-
-```text
-resources/views/
-```
-
-Layouts, pages, components, and error views can be organized below this directory.
-
-## `routes/`
-
-Routes are separated into files such as:
-
-```text
-routes/web.php
-routes/api.php
-routes/console.php
-```
-
-The Task Manager application defines its browser routes in `routes/web.php`. Its web route group applies the `web` middleware stack.
-
-## `storage/`
-
-Runtime-generated files are stored here, including provider manifests, compiled templates, sessions, logs, and framework runtime metadata.
-
-Storage contents should generally be treated as generated runtime state rather than application source code.
-
-## `tests/`
-
-Application tests belong here. A generated application includes its own test bootstrap, test case base class, and test runner.
-
-## Root CLI files
-
-PixelFix applications expose their console entry point through:
-
-```text
-pixelfix
-pixel
-```
-
-The `pixel` launcher delegates to the `pixelfix` entry point. The entry point loads the Composer autoloader, loads `bootstrap/app.php`, resolves the `ConsoleKernel`, and passes the command-line arguments to it.
+`tests/` contains application tests and their bootstrap. The generated test runner can execute the test suite without requiring the developer to know the framework's internal test-runner classes.

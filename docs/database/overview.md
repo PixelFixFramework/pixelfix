@@ -80,3 +80,22 @@ $tasks = Task::query()
 ```
 
 Both approaches ultimately use the framework's database connection and SQL grammar layer.
+
+
+## A first database workflow
+
+A safe workflow for a new table is:
+
+1. Describe the table in a migration.
+2. Apply the migration to a local development database.
+3. Create a model that represents a row from that table.
+4. Use the model or Query Builder to read and write records.
+5. Add validation before accepting browser input.
+6. Add authorization before reading or changing records belonging to a user.
+7. Write tests for important database behavior.
+
+A model is not a substitute for a migration: defining a PHP class does not create the table. Likewise, a migration does not automatically add application validation or user permissions. Those are separate responsibilities.
+
+## Choosing between model and Query Builder
+
+Use a model when rows represent application concepts with relationships, casts, scopes, or lifecycle behavior. Use the Query Builder when you need a direct table query or a focused aggregate. Both approaches use configured database connections, so connection and PDO-driver configuration must be correct before either can execute SQL.

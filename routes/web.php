@@ -11,7 +11,8 @@ use PixelFix\Framework\Routing\Route;
 | All browser routes receive:
 |
 | - Session
-| - CSRF Protection
+| - CSRF
+| - no-cache
 |
 */
 

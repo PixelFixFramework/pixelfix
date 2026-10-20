@@ -2,13 +2,11 @@
 
     'use strict';
 
-
     /* =====================================================
        COLOR MODE
        ===================================================== */
 
     const THEME_STORAGE_KEY = 'pixelfix-theme';
-
 
     const getStoredTheme = function () {
 
@@ -38,7 +36,6 @@
 
     };
 
-
     const resolveTheme = function (theme) {
 
         if (theme === 'dark') {
@@ -60,7 +57,6 @@
             : 'light';
 
     };
-
 
     const updateThemeControls = function (theme) {
 
@@ -120,7 +116,6 @@
 
     };
 
-
     const applyTheme = function (theme) {
 
         const resolvedTheme = resolveTheme(theme);
@@ -154,7 +149,6 @@
         updateThemeControls(theme);
 
     };
-
 
     const initializeColorMode = function () {
 
@@ -229,7 +223,6 @@
 
     };
 
-
     /* =====================================================
        FULLSCREEN
        ===================================================== */
@@ -266,8 +259,54 @@
 
             });
 
-    };
+        document
+            .querySelectorAll(
+                '[data-pixelfix-toggle="fullscreen"]'
+            )
+            .forEach(function (toggle) {
 
+                const enterLabel =
+                    toggle.getAttribute(
+                        'data-pixelfix-enter-label'
+                    ) || 'Enter fullscreen';
+
+                const exitLabel =
+                    toggle.getAttribute(
+                        'data-pixelfix-exit-label'
+                    ) || 'Exit fullscreen';
+
+                const enterTitle =
+                    toggle.getAttribute(
+                        'data-pixelfix-enter-title'
+                    ) || enterLabel;
+
+                const exitTitle =
+                    toggle.getAttribute(
+                        'data-pixelfix-exit-title'
+                    ) || exitLabel;
+
+                toggle.setAttribute(
+                    'aria-label',
+                    isFullscreen ? exitLabel : enterLabel
+                );
+
+                toggle.setAttribute(
+                    'title',
+                    isFullscreen ? exitTitle : enterTitle
+                );
+
+                if (toggle.hasAttribute('aria-pressed')) {
+
+                    toggle.setAttribute(
+                        'aria-pressed',
+                        isFullscreen ? 'true' : 'false'
+                    );
+
+                }
+
+            });
+
+    };
 
     const initializeFullscreen = function () {
 
@@ -321,7 +360,6 @@
         updateFullscreenControls();
 
     };
-
 
     /* =====================================================
        INITIALIZE

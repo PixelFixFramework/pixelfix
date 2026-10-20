@@ -4,7 +4,7 @@ Middleware surrounds request handling and can allow a request to continue, retur
 
 ## Middleware contract
 
-Application middleware implements `PixelFix\\Framework\\Http\\Middleware\\MiddlewareInterface` and exposes a `handle()` method.
+Application middleware implements `PixelFix\Framework\Http\Middleware\MiddlewareInterface` and exposes a `handle()` method.
 
 The framework calls middleware with the current request, a `$next` callback, and optional parameters:
 
@@ -41,10 +41,8 @@ Route::get(
 Multiple entries can be supplied:
 
 ```php
-->middleware([
-    'auth',
-    'csrf',
-])
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'csrf']);
 ```
 
 ## Middleware groups
@@ -96,7 +94,8 @@ For requests that expect JSON, the middleware returns a `401` JSON response inst
 A different redirect target can be passed as a middleware parameter:
 
 ```php
-->middleware('auth:/signin')
+Route::get('/reports', [ReportController::class, 'index'])
+    ->middleware('auth:/signin');
 ```
 
 ## Guest middleware
@@ -108,7 +107,8 @@ For JSON requests, the middleware returns a `403` response with an `Already auth
 A custom redirect target can be supplied:
 
 ```php
-->middleware('guest:/dashboard')
+Route::get('/login', [AuthController::class, 'showLogin'])
+    ->middleware('guest:/dashboard');
 ```
 
 ## Authorization middleware
@@ -123,8 +123,12 @@ CSRF protection is handled by `CsrfMiddleware` and is part of the default `web` 
 
 A normal HTML form should include:
 
-```php
-<?= csrf_field() ?>
+```html
+<form method="POST" action="/profile">
+    <?= csrf_field() ?>
+    <!-- Other form fields go here. -->
+    <button type="submit">Save</button>
+</form>
 ```
 
 or in Twig:
@@ -166,7 +170,7 @@ This is stored by the controller and resolved during controller dispatch.
 Create a middleware class in the application's middleware directory using the generator:
 
 ```bash
-php pixelfix make:middleware EnsureActiveUser
+php pixel make:middleware EnsureActiveUser
 ```
 
 Implement the middleware contract:

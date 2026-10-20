@@ -1,359 +1,72 @@
-# Building the Task Manager with PixelFix
+# Build the Task Manager with PixelFix
 
-The Task Manager is PixelFix's reference application. This tutorial follows the same architectural path as the uploaded application: establish the application, create the database layer, add authentication, add task CRUD, protect it with authorization, render the UI, and then test the resulting behavior.
+This tutorial explains how the reference Task Manager is assembled. It is meant to be read alongside the Task Manager source code so you can connect each concept to a working example.
 
-## 1. Create the application
+## Before you begin
 
-The current PixelFix CLI can generate an application directly from the framework repository:
+You need an existing PixelFix application directory. If you are starting from an empty computer, first install and use the **separate PixelFix Installer**; its README explains project creation. Do not try to create a new project with the application's `pixel` launcher. The `pixel` launcher is used after the project exists.
 
-```bash
-php pixelfix new task-manager
-cd task-manager
+Open a terminal in the application root—the directory containing `composer.json`, `pixel`, and `routes/`—and install dependencies if they are not already installed:
+
+```powershell
 composer install
 ```
 
-The generated application contains the standard PixelFix directories, including `app`, `bootstrap`, `config`, `database`, `public`, `resources`, `routes`, and `tests`.
+If the repository already contains the Task Manager source, you do not need to recreate the application. Follow the steps below to understand how it is built.
 
-## 2. Configure the environment
+## 1. Configure the local environment
 
-Create the local environment file:
+If `.env` does not exist but `.env.example` does, copy the example and edit the values for your machine. Treat `.env` as private because it can contain credentials. The active application settings are defined by `config/config.php`; a variable in `.env` has no effect unless configuration reads it.
 
-```bash
-cp .env.example .env
-```
+## 2. Create the database schema
 
-The Task Manager can use SQLite for local development. Its active configuration is held in `config/config.php`, while environment variables select deployment-specific values.
+The reference application has `users` and `tasks` tables. A migration describes the columns and indexes; it does not insert example records. Review the files in `database/migrations/`, check the migration state, then apply pending migrations:
 
-## 3. Create the database schema
-
-The reference application contains migrations for:
-
-```text
-users
-tasks
-```
-
-The task table stores ownership through `user_id` and includes title, description, status, due date, timestamps, and soft-delete state.
-
-Run:
-
-```bash
+```powershell
+php pixel migrate:status
 php pixel migrate
 ```
 
-Inspect migration state with:
+Configure a supported database and its PHP PDO driver before running these commands. See [Database Connections](../database/connections.md).
 
-```bash
-php pixel migrate:status
-```
+## 3. Add example data
 
-## 4. Add factories and seeders
+Factories describe how model attributes should be generated. Seeders use models and factories to insert records. The Task Manager includes a database seeder that creates a user and tasks associated with that user.
 
-The Task Manager contains:
-
-```text
-UserFactory
-TaskFactory
-DatabaseSeeder
-UserSeeder
-TaskSeeder
-```
-
-Seed development data with:
-
-```bash
+```powershell
+php pixel db:seed --dry-run
 php pixel db:seed
 ```
 
-Factories describe how model instances are generated; seeders orchestrate application data setup.
+Review the seeder before using it against a database with data you need to preserve.
 
-## 5. Build the User model
+## 4. Understand the User and Task models
 
-The `User` model implements PixelFix's authentication contract and uses the framework's `Authenticatable` support together with soft deletes.
+The `User` model integrates with PixelFix authentication and uses the framework's authenticatable model behavior. The `Task` model maps to the `tasks` table and allows the fields intended for assignment during create/update operations.
 
-This allows the authentication system to resolve the current user through the configured provider.
+A task belongs to a user through `tasks.user_id`. Its relationship method can be used to retrieve the owner. Controllers should still check that the signed-in user is allowed to view or change a task; defining a relationship alone is not an access-control rule.
 
-## 6. Build the Task model
+## 5. Follow the authentication flow
 
-The current Task model uses:
+The browser routes include registration, login, and logout. The registration and login Form Requests validate incoming values before the controller changes account or session state. The login controller attempts authentication using the configured guard; the logout action clears the authenticated session.
 
-```php
-protected static string $table = 'tasks';
+Read [Task Manager Authentication](authentication.md) for the route-by-route flow. Authentication answers “who is signed in?”; authorization answers “what may this person do?”
 
-protected static array $fillable = [
-    'user_id',
-    'title',
-    'description',
-    'status',
-    'due_date',
-];
-```
+## 6. Follow a task request
 
-The model defines the relationship back to its owner:
+The task routes expose list, create, store, show, edit, update, and delete operations. For each request, trace the matching route, middleware, controller, validated input, policy check, model/database call, and view or redirect.
 
-```php
-public function user(): BelongsTo
-{
-    return $this->belongsTo(
-        User::class,
-        'user_id'
-    );
-}
-```
+Start with `GET /tasks/{task}`. It is a good learning example because it loads one task, checks whether the user may view it, and renders the result.
 
-## 7. Add authentication routes
+## 7. Learn by changing one thing
 
-The reference application exposes:
+Choose a small change, such as displaying a task's status, and follow the full path: database field/model property, controller data, Twig view or component, and a test. Avoid changing the controller, model, template, and migration at once; make one change and verify it before proceeding.
 
-```text
-GET  /register
-POST /register
-GET  /login
-POST /login
-POST /logout
-```
+## Related guides
 
-All browser routes are placed inside the `web` middleware group.
-
-## 8. Validate authentication input
-
-`RegisterUserRequest` protects registration input, while `LoginRequest` protects login input. Their controllers receive the FormRequest objects rather than reading unvalidated payloads directly.
-
-The controller pattern is:
-
-```php
-$data = $request->validated();
-```
-
-## 9. Authenticate the user
-
-The login action validates credentials and calls the configured authentication facade/helper:
-
-```php
-$authenticated = auth()->attempt([
-    'email' => $credentials['email'],
-    'password' => $credentials['password'],
-]);
-```
-
-A successful login redirects to the task list. Logout clears authentication state and redirects to the home route.
-
-## 10. Define task routes
-
-The Task Manager defines these task actions:
-
-```text
-GET     /tasks/index
-GET     /tasks/create
-POST    /tasks
-GET     /tasks/{task}
-GET     /tasks/{task}/edit
-PUT     /tasks/{task}
-DELETE  /tasks/{task}
-```
-
-The `{task}` parameter is constrained to numeric values:
-
-```php
-'/tasks/{task:\\d+}'
-```
-
-The routes are named, allowing controllers and Twig templates to generate URLs without hard-coding paths.
-
-## 11. Build the task controller
-
-`TaskController` follows a consistent flow.
-
-For collection access:
-
-```php
-$this->authorize(
-    'viewAny',
-    Task::class
-);
-```
-
-Then it queries tasks for the authenticated user:
-
-```php
-$tasks = Task::query()
-    ->where('user_id', $user->id)
-    ->orderBy('created_at', 'desc')
-    ->get();
-```
-
-For creation, the controller validates, authorizes, assigns the server-owned `user_id`, creates the model, flashes a success message, and redirects.
-
-## 12. Protect task creation
-
-`StoreTaskRequest` currently validates:
-
-```php
-return [
-    'title' => 'required|string|max:255',
-    'description' => 'required|string',
-    'status' => 'required|in:pending,in_progress,completed',
-    'due_date' => 'required|date',
-];
-```
-
-Its authorization layer requires an authenticated user:
-
-```php
-public function authorize(): bool
-{
-    return auth()->check();
-}
-```
-
-The controller still performs the domain-level policy authorization for the create operation.
-
-## 13. Protect ownership with TaskPolicy
-
-`TaskPolicy` owns the task-level authorization decisions. A typical ownership rule is:
-
-```php
-public function update(User $user, Task $task): bool
-{
-    return (int) $task->user_id
-        === (int) $user->getAuthIdentifier();
-}
-```
-
-The controller invokes the policy through:
-
-```php
-$this->authorize('update', $taskModel);
-```
-
-This keeps ownership rules centralized rather than duplicating them in every controller action.
-
-## 14. Protect the admin gate
-
-The application also demonstrates a named gate in `AuthServiceProvider`:
-
-```php
-Gate::define(
-    'access-admin',
-    function ($user): bool {
-        return $user->role === 'admin';
-    }
-);
-```
-
-A route can authorize that gate with:
-
-```php
-Gate::authorize('access-admin');
-```
-
-## 15. Render the task pages with Twig
-
-The controller renders templates through the framework view helper:
-
-```php
-return view(
-    'tasks/show',
-    [
-        'task' => $taskModel,
-    ]
-);
-```
-
-The application's view tree contains layouts, authentication templates, task templates, and reusable components.
-
-Forms use the framework's CSRF support and named-route helpers so the presentation layer remains tied to the application's routing configuration without hard-coded URLs.
-
-## 16. Run the finished application
-
-Start the development server:
-
-```bash
-php pixel serve
-```
-
-Then exercise the application in this order:
-
-```text
-Register
-  ↓
-Login
-  ↓
-Open task list
-  ↓
-Create task
-  ↓
-View task
-  ↓
-Edit task
-  ↓
-Update task
-  ↓
-Delete task
-```
-
-## 17. Trace a request
-
-For `GET /tasks/{id}`, the conceptual path is:
-
-```text
-Browser
-  ↓
-public/index.php
-  ↓
-Application bootstrap
-  ↓
-HTTP kernel / middleware
-  ↓
-Router
-  ↓
-TaskController::show()
-  ↓
-Task lookup
-  ↓
-TaskPolicy::view()
-  ↓
-Twig template
-  ↓
-HTTP response
-```
-
-See [Trace a Task Manager Request](trace-a-request.md) for the same flow explained as a debugging walkthrough.
-
-## 18. Add application tests
-
-The Task Manager already contains the PixelFix test bootstrap and application `TestCase`, but the uploaded reference snapshot currently contains no discovered application test classes.
-
-The next natural test cases are:
-
-```text
-registration succeeds
-invalid registration is rejected
-login succeeds with valid credentials
-invalid login is rejected
-users can only view their own tasks
-task creation validates required fields
-users can update their own tasks
-users cannot update another user's task
-users can delete their own tasks
-```
-
-Those tests should exercise application behavior through the framework testing facilities rather than duplicate PixelFix's own framework unit tests.
-
-## What this application demonstrates
-
-The Task Manager puts the major PixelFix concepts together without requiring them to be treated as one monolithic subsystem:
-
-```text
-Routes
-  ↓
-Middleware
-  ↓
-Controllers
-  ├── FormRequests → Validation
-  ├── Policies     → Authorization
-  ├── Models       → ORM / Database
-  └── Views        → Twig
-```
-
-That separation is the central design lesson of the reference application.
+- [Quick Start](quick-start.md) — run and explore the application.
+- [Trace a Request](trace-a-request.md) — follow one request through the framework.
+- [Models](models.md) — understand model behavior.
+- [Validation](validation.md) — validate user input.
+- [Authorization](authorization.md) — protect task operations.
+- [Testing](testing.md) — verify changes.

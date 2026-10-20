@@ -1,207 +1,62 @@
-# Login
+# Login Component
 
-Renders the application login form with configurable credentials, remember-me, social authentication, and account links.
+The Page 10 login component renders the login form, branded header, optional login/register pill tabs, remember-me checkbox, password visibility control, optional forgot-password link, submit button, and optional registration footer. It composes the shared `components/form/input-group.twig`, `components/form/checkbox.twig`, `components/form/button.twig`, and `components/navigation/link.twig` components.
 
-**Component:** `components/auth/login.twig`
+## Minimal use
 
----
+```twig
+{% include 'components/auth/login.twig' with {
+    action_route: 'auth.attempt',
+    login_url: route('auth.login'),
+    register_url: route('auth.register'),
+    show_forgot_password: true,
+    forgot_password_url: route('password.request'),
+} only %}
+```
 
-## Parameters
+Supply route destinations from the calling view. The component does not try to resolve conventional route names by default; it uses an empty form action when `action` and `action_route` are not supplied, and link URLs default to `#`. If `action_route` is supplied, that named route must exist because the component resolves it through `route()`.
 
-| Parameter | Default | Description |
+## Defaults and options
+
+| Option | Default | Purpose |
 |---|---|---|
-| `logo_url` | `#` | URL used by the authentication logo. |
-| `logo_bold` | `''` | Bold portion of the logo text. |
-| `logo_text` | `''` | Logo text displayed beside the bold portion. |
-| `show_logo` | `false` | Determines whether the logo is rendered. |
-| `message` | `Sign in to start your session` | Message displayed above the login form. |
-| `action` | `#` | Form submission URL. |
-| `method` | `post` | Form submission method. |
-| `csrf` | `''` | Raw CSRF markup rendered inside the form. |
-| `email_name` | `email` | Name attribute for the email field. |
-| `email_label` | `Email` | Email field label. |
-| `email_placeholder` | `Email` | Email field placeholder. |
-| `email_value` | `''` | Initial email field value. |
-| `autofocus` | `false` | Determines whether the email field receives autofocus. |
-| `password_name` | `password` | Name attribute for the password field. |
-| `password_label` | `Password` | Password field label. |
-| `password_placeholder` | `Password` | Password field placeholder. |
-| `remember_name` | `remember` | Name attribute for the remember-me checkbox. |
-| `remember_value` | `1` | Value submitted by the remember-me checkbox. |
-| `remember_text` | `Remember Me` | Remember-me checkbox label. |
-| `remember_checked` | `false` | Determines whether the remember-me checkbox is checked. |
-| `submit_text` | `Sign In` | Login submit button text. |
-| `show_social` | `false` | Determines whether social authentication buttons are rendered. |
-| `facebook_url` | `#` | Facebook authentication URL. |
-| `facebook_text` | `Sign in using Facebook` | Facebook authentication button text. |
-| `google_url` | `#` | Google authentication URL. |
-| `google_text` | `Sign in using Google` | Google authentication button text. |
-| `forgot_password_url` | `#` | Forgot-password URL. |
-| `forgot_password_text` | `I forgot my password` | Forgot-password link text. |
-| `register_url` | `#` | Registration URL. |
-| `register_text` | `Create a new account` | Registration link text. |
+| `brand` | `config('app.name')` or `Your application` | Accessible brand/name text |
+| `csrf` | empty string | Raw CSRF markup to place inside the form |
+| `logo_text` | brand | Text beside the logo |
+| `logo_url` | empty | Optional logo destination; when present, the image is linked |
+| `logo_image_url` | `asset('images/pixelfix-logo.svg')` | Logo image URL |
+| `logo_alt` | brand | Image alternative text |
+| `tagline` | `Secure access begins here.` | Header tagline |
+| `title` | `Access your account` | Form heading |
+| `message` | empty | Optional introductory message below the heading |
+| `action_route` | not set | Named route resolved to the form action |
+| `action_route_parameters` | `[]` | Parameters for `action_route` |
+| `action` | empty | Explicit form action if no `action_route` is given |
+| `method` | `post` | Form method |
+| `show_labels` | `false` | Show visible labels instead of visually-hidden labels |
+| `show_brand` | `true` | Show branded header |
+| `show_tabs` | `true` | Show login/register pill tabs |
+| `login_url` | `#` | Destination for the login pill |
+| `register_url` | `#` | Destination for the registration pill/footer link |
+| `login_tab_text` | `Login` | Login pill text |
+| `register_tab_text` | `Create account` | Registration pill text |
+| `show_remember` | `true` | Show remember-me checkbox |
+| `remember_name` / `remember_label` / `remember_value` | `remember` / `Remember me` / `1` | Checkbox field contract |
+| `remember_checked` | `false` | Initial checkbox state |
+| `show_forgot_password` | `false` | Whether to show the forgot-password link |
+| `forgot_password_url` | `#` | Destination for the forgot-password link |
+| `forgot_password_text` | `Forgot password?` | Forgot-password link text |
+| `submit_text` | `Login` | Submit button label |
+| `show_register_link` | `true` | Show the registration footer when its URL is truthy |
+| `register_prompt` / `register_text` | `New here?` / `Create an account` | Registration footer copy |
+| `autofocus` | `true` through the email input include | Whether the email input receives autofocus |
 
----
+The component also accepts the input-specific options `email_name`, `email_id`, `email_label`, `email_placeholder`, `email_value`, `password_name`, `password_id`, `password_label`, and `password_placeholder`. Defaults are `email`, `login-email`, `Email address`, `Email address`, empty value, `password`, `login-password`, `Password`, and `Password` respectively.
 
-# Usage
+## Optional navigation
 
-The Login component is included using Twig's `include` statement.
+Forgot password is opt-in. Both `show_forgot_password: true` and a useful `forgot_password_url` should be supplied by the caller to render that link. Keep the login/register pill markup and active state owned by this component; the calling view configures destinations and text rather than recreating the pills.
 
-Example:
+## Form behavior and security
 
-```twig
-{% include
-    'components/auth/login.twig'
-    with {
-        logo_url:
-            route('home')
-
-        logo_bold:
-            'Pixel'
-
-        logo_text:
-            'Fix'
-
-        show_logo:
-            true
-
-        message:
-            'Sign in to your account'
-
-        action:
-            route('login')
-
-        method:
-            'post'
-
-        csrf:
-            csrf()
-
-        email_name:
-            'email'
-
-        password_name:
-            'password'
-
-        remember_name:
-            'remember'
-
-        submit_text:
-            'Sign In'
-    }
-    only
-%}
-```
-
----
-
-## Social Authentication
-
-Set `show_social` to `true` to render the Facebook and Google authentication links.
-
-```twig
-{% include
-    'components/auth/login.twig'
-    with {
-        show_social:
-            true
-
-        facebook_url:
-            '/auth/facebook'
-
-        facebook_text:
-            'Sign in using Facebook'
-
-        google_url:
-            '/auth/google'
-
-        google_text:
-            'Sign in using Google'
-    }
-    only
-%}
-```
-
----
-
-## Complete Example
-
-```twig
-{% include
-    'components/auth/login.twig'
-    with {
-        logo_url:
-            route('home')
-
-        logo_bold:
-            'Pixel'
-
-        logo_text:
-            'Fix'
-
-        show_logo:
-            true
-
-        message:
-            'Sign in to your account'
-
-        action:
-            route('login')
-
-        method:
-            'post'
-
-        csrf:
-            csrf()
-
-        email_name:
-            'email'
-
-        email_label:
-            'Email'
-
-        email_placeholder:
-            'Email address'
-
-        email_value:
-            ''
-
-        autofocus:
-            true
-
-        password_name:
-            'password'
-
-        password_label:
-            'Password'
-
-        password_placeholder:
-            'Password'
-
-        remember_name:
-            'remember'
-
-        remember_value:
-            '1'
-
-        remember_text:
-            'Remember Me'
-
-        remember_checked:
-            false
-
-        submit_text:
-            'Sign In'
-
-        show_social:
-            false
-
-        forgot_password_url:
-            route('password.request')
-
-        register_url:
-            route('register')
-    }
-    only
-%}
-```
+The email and password inputs are required. The password visibility buttons target their input IDs. The form includes the supplied `csrf` markup; pass the application's CSRF field if the view doesn't already supply it through the rendering context. Named routes should be supplied by the view and must be registered before it renders. Client-side required attributes improve form usability but do not replace server-side validation or authentication checks.

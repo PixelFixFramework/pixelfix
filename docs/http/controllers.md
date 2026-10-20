@@ -1,13 +1,13 @@
 # Controllers
 
-Controllers organize request handling around application actions. PixelFix provides an abstract `Controller` base class at `PixelFix\\Framework\\Http\\Controllers\\Controller`.
+Controllers organize request handling around application actions. PixelFix provides an abstract `Controller` base class at `PixelFix\Framework\Http\Controllers\Controller`.
 
 ## Creating a controller
 
 Use the generator from the project root:
 
 ```bash
-php pixelfix make:controller TaskController
+php pixel make:controller TaskController
 ```
 
 A controller normally lives under `app/Http/Controllers` and extends the framework base controller:
@@ -84,6 +84,31 @@ public function store(
     // ...
 }
 ```
+
+## Return JSON from a controller action
+
+A controller can return the same JSON response as a route closure. For example, an API controller can return the users collection:
+
+```php
+use App\Models\User;
+
+class UserController extends Controller
+{
+    public function index()
+    {
+        return response()->json(User::all());
+    }
+}
+```
+
+Register the action on a route:
+
+```php
+Route::get('/users', [UserController::class, 'index'])
+    ->name('users.index');
+```
+
+`User::all()` retrieves the records; `response()->json()` returns them as JSON with status `200` by default. Use a resource if the public API should expose only selected fields. See [Returning JSON from a Route or Controller](json-responses.md) for response status codes, error responses, and how to test the endpoint.
 
 ## Rendering a view
 
@@ -181,7 +206,7 @@ If a route declares a parameter, it may be accepted by the action:
 
 ```php
 Route::get(
-    '/tasks/{task:\\d+}',
+    '/tasks/{task:\d+}',
     [TaskController::class, 'show']
 );
 ```

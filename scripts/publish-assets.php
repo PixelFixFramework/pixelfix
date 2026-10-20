@@ -38,6 +38,17 @@ $publicJsPath =
 // ENSURE DIRECTORIES
 // =====================================================
 
+$zebraPublicBasePath =
+    $publicCssPath
+    . DIRECTORY_SEPARATOR
+    . 'zebra';
+
+$zebraThemes = [
+    'classic',
+    'flat',
+    'materialize',
+];
+
 $directories = [
 
     $publicCssPath,
@@ -48,17 +59,17 @@ $directories = [
     . DIRECTORY_SEPARATOR
     . 'fonts',
 
-    $publicCssPath
-    . DIRECTORY_SEPARATOR
-    . 'zebra',
-
-    $publicCssPath
-    . DIRECTORY_SEPARATOR
-    . 'zebra'
-    . DIRECTORY_SEPARATOR
-    . 'flat',
+    $zebraPublicBasePath,
 
 ];
+
+foreach ($zebraThemes as $zebraTheme) {
+
+    $directories[] =
+        $zebraPublicBasePath
+        . DIRECTORY_SEPARATOR
+        . $zebraTheme;
+}
 
 foreach ($directories as $directory) {
 
@@ -238,6 +249,43 @@ $copyFile(
 );
 
 // =====================================================
+// OVERLAYSCROLLBARS
+// =====================================================
+
+$overlayScrollbarsPath =
+    $vendorPath
+    . DIRECTORY_SEPARATOR
+    . 'overlayscrollbars';
+
+$copyFile(
+    $overlayScrollbarsPath
+    . DIRECTORY_SEPARATOR
+    . 'styles'
+    . DIRECTORY_SEPARATOR
+    . 'overlayscrollbars.min.css',
+
+    $publicCssPath
+    . DIRECTORY_SEPARATOR
+    . 'overlayscrollbars.min.css',
+
+    'OverlayScrollbars CSS'
+);
+
+$copyFile(
+    $overlayScrollbarsPath
+    . DIRECTORY_SEPARATOR
+    . 'browser'
+    . DIRECTORY_SEPARATOR
+    . 'overlayscrollbars.browser.es6.min.js',
+
+    $publicJsPath
+    . DIRECTORY_SEPARATOR
+    . 'overlayscrollbars.browser.es6.min.js',
+
+    'OverlayScrollbars JavaScript'
+);
+
+// =====================================================
 // TOASTR
 // =====================================================
 
@@ -283,28 +331,10 @@ $zebraPath =
     . DIRECTORY_SEPARATOR
     . 'dist';
 
-$zebraPublicPath =
+$zebraPublicBasePath =
     $publicCssPath
     . DIRECTORY_SEPARATOR
-    . 'zebra'
-    . DIRECTORY_SEPARATOR
-    . 'flat';
-
-$copyFile(
-    $zebraPath
-    . DIRECTORY_SEPARATOR
-    . 'css'
-    . DIRECTORY_SEPARATOR
-    . 'flat'
-    . DIRECTORY_SEPARATOR
-    . 'zebra_dialog.min.css',
-
-    $zebraPublicPath
-    . DIRECTORY_SEPARATOR
-    . 'zebra_dialog.min.css',
-
-    'Zebra Dialog CSS'
-);
+    . 'zebra';
 
 $copyFile(
     $zebraPath
@@ -318,42 +348,70 @@ $copyFile(
     'Zebra Dialog JavaScript'
 );
 
-// =====================================================
-// ZEBRA DIALOG THEME IMAGES
-// =====================================================
+// Publish every supported theme separately. Each stylesheet uses
+// relative image URLs, so its theme assets must stay beside the CSS.
+foreach ($zebraThemes as $zebraTheme) {
 
-$zebraThemePath =
-    $zebraPath
-    . DIRECTORY_SEPARATOR
-    . 'css'
-    . DIRECTORY_SEPARATOR
-    . 'flat';
+    $zebraSourceThemePath =
+        $zebraPath
+        . DIRECTORY_SEPARATOR
+        . 'css'
+        . DIRECTORY_SEPARATOR
+        . $zebraTheme;
 
-$imageFiles = [
-
-    'confirmation.png',
-    'error.png',
-    'information.png',
-    'prompt.png',
-    'question.png',
-    'spinner.gif',
-    'warning.png',
-
-];
-
-foreach ($imageFiles as $imageFile) {
+    $zebraPublicThemePath =
+        $zebraPublicBasePath
+        . DIRECTORY_SEPARATOR
+        . $zebraTheme;
 
     $copyFile(
-        $zebraThemePath
+        $zebraSourceThemePath
         . DIRECTORY_SEPARATOR
-        . $imageFile,
+        . 'zebra_dialog.min.css',
 
-        $zebraPublicPath
+        $zebraPublicThemePath
         . DIRECTORY_SEPARATOR
-        . $imageFile,
+        . 'zebra_dialog.min.css',
 
-        "Zebra Dialog asset {$imageFile}"
+        "Zebra Dialog {$zebraTheme} CSS"
     );
+
+    // Publish each runtime asset shipped with the theme. In particular,
+    // PNG/GIF icon paths referenced by the stylesheet remain resolvable.
+    $themeFiles = glob(
+        $zebraSourceThemePath
+        . DIRECTORY_SEPARATOR
+        . '*'
+    ) ?: [];
+
+    foreach ($themeFiles as $themeFile) {
+
+        if (!is_file($themeFile)) {
+            continue;
+        }
+
+        $extension = strtolower(
+            pathinfo($themeFile, PATHINFO_EXTENSION)
+        );
+
+        if (!in_array(
+            $extension,
+            ['png', 'gif', 'svg', 'jpg', 'jpeg', 'webp', 'woff', 'woff2', 'ttf', 'eot'],
+            true
+        )) {
+            continue;
+        }
+
+        $assetName = basename($themeFile);
+
+        $copyFile(
+            $themeFile,
+            $zebraPublicThemePath
+            . DIRECTORY_SEPARATOR
+            . $assetName,
+            "Zebra Dialog {$zebraTheme} asset {$assetName}"
+        );
+    }
 }
 
 // =====================================================

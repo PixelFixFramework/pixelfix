@@ -1,57 +1,56 @@
 # Logging
 
-PixelFix includes a lightweight logger for application and framework diagnostics.
+Logs help you understand what happened when a request or background maintenance task fails. PixelFix exposes the `logger()` helper so application code can write diagnostic messages without directly managing log files.
 
-## Logger helper
-
-Resolve the logger with:
+## Write a log entry
 
 ```php
-logger()->info('Task created');
+logger()->info('Task created', [
+    'task_id' => $task->id,
+    'user_id' => $user->id,
+]);
 ```
 
-The logger supports the standard severity methods:
+The first argument is the message. The optional context array adds structured values that help identify the affected record. Other levels are available for different severity, such as warning and error messages.
 
-```php
-logger()->emergency($message, $context);
-logger()->alert($message, $context);
-logger()->critical($message, $context);
-logger()->error($message, $context);
-logger()->warning($message, $context);
-logger()->notice($message, $context);
-logger()->info($message, $context);
-logger()->debug($message, $context);
-```
+## Log exceptions
 
-The context argument is optional and defaults to an empty array.
-
-## Log destination
-
-The default log path is:
-
-```text
-storage/logs/app.log
-```
-
-The logger creates the parent directory when necessary.
-
-## Context and exceptions
-
-Context values are JSON encoded. When a context value is a `Throwable`, PixelFix serializes useful diagnostic information including its message, file, line, and stack trace.
+When catching an exception to add context, include useful diagnostic information and preserve the exception details:
 
 ```php
 try {
-    // ...
-} catch (Throwable $e) {
-    logger()->error(
-        'Task operation failed',
-        ['exception' => $e]
-    );
+    // Perform an operation that may fail.
+} catch (\Throwable $exception) {
+    logger()->error('Unable to complete task operation', [
+        'exception' => $exception->getMessage(),
+    ]);
+
+    throw $exception;
 }
 ```
 
-## Runtime metadata
+Do not swallow exceptions silently. If the current layer cannot recover, rethrow the exception or return an appropriate failure response.
 
-The logger also records lightweight runtime metadata in memory. This can be retrieved through `runtimeMetadata()` and cleared through `reset()`.
+## Protect sensitive information
 
-This runtime metadata is distinct from the file log and is useful to framework internals and tests.
+Never log passwords, authentication tokens, session identifiers, private keys, or complete request bodies that may contain sensitive data. Log stable record IDs and a concise reason instead.
+
+## Where to look for logs
+
+The destination is controlled by the application's logging configuration. In the starter, runtime logs belong under `storage/`. In production, ensure the process has permission to write the log destination and that log files are rotated and protected.
+
+Runtime debug metadata and ordinary application logs serve different purposes: debug metadata can help explain framework execution, while application log messages record events relevant to your domain.
+
+
+## Choosing what to log
+
+Use debug-level messages while diagnosing a problem, info-level messages for significant application milestones, warning-level messages when something unexpected was recovered from, and error-level messages when an operation failed. Keep logs useful to the person investigating the issue.
+
+For example, a failed task save may be logged with a task identifier and a safe description of the failure. Do not log passwords, session IDs, access tokens, full authentication headers, or complete request payloads that might contain private data.
+
+## How to investigate a missing log entry
+
+1. Confirm the configured log path and that the process can write to its directory.
+2. Check the configured minimum log level; a debug message may be intentionally filtered in production.
+3. Check the exception handler and the code path to confirm execution reached the logging call.
+4. Confirm the log directory is writable by the same operating-system user running PHP.

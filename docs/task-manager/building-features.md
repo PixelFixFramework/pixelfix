@@ -1,79 +1,84 @@
-# Building Features in Task Manager
+# Building a Task Feature from Route to Database
 
-The Task Manager is the reference application used throughout the PixelFix documentation. Its structure shows how a feature moves from a route to a controller, validation, authorization, persistence, and views.
+This guide follows one use case: a signed-in user creates a task. The same separation of responsibilities applies when you build other features in PixelFix.
 
-## The task feature
-
-The current task feature contains:
+## Understand the path first
 
 ```text
-routes/web.php
+Browser form
+    ↓ POST /tasks
+Route + web/auth middleware
     ↓
-TaskController
+TaskController::store(StoreTaskRequest $request)
     ↓
-StoreTaskRequest / UpdateTaskRequest
+Form Request authorization and validation
     ↓
-TaskPolicy
+TaskPolicy authorization
     ↓
-Task model
+Task model + database insert
     ↓
-tasks migration
+Flash message + redirect to tasks.index
     ↓
-Twig task views
+Controller queries tasks and returns Twig view
 ```
 
-## Create flow
+Each step has one job. The route maps the HTTP method and path; middleware establishes request protections; the Form Request rejects invalid or unauthorized input; the policy answers whether the user may perform the action; the model persists data; and the response tells the browser what to display next.
 
-The create screen is exposed by `GET /tasks/create` and the submitted form by `POST /tasks`.
+## 1. Define the route
 
-The controller receives the typed request:
+The reference app's `routes/web.php` registers `POST /tasks` under the `web` and `auth` middleware groups and names it `tasks.store`. The form uses the route name rather than hard-coding a destination:
+
+```twig
+<form method="POST" action="{{ route('tasks.store') }}">
+    {{ csrf|raw }}
+    <!-- fields use title, description, status, due_date -->
+</form>
+```
+
+The CSRF field matters because this is a state-changing browser request.
+
+## 2. Validate input before persistence
+
+The controller declares the request type:
 
 ```php
 public function store(StoreTaskRequest $request)
+{
+    $data = $request->validated();
+    // Perform the use case with validated fields.
+}
 ```
 
-The validated payload is obtained with:
+`validated()` returns an array containing fields that were covered by the request rules and passed validation. If the request is invalid, the normal Form Request flow stops before the controller action can store the record. Do not use `request()->all()` as your database payload.
+
+## 3. Authorize and assign ownership
+
+The action authorizes the `create` ability against `Task::class`, then obtains the signed-in user. It assigns the ownership column on the server:
 
 ```php
-$data = $request->validated();
-```
-
-The controller then associates the task with the authenticated user and creates the model:
-
-```php
+$user = auth()->user();
 $data['user_id'] = $user->id;
+$data['status'] = $data['status'] ?? 'pending';
+
 Task::create($data);
 ```
 
-## Update flow
+The browser must not be allowed to decide whose task is created. The `$fillable` list on the model is an additional assignment safeguard, not a replacement for request validation or authorization.
 
-The update endpoint is:
+## 4. Return a clear result
 
-```text
-PUT /tasks/{task}
-```
+After creating the task, the controller flashes a success message and redirects to the task list. This is the Post/Redirect/Get pattern: refreshing the resulting page does not normally resubmit the original POST.
 
-The request is validated through `UpdateTaskRequest` and the controller authorizes the current user against the task before saving the changes.
+## Update and delete follow the same structure
 
-## Delete flow
+For `PUT /tasks/{task}`, the controller finds the task, authorizes `update` against that model, validates with `UpdateTaskRequest`, removes any ownership field from writable input, and saves. For `DELETE /tasks/{task}`, it finds the task, authorizes `delete`, then calls the model's delete behavior. Since `Task` uses `SoftDeletes`, the row is marked deleted and omitted from normal queries rather than immediately erased.
 
-The delete endpoint is:
+## Debugging checklist
 
-```text
-DELETE /tasks/{task}
-```
+- A 404 usually means the route or record was not found.
+- A validation redirect means one or more submitted values did not satisfy the Form Request rules.
+- A forbidden response usually means the policy denied the action.
+- A database error means you should inspect the migration, configured connection, and the shape of the inserted data.
+- A successful insert but missing list item may mean the list query intentionally filters by the signed-in user's `user_id`.
 
-The controller authorizes the operation through `TaskPolicy` and then calls the model's delete behavior. Because `Task` uses `SoftDeletes`, this is a soft delete.
-
-## Why this structure matters
-
-The reference application intentionally separates concerns:
-
-- routes describe HTTP entry points;
-- controllers coordinate use cases;
-- FormRequests authorize and validate request input;
-- policies express access rules;
-- models represent persisted data and relationships;
-- views render the result.
-
-This is the core MVC-oriented workflow that the rest of the PixelFix documentation builds on.
+For the specific route map, see [Task Manager Routing](routing.md). For the security logic, see [Validation](validation.md), [Authentication](authentication.md), and [Authorization](authorization.md).

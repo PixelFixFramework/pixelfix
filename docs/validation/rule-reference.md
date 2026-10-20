@@ -5,17 +5,17 @@ PixelFix parses validation rules from either pipe-delimited strings or arrays co
 Example:
 
 ```php
-'required|string|max:255'
+$titleRule = 'required|string|max:255';
 ```
 
 or:
 
 ```php
-[
+$titleRules = [
     'required',
     'string',
     'max:255',
-]
+];
 ```
 
 ## Rule list

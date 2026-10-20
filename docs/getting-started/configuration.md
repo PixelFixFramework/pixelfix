@@ -1,61 +1,53 @@
 # Configuration
 
-PixelFix loads environment variables and application configuration during bootstrap. The Task Manager reference application keeps its active configuration in `config/config.php` and loads it through the framework configuration bootstrapper.
+Configuration lets you change application behavior without rewriting PHP classes. For example, the database host can change between a developer's computer and production while the model classes stay the same.
 
-## Environment
+## Environment values and configuration are different
 
-The application loads environment variables before configuration is loaded. Application values can therefore be defined in `.env` and consumed with `env()`:
+The `.env` file contains values that vary by environment, such as credentials and the application URL. The active configuration is assembled in `config/config.php` after environment values are loaded.
+
+Example `.env` values:
+
+```dotenv
+APP_NAME="Task Manager"
+APP_ENV=local
+APP_DEBUG=true
+DB_CONNECTION=sqlite
+```
+
+The exact variables used depend on the active `config/config.php`. Adding a line to `.env` has no effect unless the configuration reads it.
+
+## Read values in application code
+
+Use `env()` when a configuration file needs to read an environment variable. For example, a simplified configuration file can return:
 
 ```php
-'name' => env('APP_NAME', 'PixelFix'),
+<?php
+
+return [
+    'app' => [
+        'name' => env('APP_NAME', 'PixelFix'),
+    ],
+];
 ```
 
-## Configuration repository
-
-Read configuration values with:
+The configuration loader reads the environment variable while assembling the configuration. In an application service or controller, read the resolved value with `config()`:
 
 ```php
-config('app.name');
-config('database.default');
-config('auth.defaults.guard');
+$appName = config('app.name', 'PixelFix');
+$defaultConnection = config('database.default');
 ```
 
-A default can be supplied:
+The second argument to `env()`/`config()` supplies a fallback when no value is configured. A fallback is not a substitute for requiring a production secret; validate mandatory deployment settings during setup.
 
-```php
-config('app.name', 'PixelFix');
-```
+## Current starter configuration
 
-## Main Task Manager configuration sections
+The reference application groups settings under areas including `app`, `auth`, `database`, `session`, `security`, `view`, `ui`, `logging`, and `providers`. Check `config/config.php` in your installed starter for the actual keys and defaults in use. Empty placeholder files do not necessarily contain the active values.
 
-The current reference application defines these top-level sections:
+## Keep secrets out of source control
 
-```text
-app
-auth
-database
-session
-security
-view
-ui
-logging
-providers
-```
+Do not commit `.env` values containing passwords, private keys, API tokens, or production credentials. Share a sanitized example file if teammates need to know which variable names to define.
 
-The exact keys should be read from the application's current configuration file. They are intentionally environment-driven so development and deployment settings can change without modifying application classes.
+## Troubleshooting
 
-## Authentication configuration
-
-The reference application defines a `web` session guard and a `users` database provider backed by `App\Models\User`.
-
-## Database configuration
-
-The current configuration contains named connection definitions for MySQL, MariaDB, PostgreSQL, SQLite, SQL Server, DBLIB, and MongoDB, with the default connection selected through `DB_CONNECTION`.
-
-## Views and application runtime
-
-View behavior, UI selection, session behavior, logging, and provider registration are configured from the same configuration repository.
-
-## Do not confuse empty starter files with active configuration
-
-The reference application's `config/` directory also contains several empty files such as `config/app.php` and `config/database.php`. They are not the active source of the loaded values in the uploaded application; `config/config.php` contains the populated configuration that is consumed by the bootstrap process. Documentation therefore follows the effective runtime configuration rather than the presence of placeholder filenames.
+If a changed value is not taking effect, verify the spelling of the config key, confirm that the application reads the matching environment variable, and check whether a long-running process needs to be restarted. For database settings, confirm the active connection and PHP driver before troubleshooting migrations.

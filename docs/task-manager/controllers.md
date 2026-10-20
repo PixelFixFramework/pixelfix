@@ -1,95 +1,64 @@
-# Task Manager: Controllers
+# Task Manager Controllers
 
-The Task Manager has four application controllers:
+Controllers coordinate a request. They should not replace routing, validation, authorization, or model responsibilities; they connect those parts into one use case.
 
-```text
-app/Http/Controllers/
-├── AuthController.php
-├── HomeController.php
-├── TaskController.php
-└── UserController.php
-```
+## The task controller's responsibilities
 
-## TaskController
+`TaskController` contains actions for listing tasks, showing the create form, storing a task, showing one task, editing, updating, and deleting. A common action has this flow:
 
-`TaskController` is the main CRUD example. Its public actions are:
+1. Obtain the current user when ownership matters.
+2. Find the requested record if the route contains an identifier.
+3. Authorize the action through the controller's `authorize()` method.
+4. Read validated data from a typed Form Request.
+5. Ask the model to perform database work.
+6. Return a view, redirect, or another HTTP response.
 
-```text
-index
-create
-store
-show
-edit
-update
-destroy
-```
+## A create action
 
-### Index
-
-The index action:
-
-1. obtains the authenticated user;
-2. authorizes the `viewAny` ability for `Task`;
-3. queries tasks belonging to that user;
-4. orders them by creation time descending;
-5. calculates dashboard counters;
-6. renders `tasks/index`.
-
-The ownership filter is explicit:
+The controller receives `StoreTaskRequest`, so PixelFix resolves the request's authorization and validation before the action uses its payload:
 
 ```php
-Task::query()
-    ->where('user_id', $user->id)
-    ->orderBy('created_at', 'desc')
-    ->get();
+public function store(StoreTaskRequest $request)
+{
+    $user = auth()->user();
+
+    $this->authorize('create', Task::class);
+
+    $data = $request->validated();
+    $data['user_id'] = $user->id;
+    $data['status'] = $data['status'] ?? 'pending';
+
+    Task::create($data);
+
+    flash('success', 'Task created successfully.');
+    return redirect_to_route('tasks.index');
+}
 ```
 
-## Create and store
+The code assigns `user_id` on the server so that form input cannot select another owner. `Task::create()` persists an allowed set of attributes and returns the created model; the controller then flashes a message and redirects instead of returning the whole HTML form response again.
 
-`create()` authorizes the `create` ability and renders the form.
+## Show an existing task
 
-`store()` accepts a `StoreTaskRequest`, authorizes creation again for the actual write operation, and persists only validated input.
+The show/edit/update/delete actions must handle a missing task and authorize against the actual model instance. A route parameter is user-controlled input even if it matches the expected numeric pattern. Never assume that knowing a task ID proves ownership.
 
-The controller then assigns ownership from the authenticated user:
+## Return JSON for an API endpoint
+
+A controller can explicitly return JSON instead of a Twig view:
 
 ```php
-$data['user_id'] = auth()->user()->id;
+public function indexJson()
+{
+    $user = auth()->user();
+    $tasks = Task::query()
+        ->where('user_id', $user->id)
+        ->get();
+
+    return response()->json($tasks);
+}
 ```
 
-This is an important application boundary: ownership is not accepted from the submitted form.
+This is an illustrative action; register a route to it and decide whether it should use authentication middleware. The ownership filter ensures the response only includes tasks for the current user. See [JSON Responses](../http/json-responses.md) before exposing model data through an API.
 
-## Show, edit, update, destroy
+## Keep controllers understandable
 
-The remaining actions resolve the task, handle missing records, authorize the operation against the concrete model, and then render, update, or delete as appropriate.
-
-The authorization calls are action-specific:
-
-```php
-$this->authorize('view', $taskModel);
-$this->authorize('update', $taskModel);
-$this->authorize('delete', $taskModel);
-```
-
-After a successful update or delete, the controller uses a flash message and redirects to another named route.
-
-## Response patterns
-
-The Task Manager demonstrates three common controller responses:
-
-```php
-return view('tasks/show', [
-    'task' => $taskModel,
-]);
-```
-
-```php
-return redirect_to_route('tasks.index');
-```
-
-```php
-return redirect_to_route('tasks.show', [
-    $taskModel->id,
-]);
-```
-
-This keeps read operations server-rendered while state-changing operations finish with redirects.
+If the same validation rules are repeated across controllers, move them into a Form Request. If the same ownership rule appears in several actions, keep it in a policy. If a query is reused, consider a model scope or a service. Avoid hiding a simple three-line operation behind many abstractions; extract code when doing so creates a clearer responsibility or reusable behavior.

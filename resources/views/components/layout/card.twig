@@ -1,53 +1,211 @@
 {# =====================================================
-   CARD COMPONENT
+   PIXELFIX CARD COMPONENT
    ===================================================== #}
 
 {% set cardTitle = title|default(null) %}
 {% set cardSubtitle = subtitle|default(null) %}
 {% set cardContent = content|default('') %}
 {% set cardFooter = footer|default(null) %}
+
 {% set cardClass = class|default('') %}
+{% set cardId = id|default('') %}
+{% set cardRole = role|default('') %}
+{% set cardAriaLabel = aria_label|default('') %}
+{% set cardAriaLabelledby = aria_labelledby|default('') %}
+{% set cardAriaDescribedby = aria_describedby|default('') %}
+
+{% set cardBodyClass = body_class|default('') %}
+{% set cardTitleClass = title_class|default('') %}
+{% set cardTitleId = title_id|default('') %}
+{% set cardSubtitleClass = subtitle_class|default('') %}
+{% set cardSubtitleId = subtitle_id|default('') %}
+{% set cardFooterClass = footer_class|default('') %}
+
+{% set cardContentPartial = content_partial|default('') %}
+{% set cardFooterPartial = footer_partial|default('') %}
+
+{% set cardEscapeContent = escape_content|default(false) %}
+{% set cardEscapeFooter = escape_footer|default(false) %}
+
+{% set cardTitleTag = title_tag|default('h5') %}
+{% set cardSubtitleTag = subtitle_tag|default('h6') %}
+
+{% set cardHeadingTags = [
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+] %}
+
+{% if cardTitleTag not in cardHeadingTags %}
+
+    {% set cardTitleTag = 'h5' %}
+
+{% endif %}
+
+{% if cardSubtitleTag not in cardHeadingTags %}
+
+    {% set cardSubtitleTag = 'h6' %}
+
+{% endif %}
+
+
+{# =====================================================
+   FOOTER VISIBILITY
+   ===================================================== #}
+
+{% set cardShowFooter =
+    (cardFooter is not null and cardFooter != '')
+    or cardFooterPartial
+%}
+
+{% if show_footer is defined and not show_footer %}
+
+    {% set cardShowFooter = false %}
+
+{% endif %}
+
+
+{# =====================================================
+   CARD
+   ===================================================== #}
 
 <div
-    class="
-        card
-        {{ cardClass }}
-    "
+    {% if cardId %}
+        id="{{ cardId }}"
+    {% endif %}
+    {% if cardRole %}
+        role="{{ cardRole }}"
+    {% endif %}
+    {% if cardAriaLabel %}
+        aria-label="{{ cardAriaLabel }}"
+    {% endif %}
+    {% if cardAriaLabelledby %}
+        aria-labelledby="{{ cardAriaLabelledby }}"
+    {% endif %}
+    {% if cardAriaDescribedby %}
+        aria-describedby="{{ cardAriaDescribedby }}"
+    {% endif %}
+    class="card {{ cardClass }}"
 >
 
-    <div class="card-body">
+    {# Allow embed callers to supply the complete card content while retaining #}
+    {# the default reusable card body for ordinary include callers. #}
+    {% block card_content %}
+    <div class="card-body {{ cardBodyClass }}">
 
-        {% if cardTitle %}
+        {% if cardTitle is not null and cardTitle != '' %}
 
-            <h5 class="card-title">
+            <{{ cardTitleTag }}
+                {% if cardTitleId %}
+                    id="{{ cardTitleId }}"
+                {% endif %}
+                class="card-title {{ cardTitleClass }}"
+            >
 
                 {{ cardTitle }}
 
-            </h5>
+            </{{ cardTitleTag }}>
 
         {% endif %}
 
-        {% if cardSubtitle %}
+        {% if cardSubtitle is not null and cardSubtitle != '' %}
 
-            <h6 class="card-subtitle mb-3 text-muted">
+            <{{ cardSubtitleTag }}
+                {% if cardSubtitleId %}
+                    id="{{ cardSubtitleId }}"
+                {% endif %}
+                class="card-subtitle mb-3 text-muted {{ cardSubtitleClass }}"
+            >
 
                 {{ cardSubtitle }}
 
-            </h6>
+            </{{ cardSubtitleTag }}>
 
         {% endif %}
 
-        {{ cardContent|raw }}
+        {% if cardContentPartial %}
+
+            {% include
+                cardContentPartial
+                with {
+                    cardTitle:
+                        cardTitle,
+
+                    cardSubtitle:
+                        cardSubtitle,
+
+                    cardContent:
+                        cardContent,
+
+                    cardFooter:
+                        cardFooter,
+                }
+                only
+            %}
+
+        {% elseif cardEscapeContent %}
+
+            {{ cardContent|e }}
+
+        {% else %}
+
+            {#
+                Backward compatibility: content is trusted HTML by default.
+                Set escape_content to true for plain text, or use a partial
+                for structured, application-authored markup.
+            #}
+
+            {{ cardContent|raw }}
+
+        {% endif %}
 
     </div>
+    {% endblock %}
 
-    {% if cardFooter %}
+    {% if cardShowFooter %}
 
-        <div class="card-footer">
+        {% if cardFooterPartial %}
 
-            {{ cardFooter|raw }}
+            {% include
+                cardFooterPartial
+                with {
+                    cardTitle:
+                        cardTitle,
 
-        </div>
+                    cardSubtitle:
+                        cardSubtitle,
+
+                    cardContent:
+                        cardContent,
+
+                    cardFooter:
+                        cardFooter,
+                }
+                only
+            %}
+
+        {% else %}
+
+            <div class="card-footer {{ cardFooterClass }}">
+
+                {% if cardEscapeFooter %}
+
+                    {{ cardFooter|e }}
+
+                {% else %}
+
+                    {# Footer retains the legacy trusted-HTML default. #}
+
+                    {{ cardFooter|raw }}
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
 
     {% endif %}
 

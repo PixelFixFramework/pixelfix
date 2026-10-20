@@ -7,7 +7,7 @@ Migrations describe database schema changes as versioned application code.
 Use:
 
 ```bash
-php pixelfix make:migration create_tasks_table
+php pixel make:migration create_tasks_table
 ```
 
 Migrations are stored under:
@@ -16,7 +16,7 @@ Migrations are stored under:
 database/migrations
 ```
 
-and use the `Database\\Migrations` namespace convention for named migration classes. The generated application also uses anonymous migration classes in its current migrations.
+and use the `Database\Migrations` namespace convention for named migration classes. The generated application also uses anonymous migration classes in its current migrations.
 
 ## Migration class
 
@@ -108,12 +108,12 @@ Whether transactional behavior is appropriate depends on the database driver's D
 ## Migration commands
 
 ```bash
-php pixelfix migrate
-php pixelfix migrate:status
-php pixelfix migrate:rollback
-php pixelfix migrate:reset
-php pixelfix migrate:refresh
-php pixelfix migrate:fresh
+php pixel migrate
+php pixel migrate:status
+php pixel migrate:rollback
+php pixel migrate:reset
+php pixel migrate:refresh
+php pixel migrate:fresh
 ```
 
 All migration commands include `--force|-f` where supported by the current command and the migrate command also exposes `--dry-run|-d`.
@@ -123,3 +123,14 @@ All migration commands include `--force|-f` where supported by the current comma
 `migrate:status` can inspect a specific migration.
 
 `migrate:fresh` drops all tables and runs the migrations again; use it only where rebuilding the database is acceptable.
+
+
+## A safe migration cycle
+
+During development, use this sequence: inspect the migration files, inspect migration status, apply pending changes, and verify the resulting table. If an applied migration needs to change, prefer creating a new migration that moves the schema from its current state to the desired state. Editing an old migration does not automatically change a database where that migration has already run.
+
+Before using rollback or schema-reset commands, read what the command will reverse and back up any data that matters. A schema migration is executable code against your database; run it first against a disposable local database rather than a production copy.
+
+## A beginner's table example
+
+A task table might include an ID, a title, an owner ID, timestamps, and—if the model uses soft deletes—a nullable `deleted_at` column. The migration defines these columns. The model then describes how the application reads and writes rows. Keeping those responsibilities separate makes it easier to reason about database changes.

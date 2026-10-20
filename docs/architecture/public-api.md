@@ -80,7 +80,7 @@ Workflow
 Display
 ```
 
-An application developer normally interacts with that pipeline through `php pixelfix make:*`, not by constructing every stage manually.
+An application developer normally interacts with that pipeline through the public `make:*` generator commands listed in the [Command-Line Reference](../console/command-reference.md), not by constructing every stage manually.
 
 ## Documentation policy
 

@@ -1,39 +1,74 @@
 # Query Scopes
 
-PixelFix's model/query layer supports global scopes and query composition.
+A **scope** adds a reusable rule to a database query. PixelFix supports global scopes, which are applied automatically to a model's queries, and ordinary query conditions, which you add only when a particular operation needs them.
 
 ## Global scopes
 
-A model can register a global scope with:
+Use a global scope for a rule that should apply whenever a model is queried—for example, hiding inactive records by default. A model can register a named scope with `addGlobalScope()`:
 
 ```php
-ModelClass::addGlobalScope(
-    'active',
-    function (QueryBuilder $query) {
-        $query->where('active', true);
+use PixelFix\Framework\Database\Query\QueryBuilder;
+
+class Task extends Model
+{
+    protected static string $table = 'tasks';
+
+    protected static function boot(): void
+    {
+        static::addGlobalScope(
+            'active',
+            function (QueryBuilder $query) {
+                $query->where('active', '=', true);
+            }
+        );
     }
-);
+}
 ```
 
-Global scopes are automatically applied to the model's queries unless they are explicitly removed.
+The registered callback receives a query builder and adds a condition to it. With this scope, a normal `Task::query()->get()` includes only rows where `active` is true. Confirm the model lifecycle hook and `addGlobalScope()` signature against your installed version when registering scopes in a custom base model.
 
-## Removing scopes
+## Why a global scope affects results
 
-The query builder supports:
+Suppose the `tasks` table contains active and archived rows. A global scope causes ordinary model queries to hide the archived rows even when the call site does not explicitly mention `active`. This is convenient for a rule that should always apply, but it can surprise a developer who expects every database row to be returned.
 
-```php
-$query->withoutGlobalScope('active');
-$query->withoutGlobalScopes();
-```
+Use global scopes only for genuinely model-wide rules. A tenant boundary or soft-delete rule may need to apply everywhere; a filter like “show pending tasks on this screen” usually belongs in that screen's query instead.
 
-Use scope removal deliberately because it changes the normal visibility rules of the model.
+## Remove a named scope deliberately
 
-## Practical use
-
-Global scopes are useful for cross-cutting model constraints such as tenant boundaries or default visibility. Domain-specific filtering that belongs to an individual use case is often clearer as an ordinary query:
+The query builder exposes:
 
 ```php
-Task::query()
-    ->where('status', 'pending')
+$allTasks = Task::query()
+    ->withoutGlobalScope('active')
     ->get();
 ```
+
+`withoutGlobalScope('active')` removes only the named scope from that query. It does not permanently change the model's configuration. The removal applies to the query being built.
+
+To remove every registered global scope:
+
+```php
+$tasks = Task::query()
+    ->withoutGlobalScopes()
+    ->get();
+```
+
+Removing all scopes can bypass important visibility rules, including soft-delete constraints. Do this only when the operation is specifically intended to access those records and is protected by appropriate authorization.
+
+## Prefer an ordinary query for one-off filters
+
+For filters that vary by user action, add conditions directly:
+
+```php
+$pendingTasks = Task::query()
+    ->where('status', '=', 'pending')
+    ->where('user_id', '=', auth()->id())
+    ->orderBy('created_at', 'desc')
+    ->get();
+```
+
+This query applies the `pending` and ownership filters only to this operation. It is easier for another developer to understand why those rows are selected because the conditions are visible at the place the query is written.
+
+## Debugging unexpected query results
+
+If records are missing, check for global scopes before rewriting the query. Look for scopes registered by the model or inherited conventions, and remember that soft deletes are implemented through a global scope. Temporarily removing a scope may help diagnose a query, but do not leave a visibility bypass in production code without a clear reason.

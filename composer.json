@@ -9,6 +9,7 @@
         "npm-asset/bootstrap": "^5.3.8",
         "npm-asset/bootstrap-icons": "^1.13.1",
         "npm-asset/jquery": "^3.7.1",
+        "npm-asset/overlayscrollbars": "^2.11.0",
         "npm-asset/toastr": "^2.1.4",
         "npm-asset/zebra_dialog": "^3.1.0"
     },

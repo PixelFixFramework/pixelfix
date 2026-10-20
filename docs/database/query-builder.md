@@ -66,10 +66,12 @@ Task::query()
 Null checks and membership are available through:
 
 ```php
-->whereNull('deleted_at')
-->whereNotNull('due_date')
-->whereIn('status', ['pending', 'in_progress'])
-->orWhereIn('status', ['completed'])
+$tasks = Task::query()
+    ->whereNull('deleted_at')
+    ->whereNotNull('due_date')
+    ->whereIn('status', ['pending', 'in_progress'])
+    ->orWhereIn('status', ['completed'])
+    ->get();
 ```
 
 The builder also supports `whereRaw()`, `orWhereRaw()`, `whereExists()`, `whereNotExists()`, and `search()`.
@@ -98,7 +100,9 @@ $tasks = db()
 ## Grouping, ordering, limit, and offset
 
 ```php
-$query
+$query = Task::query();
+
+$summary = $query
     ->groupBy('status')
     ->having('COUNT(*)', '>', 1)
     ->orderBy('created_at', 'desc')
@@ -112,7 +116,7 @@ Convenience methods `orderByAsc()` and `orderByDesc()` are available.
 
 The builder supports:
 
-```php
+```text
 get()
 first()
 firstOrFail()
@@ -130,11 +134,13 @@ It also provides `cursor()`, `chunk()`, `chunkById()`, and `lazy()` for processi
 ## Aggregates
 
 ```php
-$query->count();
-$query->sum('amount');
-$query->avg('amount');
-$query->min('amount');
-$query->max('amount');
+$query = db()->table('tasks');
+
+$total = $query->count();
+$sum = $query->sum('amount');
+$average = $query->avg('amount');
+$minimum = $query->min('amount');
+$maximum = $query->max('amount');
 ```
 
 ## Inserts and updates

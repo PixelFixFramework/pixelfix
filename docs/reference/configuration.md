@@ -1,88 +1,64 @@
 # Configuration Reference
 
-PixelFix exposes configuration through the `PixelFix\\Framework\\Config\\Config` class and its `Repository` subclass. Configuration is an in-memory nested array with dot-notation lookup.
+PixelFix loads the application's configuration into the framework configuration repository during bootstrap. The starter application defines the main settings in `config/config.php`; environment variables are read there and then exposed through `config()` and the repository. Do not assume that every conventional configuration filename is loaded automatically.
 
-## Reading values
+## Reading configuration
 
 ```php
-$value = app(\PixelFix\Framework\Config\Config::class)->get('app.name');
-
-$value = app(\PixelFix\Framework\Config\Config::class)
-    ->get('database.default', 'sqlite');
+$name = config('app.name');
+$connection = config('database.default', 'sqlite');
+$enabled = config('websockets.enabled', false);
 ```
 
-`get()` returns the supplied default when a segment does not exist.
-
-## Checking values
+Dot notation reads nested values. Supply a fallback for optional keys. `config('...')` is the application-facing helper; `app(PixelFix\Framework\Config\Config::class)` resolves the configuration service for direct repository operations.
 
 ```php
+$config = app(PixelFix\Framework\Config\Config::class);
+$config->get('app.name');
 $config->has('database.default');
 $config->missing('database.default');
-```
-
-## Setting values
-
-```php
-$config->set('app.name', 'Task Manager');
-$config->set('database.connections.mysql.host', '127.0.0.1');
-```
-
-Intermediate arrays are created automatically when required.
-
-## Merging configuration
-
-```php
-$config->merge([
-    'app' => [
-        'debug' => true,
-    ],
-]);
-```
-
-`merge()` uses recursive array replacement, so nested configuration can be extended without replacing unrelated siblings.
-
-## Replacing and resetting
-
-```php
-$config->replace($items);
-$config->reset();
+$config->set('app.name', 'Example Portal');
+$config->merge(['app' => ['debug' => false]]);
 $config->all();
 ```
 
-`replace()` discards the current configuration and installs the supplied array. `reset()` clears everything. `all()` returns the complete configuration array.
+`set()` creates missing intermediate arrays. `merge()` recursively replaces nested values while preserving unrelated siblings. `replace()` replaces the full configuration array and `reset()` clears it; use these low-level operations deliberately.
 
-## Application configuration loading
+## Bootstrap order
 
-The framework provides the configuration repository as part of the application container. An application can load environment values and configuration during bootstrap before providers and the console are booted.
+The starter bootstrap loads environment values and configuration before core services and application providers are initialized. Services that depend on configured values should therefore be resolved after configuration loading. Application providers should register application behavior, not mutate unrelated configuration as a workaround for missing bootstrap setup.
 
-A typical Task Manager bootstrap sequence is:
+## Configuration groups in the starter
 
-```text
-LoadEnvironment
-    ↓
-LoadConfiguration
-    ↓
-CoreBootstraper
-    ↓
-ProvidersBootstraper
-    ↓
-BootConsole
-    ↓
-Application::boot()
-```
+The current starter `config/config.php` defines the following top-level groups:
 
-This ordering matters: services that depend on configuration should be created after configuration has been loaded.
+| Group | Purpose |
+|---|---|
+| `app` | Application name, environment, base URL/path and timezone |
+| `auth` | Authentication defaults, providers/guards and remember-me settings |
+| `cache` | Default cache store, file path and lock store |
+| `rate_limiting` | Prefix and authentication attempt limits/decay |
+| `database` | Default driver and connection definitions |
+| `session` | Session driver, lifetime, cookie and encryption settings |
+| `security` | CSRF and password-reset security settings |
+| `view` | Twig view locations/debug/cache configuration |
+| `ui` | UI driver and Zebra Dialog theme |
+| `logging` | Log channel/level/path settings |
+| `mail` | SMTP transport, sender and timeout |
+| `scheduling` | Scheduler timezone |
+| `notifications` | Default notification channels and database table |
+| `broadcasting` | Default broadcaster and Redis prefix |
+| `websockets` | WebSocket host/port, allowed origins, frame limits and relay settings |
+| `redis` | Named Redis connections and Pub/Sub connection |
+| `events` | Event cache/manifest settings |
+| `queue` | Queue driver, retry, database/Redis tables and connection settings |
+| `schedules` | Configuration for schedules registered by this application |
+| `providers` | Provider configuration/registration |
 
-## Configuration conventions
+The exact group values and defaults in the application's `config/config.php` are authoritative for that application. The framework APIs and default behavior are described in the subsystem references for [Cache](../cache/overview.md), [Queues](../queue/overview.md), [Events](../events/overview.md), [Scheduling](../scheduling/overview.md), [Mail](../mail/overview.md), [Notifications](../notifications/overview.md), [Redis](../redis/overview.md), [Broadcasting](../broadcasting/overview.md), and [WebSockets](../websockets/overview.md).
 
-Keep configuration concerns separate from application logic. Prefer configuration keys such as:
+## Environment values versus application configuration
 
-```text
-app.*
-database.*
-auth.*
-session.*
-view.*
-```
+`.env` values are deployment-specific inputs. The starter's `config/config.php` maps them into namespaced configuration keys. Prefer consuming `config()` from application code after bootstrap, instead of calling `env()` throughout controllers/services. Each installed application has its own `.env`; matching key names across applications do not cause values to be shared.
 
-The current Task Manager repository contains a central `config/config.php`; the framework also supports the configuration repository abstraction used by the bootstrap process. When describing an application's configuration, follow the actual files and bootstrap code present in that application rather than assuming every conventional config filename is loaded automatically.
+For the current environment-key inventory and which subsystem uses each group, see [Environment Reference](environment.md).

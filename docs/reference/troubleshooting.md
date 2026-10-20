@@ -1,97 +1,59 @@
 # Troubleshooting
 
-This page collects the most useful checks for a PixelFix application that is not behaving as expected.
+When something goes wrong, change one thing at a time and use the error message to narrow the problem. The most common failures involve the current directory, route registration, database configuration, input validation, authorization, or a Twig template reference.
 
-## Confirm the application boots
+## The console says a command is not found
 
-From the application root, run:
+Run commands from the application root and check:
 
-```bash
-php pixelfix help
+```powershell
+php pixel help
 ```
 
-A successful result confirms that Composer autoloading, application bootstrap, console registration, and the command kernel can initialize together.
+The command must exist in the installed framework version. Do not assume that commands from another framework or an older PixelFix version exist. Use the installer documentation for project-creation tasks; application commands are run after a project exists.
 
-## Confirm the routes
+## The application will not start
 
-Use:
+Check PHP and dependencies:
 
-```bash
-php pixelfix route:list
+```powershell
+php -v
+composer install
 ```
 
-When route caching is involved, compare the live and cached route views when supported by the current command options:
+Review the first exception in the console output and the application logs under `storage/`. Check that `bootstrap/app.php`, `config/config.php`, and `public/index.php` exist in the expected locations.
 
-```bash
-php pixelfix route:list --live
-php pixelfix route:list --cached
+## A URL returns 404
+
+Inspect the route list:
+
+```powershell
+php pixel route:list --live
+php pixel route:list --cached
 ```
 
-## Confirm the database state
+If the live list contains the route but the cached list does not, clear or rebuild the route cache as appropriate. Check the HTTP method as well: a route declared for POST does not handle a browser GET request to the same path.
 
-Inspect migrations before changing the schema:
+## Database connection or migration errors
 
-```bash
-php pixelfix migrate:status
-```
+Confirm that the database server is running, the active `config/config.php` reads the expected `.env` values, the database/user exist, and the current PHP runtime has the matching PDO driver enabled. Review `migrate:status` before trying to migrate. Do not use a destructive rebuild to diagnose a production connection issue.
 
-Apply pending migrations with:
+## Validation or CSRF errors
 
-```bash
-php pixelfix migrate
-```
+For validation, confirm the field names in the form match the rules in the Form Request and that the controller uses validated data. For CSRF errors, check that the form submits a token and that session/web middleware is active. Do not disable protection to make a form work.
 
-Resetting or refreshing a development database can be destructive. Treat these commands as development-maintenance operations and verify the target database before running them.
+## Authorization errors
 
-## Confirm validation behavior
+Authentication means the user is signed in; authorization means that user is permitted to perform this action. Check the active guard, policy registration, method name, and ownership rule. Hiding a button in Twig does not protect a route—server-side authorization is required.
 
-When a FormRequest rejects input, inspect three places:
+## Twig errors
 
-```text
-FormRequest::authorize()
-FormRequest::rules()
-Controller::validated()
-```
+Confirm the view name maps to a file under `resources/views/`, that the template extends the right layout, and that each included component exists. If Twig says a variable is undefined, check the controller's data keys and the name used in the template. A generated view does not automatically import components it includes.
 
-The controller should consume validated data rather than bypassing the FormRequest with raw request input.
+## General debugging method
 
-## Confirm authorization behavior
-
-For a policy-based operation, verify:
-
-```text
-Model ↔ Policy registration
-          ↓
-Controller authorize(...)
-          ↓
-Policy method
-```
-
-For gate-based checks, verify that the gate is defined during provider boot before the application calls `Gate::authorize()` or the corresponding check.
-
-## Confirm views
-
-If a template fails to render, verify:
-
-1. The template exists under `resources/views`.
-2. The controller uses the correct view name.
-3. Variables passed to `view()` match the names referenced by the Twig template.
-4. The application view configuration points to the expected template location.
-
-## Debugging principle
-
-Start with the narrowest observable boundary:
-
-```text
-CLI boot
-→ routes
-→ middleware
-→ controller
-→ request validation
-→ authorization
-→ database
-→ view
-→ response
-```
-
-The Task Manager request trace follows this same sequence and is a useful worked example when debugging a real feature.
+1. Reproduce the problem with the smallest request or command.
+2. Read the exact reason and the first application file in the stack trace.
+3. Verify the relevant configuration/path/name in the source.
+4. Fix one cause, then rerun the narrowest relevant test.
+5. Add a regression test if this behavior should remain correct in the future.

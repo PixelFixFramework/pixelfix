@@ -1,25 +1,16 @@
 # Factories
 
-Factories generate model instances and database records for development, tests, and seed data.
+A factory describes how to create model attributes for realistic test and development data. It keeps sample-data rules out of controllers and makes it easier to create many related records in a repeatable way.
 
-## Creating a factory
+## Create a factory
 
-Generate one with:
-
-```bash
-php pixelfix make:factory TaskFactory
+```powershell
+php pixel make:factory TaskFactory --model=Task
 ```
 
-The convention is:
+Factory classes normally live in `database/factories/` under the `Database\Factories` namespace.
 
-```text
-database/factories
-Database\\Factories
-```
-
-## Defining a factory
-
-A factory declares the model it creates and a default attribute definition:
+## Define the data
 
 ```php
 class TaskFactory extends Factory
@@ -39,92 +30,53 @@ class TaskFactory extends Factory
 }
 ```
 
-## Creating records
+`model()` tells the factory which model to create. `definition()` returns the default attribute values. The Faker helper generates plausible text or other values so every test does not need to hard-code a title.
+
+## Build records or just attributes
+
+To create ten tasks in the database:
 
 ```php
-TaskFactory::new()
+$tasks = TaskFactory::new()
     ->count(10)
     ->create();
 ```
 
-For an in-memory model without persistence:
+`create()` persists records and returns the created model(s). For an in-memory model without writing to the database:
 
 ```php
 $task = TaskFactory::new()->makeOne();
 ```
 
-The factory also provides `makeMany()`, `createMany()`, `raw()`, and corresponding single-record methods.
+Use `makeOne()` when a unit test needs a model-shaped object but should not require a database. Use `create()` when the test is about persistence or a database-backed workflow.
 
-## States
+Other factory methods include `raw()` for attributes, `makeMany()` for in-memory models, and `createMany()` for persisted records. The returned value differs by method, so choose based on whether you need an array of attributes, one model, a collection of models, or rows saved to the database.
 
-Use `state()` to modify the base definition:
-
-```php
-$completed = TaskFactory::new()
-    ->state([
-        'status' => 'completed',
-    ]);
-```
-
-A state can also be a callback receiving the resolved attributes and factory.
-
-## Sequences
-
-Use `sequence()` for rotating attribute states:
+## Change one or more fields with a state
 
 ```php
-TaskFactory::new()
-    ->sequence(
-        ['status' => 'pending'],
-        ['status' => 'completed']
-    )
-    ->count(4)
-    ->create();
+$completedTaskFactory = TaskFactory::new()
+    ->state(['status' => 'completed']);
 ```
 
-The sequence cycles through its state definitions.
+A state overlays values on top of the default definition. This lets a test create a completed task without duplicating the title and other common fields. A sequence can rotate through several states across a batch.
 
-## Relationships
+## Create related records
 
-Factories can create related models with `has()` and associate a parent with `for()`:
+Factories support related-model helpers such as `has()` and `for()`:
 
 ```php
 UserFactory::new()
-    ->has(
-        TaskFactory::new()->count(3)
-    )
+    ->has(TaskFactory::new()->count(3))
     ->create();
 ```
 
-For a child factory:
-
-```php
-TaskFactory::new()
-    ->for(
-        UserFactory::new(),
-        'user'
-    )
-    ->create();
-```
-
-Nested factories can also be supplied directly inside attribute arrays where supported by the factory resolver.
+This expresses the intent “create a user with three tasks.” Related factories are particularly useful when a database schema requires a valid owner foreign key.
 
 ## Callbacks
 
-Factories support lifecycle callbacks:
-
-```php
-->afterMaking(function ($model, $factory) {
-    // ...
-})
-```
-
-```php
-->afterCreating(function ($model, $factory) {
-    // ...
-})
-```
+`afterMaking()` runs after a model has been built in memory; `afterCreating()` runs after it has been persisted. Use these callbacks for related setup that must happen at the corresponding stage, not as a place for unrelated application business logic.
 
 ## Task Manager example
 
-`TaskFactory` defines realistic titles, descriptions, statuses, and due dates. `UserFactory` creates users with hashed passwords. `TaskSeeder` uses `TaskFactory::new()->count(10)->create()` after locating an existing user so that generated tasks have an owner.
+The Task Manager's task factory produces plausible titles and statuses. Its task seeder first ensures a user exists, then creates tasks associated with that user. The ordering matters because a task's `user_id` represents ownership.

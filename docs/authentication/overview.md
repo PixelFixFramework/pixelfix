@@ -7,33 +7,37 @@ PixelFix provides configurable authentication through guards and user providers.
 Authentication is configured under the `auth` key in the application's configuration:
 
 ```php
-'auth' => [
-    'defaults' => [
-        'guard' => 'web',
-    ],
+<?php
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
+use App\Models\User;
+
+return [
+    'auth' => [
+        'defaults' => [
+            'guard' => 'web',
+        ],
+        'guards' => [
+            'web' => [
+                'driver' => 'session',
+                'provider' => 'users',
+            ],
+        ],
+        'providers' => [
+            'users' => [
+                'driver' => 'database',
+                'model' => User::class,
+                'password_field' => 'password',
+            ],
         ],
     ],
-
-    'providers' => [
-        'users' => [
-            'driver' => 'database',
-            'model' => User::class,
-            'password_field' => 'password',
-        ],
-    ],
-],
+];
 ```
 
 The default guard is selected from `auth.defaults.guard`.
 
 ## Authenticatable model
 
-An application user model implements `PixelFix\\Framework\\Auth\\Contracts\\Authenticatable` and commonly uses the framework `Authenticatable` trait:
+An application user model implements `PixelFix\Framework\Auth\Contracts\Authenticatable` and commonly uses the framework `Authenticatable` trait:
 
 ```php
 use PixelFix\Framework\Auth\Authenticatable;

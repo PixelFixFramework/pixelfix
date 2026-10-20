@@ -1,114 +1,49 @@
 # Trace a Task Manager Request
 
-The Task Manager is most useful as a framework learning tool when a complete request is followed through the system.
+This walkthrough shows how to follow a request across the framework, instead of treating a controller as magic. We'll trace `GET /tasks/12` (replace `12` with a real task ID in your local database).
 
-This example traces the task details page.
+## 1. The browser sends a request
 
-## Route declaration
+The browser requests `GET /tasks/12`. The HTTP method and URL must match a route declaration. A route is not just a PHP method: it also carries a path, name, and middleware configuration.
 
-The route is declared in `routes/web.php`:
+## 2. The router matches the route
 
-```php
-Route::get(
-    '/tasks/{task:\\d+}',
-    [
-        TaskController::class,
-        'show',
-    ]
-)->name('tasks.show');
-```
+`routes/web.php` declares `/tasks/{task:\d+}` and points it to `TaskController::show()`. The `\d+` constraint means the parameter is expected to contain digits. A non-numeric path will not match this route.
 
-The `\\d+` constraint means the dynamic `task` segment must be numeric.
+## 3. Middleware runs
 
-## Web middleware
+The route is inside the `web` and `auth` groups. The web middleware establishes browser session/CSRF behavior; the auth middleware prevents an unauthenticated request from continuing to the protected action. Middleware can reject or modify a request before the controller runs.
 
-The route is inside the `web` middleware group, which currently contains:
+## 4. The controller looks up the record
 
-```text
-session
-csrf
-```
+`TaskController::show()` receives the route identifier, calls its task lookup helper, and handles a missing record before rendering. Finding a record is not authorization: a valid ID can belong to another user.
 
-Because this request is a GET request, the CSRF middleware does not require a token. The session middleware still starts the session.
+## 5. The policy checks ownership
 
-## Routing
+The controller calls `authorize('view', $taskModel)`. PixelFix resolves the registered `TaskPolicy` and calls the relevant ability with the current user and task. The reference policy allows viewing only if the task's `user_id` matches the authenticated user's identifier. A denied decision stops normal rendering.
 
-The router matches the URI and stores the captured `task` value in the route parameter set.
+## 6. The controller returns a view
 
-PixelFix can then use route model binding to resolve a model from that parameter when the route/controller configuration requests it. The Task Manager also demonstrates explicit model lookup in controller code.
-
-## Controller
-
-The task controller obtains the authenticated user, checks the relevant policy, loads the requested task, and returns a view. The important separation is:
-
-```text
-HTTP orchestration → Controller
-Authorization      → Policy
-Data access        → Model / Query Builder
-Presentation       → Twig View
-```
-
-## Model query
-
-The current reference implementation resolves the task in a small controller helper:
-
-```php
-return Task::query()
-    ->where('id', (int) $taskId)
-    ->first();
-```
-
-The controller then passes the resolved model through `TaskPolicy::view()`. The policy is the authoritative ownership check for the page.
-
-## Authorization
-
-Policy checks use the framework authorization layer. The Task Manager's `TaskPolicy::view()` compares the task owner with the authenticated user's identity.
-
-## View rendering
-
-The controller renders:
+After the lookup and authorization succeed, the controller calls:
 
 ```php
 return view('tasks/show', [
-    'task' => $task,
+    'task' => $taskModel,
 ]);
 ```
 
-Twig receives the `task` variable and the surrounding layout/components render the final HTML.
+The string `tasks/show` points to `resources/views/tasks/show.twig`. The array makes the model available in Twig as `task`.
 
-## Response
+## 7. Twig composes the page
 
-The controller returns an `HtmlResponse`. The HTTP kernel ultimately sends its headers and rendered content to the browser.
+The page extends the application layout and includes reusable components for the task details and actions. The template presents values; database lookup, authorization, and persistence remain in the PHP layer.
 
-## Complete path
+## What to inspect when it fails
 
-```text
-Browser
-  ↓
-public/index.php
-  ↓
-Application bootstrap
-  ↓
-HTTP pipeline
-  ↓
-web middleware
-  ↓
-Router
-  ↓
-TaskController
-  ├── authentication context
-  ├── policy authorization
-  └── ORM query
-          ↓
-       Task model
-          ↓
-       Database
-  ↓
-Twig view
-  ↓
-HtmlResponse
-  ↓
-Browser
-```
+- 404: confirm the route matches and the task ID exists.
+- Redirect to login: the request was not authenticated.
+- Forbidden response: the policy denied the operation.
+- Blank or malformed page: check the view name, Twig syntax, and variables passed to `view()`.
+- Database error: verify migrations, connection settings, and the task row.
 
-This same mental model applies to the Task Manager's other browser workflows.
+Try the same trace for `PUT /tasks/12`: it adds request validation and persistence after authorization. See [Routing](routing.md), [Authentication](authentication.md), and [Authorization](authorization.md).

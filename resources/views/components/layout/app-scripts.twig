@@ -1,0 +1,167 @@
+{% set appUiDriver = ui|default(config('ui.driver')|default('toastr')) %}
+{% set appFlashMessages = flash_messages()|default({}) %}
+    {# =====================================================
+       JQUERY
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/jquery.min.js') }}"
+    ></script>
+
+
+    {# =====================================================
+       BOOTSTRAP
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/bootstrap.bundle.min.js') }}"
+    ></script>
+
+
+    {# =====================================================
+       TOASTR
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/toastr.min.js') }}"
+    ></script>
+
+
+    {# =====================================================
+       ZEBRA DIALOG
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/zebra_dialog.min.js') }}"
+    ></script>
+
+
+    {# =====================================================
+       OVERLAYSCROLLBARS
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/overlayscrollbars.browser.es6.min.js') }}"
+    ></script>
+
+
+    {# =====================================================
+       CLIENT CONFIG
+       ===================================================== #}
+
+    <script>
+
+        window.uiDriver = "{{ appUiDriver|e('js') }}";
+
+        window.flashMessages = [
+
+            {% for type, messages in appFlashMessages %}
+
+                {% for message in messages %}
+
+                    {
+                        type: "{{ type }}",
+                        message: "{{ message|e('js') }}"
+                    },
+
+                {% endfor %}
+
+            {% endfor %}
+
+        ];
+
+    </script>
+
+
+    {# =====================================================
+       TOASTR CONFIG
+       ===================================================== #}
+
+    <script>
+
+        if (typeof toastr !== 'undefined') {
+
+            toastr.options = {
+
+                closeButton: true,
+
+                progressBar: true,
+
+                positionClass: "toast-top-right",
+
+                timeOut: 3000
+
+            };
+
+        }
+
+    </script>
+
+
+    {# =====================================================
+       OVERLAYSCROLLBARS CONFIG
+       ===================================================== #}
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const sidebarWrapper =
+                document.querySelector('.pixelfix-sidebar-wrapper');
+
+            const isMobile =
+                window.innerWidth <= 992;
+
+            if (
+                sidebarWrapper &&
+                !isMobile &&
+                typeof OverlayScrollbarsGlobal !== 'undefined' &&
+                typeof OverlayScrollbarsGlobal.OverlayScrollbars !== 'undefined'
+            ) {
+
+                OverlayScrollbarsGlobal.OverlayScrollbars(
+                    sidebarWrapper,
+                    {
+                        scrollbars: {
+                            theme: 'os-theme-light',
+                            autoHide: 'leave',
+                            clickScroll: true
+                        }
+                    }
+                );
+
+            }
+
+        });
+
+    </script>
+
+
+    {# =====================================================
+       APPLICATION
+       ===================================================== #}
+
+    <script
+        src="{{ asset('js/app.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/sidebar.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/header.js') }}"
+    ></script>
+
+    <script
+        src="{{ asset('js/theme.js') }}"
+    ></script>
+
+
+
+    {# =====================================================
+       LIVE NOTIFICATIONS
+       ===================================================== #}
+
+    <script src="{{ asset('js/pixelfix-broadcasting.js') }}"></script>
+    <script src="{{ asset('js/pixelfix-notifications.js') }}"></script>

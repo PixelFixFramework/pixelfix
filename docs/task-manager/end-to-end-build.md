@@ -1,82 +1,97 @@
 # Building the Task Manager End to End
 
-This guide describes the feature-building sequence demonstrated by the reference application.
+This guide explains the order in which to build a small data-driven application. It assumes you already have a PixelFix application. If you still need to create the project, use the separate PixelFix Installer and follow that package's instructions; the application console is for work inside an existing project.
 
-## 1. Create the application
+## 1. Prepare the application
 
-Create a PixelFix application and install its dependencies:
+From the directory containing `composer.json` and the `pixel` launcher, install dependencies if necessary:
 
-```bash
-php pixelfix new task-manager
+```powershell
 composer install
 ```
 
-## 2. Create the domain models
+Configure `.env` for your local database and confirm `config/config.php` reads those values. Do not commit credentials. Before changing a database, confirm it points to your development database rather than a shared or production database.
 
-The application contains `User` and `Task` models. The Task model maps to `tasks` and defines a `belongsTo` relationship to `User`.
+## 2. Design the data before writing controllers
 
-## 3. Create database migrations
+The Task Manager has two central records:
 
-The user migration creates the authentication fields, timestamps, remember token, and soft-delete column. The task migration creates the owner foreign key, title, description, status, due date, timestamps, and soft-delete column.
+- **User:** identifies the person who owns tasks and can sign in.
+- **Task:** stores task information and a `user_id` foreign-key value linking the task to its owner.
 
-Run migrations with:
+For each field, decide its type, whether it is nullable, whether it needs an index, and whether a user is allowed to edit it. These choices shape the migration, model, validation rules, and forms.
 
-```bash
-php pixelfix migrate
+## 3. Create and apply migrations
+
+Migrations define the database structure. The user table stores authentication-related data; the task table stores its owner, title, description, status, due date, timestamps, and soft-delete timestamp.
+
+Review migration state before applying changes:
+
+```powershell
+php pixel migrate:status
+php pixel migrate
 ```
+
+Only use schema-reset commands on a disposable development database. Commands that rebuild or drop tables may permanently remove records.
 
 ## 4. Add factories and seeders
 
-Factories provide realistic development data. `DatabaseSeeder` calls the user and task seeders, while `TaskSeeder` attaches generated tasks to an existing user.
+A factory describes sample model attributes—for example, a plausible task title and status. A seeder orchestrates data creation, often by calling factories and saving models. This separation helps the same factory be reused in tests and development data setup.
 
-Run:
-
-```bash
-php pixelfix db:seed
+```powershell
+php pixel db:seed --list
+php pixel db:seed --dry-run
+php pixel db:seed
 ```
+
+Use the preview and list options to understand what will run before inserting sample data.
 
 ## 5. Build authentication
 
-`AuthController` handles registration, login, and logout. `LoginRequest` and `RegisterUserRequest` validate form input before the controller changes authentication state.
+Registration and login need routes, controller actions, validation, and views. Form Requests define accepted input. The controller should use validated data rather than trusting every value in the raw request. Login checks credentials through the configured authentication guard, and logout clears the user's authentication state.
 
-## 6. Build authorization
+The login interface is a view composed from components; generating a view does not automatically import the component it references. Import the required components into the application, then include them from the view.
 
-`PolicyServiceProvider` maps `Task` to `TaskPolicy` and `User` to `UserPolicy`. `AuthServiceProvider` defines the `access-admin` gate.
+## 6. Add authorization before exposing task operations
 
-## 7. Build task routes
+A task owner must be able to work with their own tasks, but another signed-in user should not automatically gain access. The Task policy contains decisions such as viewing a task, updating it, and deleting it. The controller invokes the policy before sensitive operations.
 
-The web routes expose list, create, store, show, edit, update, and destroy operations. Browser routes are placed inside the `web` middleware group.
+Filtering a list by `user_id` is useful, but it does not replace checking authorization for a single task loaded by ID.
 
-## 8. Build validation
+## 7. Validate task input
 
-`StoreTaskRequest` and `UpdateTaskRequest` define the request rules. The controller consumes only `$request->validated()` rather than raw request data.
+The store and update Form Requests define which values are accepted. For example, the title might be required and limited in length, while status must be one of the supported values. The controller should persist `$request->validated()` or explicitly chosen validated fields—not the entire raw request payload.
 
-## 9. Build views
+Validation protects data quality. Authorization protects access. Most applications need both.
 
-Twig templates use the application layout and reusable components. Forms include the `csrf` global, generate URLs through named routes, and can display old input and validation errors.
+## 8. Compose the views from components
 
-## 10. Add application tests
+Use generic views for pages and components for reusable interface pieces. A view can include a button, form control, alert, navigation bar, or task-specific component. Reuse shared components from their canonical domain rather than copying them into each feature directory.
 
-Use the framework's test case and test runner to protect the behavior that matters to the application.
+After adding an include, check that its component file exists at that path. Importing a component and generating a view are separate operations.
 
-## Result
+## 9. Test the complete behavior
 
-The finished application demonstrates the main PixelFix workflow:
+Write tests for important outcomes: valid registration, rejected invalid input, successful login, inability to view another user's task, and successful task updates. Tests should assert behavior that a user or API client can observe rather than merely checking that a class exists.
+
+## Request lifecycle summary
 
 ```text
-Route
-  ↓
+Browser request
+    ↓
+Route match
+    ↓
 Middleware
-  ↓
-Controller
-  ↓
-Request validation
-  ↓
-Authorization
-  ↓
-Model / Database
-  ↓
-View or HTTP response
+    ↓
+Controller action
+    ↓
+Form Request validation
+    ↓
+Authorization policy
+    ↓
+Model / database operation
+    ↓
+Twig view composed from components or HTTP response
 ```
 
-The individual Task Manager pages in this documentation set provide the detailed implementation for each stage.
+Follow the individual Task Manager guides for complete examples of each layer. When changing a feature, work through this path one layer at a time and run the relevant tests after each change.

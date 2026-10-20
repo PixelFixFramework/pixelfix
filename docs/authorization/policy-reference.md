@@ -1,93 +1,56 @@
 # Policy Reference
 
-PixelFix policies centralize model-oriented authorization decisions.
+A policy is a class of authorization decisions associated with a model. A gate is a named rule not necessarily tied to one model instance. Both must be enforced on the server for every protected operation.
 
 ## Register a policy
 
-Use the `Policy` support API:
+The application maps a model class to its policy class through its authorization provider:
 
 ```php
-Policy::policy(
-    Task::class,
-    TaskPolicy::class
-);
+$policies->policy(Task::class, TaskPolicy::class);
 ```
 
-The application's provider is a natural place to register policies because providers participate in application bootstrap.
+This tells PixelFix to consult `TaskPolicy` when checking abilities for a `Task`. Registration is required; creating a PHP class alone does not guarantee that authorization will use it.
 
-## Policy methods
+## Policy method arguments
 
-The policy convention is to expose ability methods such as:
-
-```text
-viewAny
-view
-create
-update
-delete
-restore
-forceDelete
-```
-
-The names are abilities, not magic requirements. The policy manager dispatches the requested ability to the policy implementation.
-
-## Authorize in a controller
+A record-oriented policy method normally receives the authenticated user first and the model instance second:
 
 ```php
-$this->authorize(
-    'update',
-    $task
-);
+public function view(User $user, Task $task): bool
+{
+    return (int) $task->user_id === (int) $user->getAuthIdentifier();
+}
 ```
 
-The controller base class uses the framework authorization handling support.
+The method should return `true` only when access is allowed. Returning `false` denies the ability. The user is obtained from the active authentication guard; the model is the specific record on which the action is being attempted.
 
-## Static policy API
+## Common abilities and their meaning
 
-Application code may also use:
+| Ability | Typical question |
+|---|---|
+| `viewAny` | May the user see the task list? |
+| `view` | May the user see this particular task? |
+| `create` | May the user create a task? |
+| `update` | May the user change this task? |
+| `delete` | May the user soft-delete this task? |
+| `restore` | May the user restore a soft-deleted task? |
+| `forceDelete` | May the user permanently remove this task? |
+
+These are conventions, not automatic guarantees. Your controllers and views should call the abilities appropriate to the action they perform.
+
+## Authorize and handle denial
 
 ```php
-Policy::authorize('update', $task);
-Policy::allows('update', $task);
-Policy::denies('update', $task);
+$this->authorize('update', $task);
 ```
 
-Use `authorize()` when denial should become the framework's authorization exception/HTTP response flow. Use `allows()`/`denies()` for conditional logic.
+The controller helper invokes the registered authorization logic and raises an authorization failure when the action is denied. Let the framework return the appropriate forbidden response, or catch/translate that failure only when the application has a deliberate alternative behavior.
 
-## Gates versus policies
+## Gates and policies
 
-Use a gate for an ability that is not naturally tied to a particular model instance:
+Use a gate for broad abilities such as access to an operations dashboard. Use a policy for abilities attached to an individual model. Authentication middleware establishes that a user is signed in; the policy decides whether that user can act on this record. All three concerns can be necessary for a secure route.
 
-```php
-Gate::define(
-    'access-admin',
-    function ($user) {
-        return $user->role === 'admin';
-    }
-);
-```
+## Ownership must be checked on every write
 
-The Task Manager includes an `access-admin` gate check for its admin test route.
-
-Use a policy when the decision is naturally about an operation on a model.
-
-## Global hooks
-
-`Gate` exposes:
-
-```text
-before()
-after()
-```
-
-These hooks allow framework/application authorization code to run before and after an ability decision.
-
-## Middleware
-
-The built-in `can` middleware delegates to the gate manager:
-
-```text
-can:ability
-```
-
-Additional middleware parameters can refer to current route parameters.
+Do not rely on a record ID being difficult to guess. A user can alter a URL or form field. A policy should verify ownership or role permissions on the server, and queries should be scoped where appropriate so that one user's records are not listed to another user.

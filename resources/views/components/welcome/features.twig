@@ -1,0 +1,84 @@
+{# PixelFix feature cards composed with the reusable layout card component. #}
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-4">
+            {% set routing_content %}
+                <i class="bi bi-signpost-split fs-1 text-primary" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">Routing</h5>
+                <p class="text-secondary mb-0">Define clean and expressive application routes and connect requests to your application logic.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: routing_content
+                } only %}
+            </div>
+
+            {% set validation_content %}
+                <i class="bi bi-shield-check fs-1 text-success" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">Validation</h5>
+                <p class="text-secondary mb-0">Validate incoming data with reusable validation rules designed for application development.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: validation_content
+                } only %}
+            </div>
+
+            {% set orm_content %}
+                <i class="bi bi-database fs-1 text-warning" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">ORM</h5>
+                <p class="text-secondary mb-0">Work with models, relationships, queries, and database operations through a structured ORM layer.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: orm_content
+                } only %}
+            </div>
+
+            {% set authentication_content %}
+                <i class="bi bi-person-lock fs-1 text-danger" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">Authentication</h5>
+                <p class="text-secondary mb-0">Build applications with authentication and authorization support.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: authentication_content
+                } only %}
+            </div>
+
+            {% set views_content %}
+                <i class="bi bi-window-stack fs-1 text-info" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">Twig Views</h5>
+                <p class="text-secondary mb-0">Build reusable interfaces using Twig templates and PixelFix view components.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: views_content
+                } only %}
+            </div>
+
+            {% set testing_content %}
+                <i class="bi bi-check2-square fs-1 text-secondary" aria-hidden="true"></i>
+                <h5 class="mt-3 fw-bold">Testing</h5>
+                <p class="text-secondary mb-0">Test your application with the framework's built-in testing capabilities.</p>
+            {% endset %}
+            <div class="col-md-6 col-lg-4">
+                {% include 'components/layout/card.twig' with {
+                    class: 'h-100 border-0 shadow-sm',
+                    body_class: 'p-4',
+                    content: testing_content
+                } only %}
+            </div>
+        </div>
+    </div>
+</section>

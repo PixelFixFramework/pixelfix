@@ -1,0 +1,112 @@
+        {# =================================================
+           CALL TO ACTION
+           ================================================= #}
+
+        <section class="py-5">
+
+            <div class="container">
+
+                <div
+                    class="
+                        bg-primary
+                        text-white
+                        rounded-4
+                        shadow
+                        p-4
+                        p-md-5
+                        text-center
+                    "
+                >
+
+                    <span
+                        class="
+                            badge
+                            bg-white
+                            text-primary
+                            rounded-pill
+                            px-3
+                            py-2
+                            mb-3
+                        "
+                    >
+                        Start Building
+                    </span>
+
+                    <h2 class="fw-bold mb-3">
+                        Build your next application with PixelFix.
+                    </h2>
+
+                    <p class="lead mb-4">
+
+                        Explore the framework, learn how it works,
+                        and start building with a structured PHP
+                        application foundation.
+
+                    </p>
+
+                    <div
+                        class="
+                            d-flex
+                            flex-wrap
+                            justify-content-center
+                            gap-2
+                        "
+                    >
+
+                        {% include 'components/form/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                'https://github.com/PixelFixFramework/pixelfix/tree/main#-documentation',
+
+                            target:
+                                '_blank',
+
+                            rel:
+                                'noopener noreferrer',
+
+                            class:
+                                'btn btn-light btn-lg px-4',
+
+                            icon:
+                                'bi bi-book',
+
+                            text:
+                                'Documentation'
+
+                        } only %}
+
+                        {% include 'components/form/button.twig' with {
+
+                            tag:
+                                'a',
+
+                            href:
+                                'https://github.com/PixelFixFramework/pixelfix',
+
+                            target:
+                                '_blank',
+
+                            rel:
+                                'noopener noreferrer',
+
+                            class:
+                                'btn btn-outline-light btn-lg px-4',
+
+                            icon:
+                                'bi bi-code-slash',
+
+                            text:
+                                'Demo Tutorial'
+
+                        } only %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
