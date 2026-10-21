@@ -1,4 +1,4 @@
-# PixelFix Application
+﻿# PixelFix Application
 
 A starter application for building web applications with PixelFix.
 
@@ -21,7 +21,7 @@ Configure your environment and database before running the application.
 
 The complete developer documentation is available here:
 
-**[Read the PixelFix Documentation](https://github.com/PixelFixFramework/pixelfix/tree/main/docs)**
+**[Read the PixelFix Documentation](https://github.com/PixelFixFramework/pixelfix/blob/main/docs/documentation-map.md)**
 
 Start with the [Getting Started guides](https://github.com/PixelFixFramework/pixelfix/tree/main/docs/getting-started).
 
