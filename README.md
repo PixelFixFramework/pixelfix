@@ -21,7 +21,7 @@ Configure your environment and database before running the application.
 
 The complete developer documentation is available here:
 
-**[Read the PixelFix Documentation](https://github.com/PixelFixFramework/pixelfix/blob/main/docs/documentation-map.md)**
+<strong><a href="https://github.com/PixelFixFramework/pixelfix/blob/main/docs/documentation-map.md" target="_blank" rel="noopener noreferrer">Read the PixelFix Documentation</a></strong>
 
 Start with the [Getting Started guides](https://github.com/PixelFixFramework/pixelfix/tree/main/docs/getting-started).
 
