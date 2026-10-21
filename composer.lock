@@ -267,16 +267,16 @@
         },
         {
             "name": "pixelfix/framework",
-            "version": "0.1.23",
+            "version": "0.1.25",
             "source": {
                 "type": "git",
                 "url": "git@github.com:PixelFixFramework/framework.git",
-                "reference": "42d7ddeeaacc5c01f016875ba53e73b7894d9b19"
+                "reference": "b61cda4882a5b48cae2b4de24de6b1b5aeee69f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PixelFixFramework/framework/zipball/42d7ddeeaacc5c01f016875ba53e73b7894d9b19",
-                "reference": "42d7ddeeaacc5c01f016875ba53e73b7894d9b19",
+                "url": "https://api.github.com/repos/PixelFixFramework/framework/zipball/b61cda4882a5b48cae2b4de24de6b1b5aeee69f8",
+                "reference": "b61cda4882a5b48cae2b4de24de6b1b5aeee69f8",
                 "shasum": ""
             },
             "require": {
@@ -334,7 +334,7 @@
                 "issues": "https://github.com/PixelFixFramework/framework/issues",
                 "source": "https://github.com/PixelFixFramework/framework"
             },
-            "time": "2026-10-20T18:16:46+00:00"
+            "time": "2026-10-21T09:53:57+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
