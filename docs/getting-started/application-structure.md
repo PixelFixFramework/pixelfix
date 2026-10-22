@@ -13,6 +13,18 @@ project/
 │   └── Providers/
 ├── bootstrap/
 ├── config/
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── notifications.php
+│   ├── providers.php
+│   ├── queue.php
+│   ├── redis.php
+│   ├── session.php
+│   └── ... other subsystem files
 ├── database/
 │   ├── factories/
 │   ├── migrations/
@@ -40,7 +52,7 @@ project/
 
 ## Bootstrap and configuration
 
-`bootstrap/` builds the application and registers the lifecycle bootstrappers. `config/config.php` is the active configuration file in this starter. It reads values from `.env` through helpers such as `env()` and exposes them through `config()`.
+`bootstrap/` builds the application and registers the lifecycle bootstrappers. Each top-level PHP file under `config/` returns one configuration group: for example, `config/app.php` defines the `app` group and `config/database.php` defines the `database` group. These files read values from `.env` through helpers such as `env()`, and the framework exposes the assembled values through `config()`.
 
 Keep passwords, API keys, and environment-specific credentials in `.env` or your deployment environment, not in committed PHP source files.
 

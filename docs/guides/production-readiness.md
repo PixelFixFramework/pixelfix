@@ -6,7 +6,7 @@ This guide is a review workflow, not a claim that one command makes an applicati
 
 ## 1. Configure the production environment deliberately
 
-Review `.env`, the configuration returned by `config/config.php`, and the environment in which PHP runs. The starter configuration includes settings for the application, authentication, database connections, sessions, security, views, logging, and registered providers. The actual values in your application are authoritative; a documentation default is not proof that the live deployment uses it.
+Review `.env`, the configuration assembled from the files under `config/`, and the environment in which PHP runs. The starter configuration includes settings for the application, authentication, database connections, sessions, security, views, logging, and registered providers. The actual values in your application are authoritative; a documentation default is not proof that the live deployment uses it.
 
 Before deployment, verify:
 

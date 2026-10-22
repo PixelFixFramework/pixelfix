@@ -16,7 +16,7 @@ If the repository already contains the Task Manager source, you do not need to r
 
 ## 1. Configure the local environment
 
-If `.env` does not exist but `.env.example` does, copy the example and edit the values for your machine. Treat `.env` as private because it can contain credentials. The active application settings are defined by `config/config.php`; a variable in `.env` has no effect unless configuration reads it.
+If `.env` does not exist but `.env.example` does, copy the example and edit the values for your machine. Treat `.env` as private because it can contain credentials. Application settings are defined in the corresponding files under `config/`, such as `config/app.php` and `config/database.php`; a variable in `.env` has no effect unless a configuration file reads it.
 
 ## 2. Create the database schema
 

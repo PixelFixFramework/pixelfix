@@ -10,7 +10,7 @@ From the directory containing `composer.json` and the `pixel` launcher, install 
 composer install
 ```
 
-Configure `.env` for your local database and confirm `config/config.php` reads those values. Do not commit credentials. Before changing a database, confirm it points to your development database rather than a shared or production database.
+Configure `.env` for your local database and confirm `config/database.php` reads those values. Do not commit credentials. Before changing a database, confirm it points to your development database rather than a shared or production database.
 
 ## 2. Design the data before writing controllers
 

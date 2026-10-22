@@ -20,7 +20,7 @@ The project includes `.env.example`. If the application does not yet have a loca
 Copy-Item .env.example .env
 ```
 
-Open `.env` and `config/config.php` and check the database settings. Never commit passwords, private tokens, or machine-specific secrets. Make sure the PHP CLI has the PDO driver required by the selected database.
+Open `.env` and `config/database.php` and check the database settings. Never commit passwords, private tokens, or machine-specific secrets. Make sure the PHP CLI has the PDO driver required by the selected database.
 
 ## 3. Prepare the database
 
@@ -64,6 +64,6 @@ A useful next step is `GET /records/{record}`. Follow it through `routes/web.php
 ## Troubleshooting checklist
 
 - `php pixel` is not recognized: run it from the project root and verify the launcher file is present.
-- Database connection fails: verify `.env`, `config/config.php`, the database service, database file permissions, and the CLI PDO driver.
+- Database connection fails: verify `.env`, `config/database.php`, the database service, database file permissions, and the CLI PDO driver.
 - Login fails: confirm the user exists and its password is a password hash created by the registration flow.
 - record route is denied: confirm you are signed in and viewing a record owned by that account.

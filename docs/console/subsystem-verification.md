@@ -35,21 +35,21 @@ php pixelfix subsystems:verify --skip-notifications
 
 Framework diagnostics verify the framework-level plumbing. A business flow—such as an order lifecycle event, invoice notification, or booking workflow—belongs to the application and should be tested with an application-specific probe, not hard-coded into the framework command.
 
-Implement `PixelFix\Framework\Console\Diagnostics\SubsystemVerificationProbe`, then register its class in the application's `config/config.php`:
+Implement `PixelFix\Framework\Console\Diagnostics\SubsystemVerificationProbe`, then create or update `config/subsystems.php`. This custom file returns the `subsystems` group:
 
 ```php
-'subsystems' => [
+return [
     'verification' => [
         'probes' => [
             App\Diagnostics\OrderWorkflowProbe::class,
         ],
     ],
-],
+];
 ```
 
 A probe's `run(SubsystemVerificationContext $context)` can use `$context->token()` to tag synthetic records, report assertions with `$context->check($condition, $label, $detail)`, and provide informational notes with `$context->info($label, $detail)`. Probes must clean up only their own diagnostic data in `finally` blocks, never touch unrelated jobs/records, and must not send real messages unless explicitly designed for a separate opt-in delivery test.
 
-For a generic framework-only run, the `probes` array can remain absent or empty.
+The filename `subsystems.php` maps its returned array to `config('subsystems.verification.probes')`. For a generic framework-only run, the `probes` array can remain absent or empty.
 
 ## Background services on Windows
 

@@ -6,7 +6,7 @@ You normally configure a provider rather than write one yourself. This guide sho
 
 ## 1. Find the default provider configuration
 
-Open `config/config.php` in the generated application and look under `auth`. The starter configuration is similar to:
+Open `config/auth.php` in the generated application. It returns the contents of the `auth` group, similar to:
 
 ```php
 <?php
@@ -14,17 +14,15 @@ Open `config/config.php` in the generated application and look under `auth`. The
 use App\Models\User;
 
 return [
-    'auth' => [
-        'defaults' => ['guard' => 'web'],
-        'guards' => [
-            'web' => ['driver' => 'session', 'provider' => 'users'],
-        ],
-        'providers' => [
-            'users' => [
-                'driver' => 'database',
-                'model' => User::class,
-                'password_field' => 'password',
-            ],
+    'defaults' => ['guard' => 'web'],
+    'guards' => [
+        'web' => ['driver' => 'session', 'provider' => 'users'],
+    ],
+    'providers' => [
+        'users' => [
+            'driver' => 'database',
+            'model' => User::class,
+            'password_field' => 'password',
         ],
     ],
 ];
@@ -39,7 +37,7 @@ Read the configuration from the inside out:
 - `providers.users.model` identifies the model class returned by the provider.
 - `password_field` identifies the model attribute that contains the stored password hash.
 
-The `User::class` reference assumes `App\Models\User` is imported near the top of the configuration file, as it is in the starter application.
+The `User::class` reference assumes `App\Models\User` is imported near the top of `config/auth.php`, as it is in the starter application.
 
 ## 2. What happens during a login attempt?
 
@@ -62,7 +60,7 @@ Do not compare passwords directly in your controller or store plain-text passwor
 
 ## 3. Use a different user model
 
-Suppose staff accounts live in a `staff` table and use an `App\Models\Staff` model. Create a model that fulfils the framework's authentication contract, then define both a guard and provider for it. The following is a complete, simplified example of the returned configuration array; merge its settings with your existing config rather than deleting unrelated settings:
+Suppose staff accounts live in a `staff` table and use an `App\Models\Staff` model. Create a model that fulfils the framework's authentication contract, then define both a guard and provider for it. The following is a simplified example of the array returned by `config/auth.php`; merge its settings with your existing auth settings rather than deleting unrelated authentication settings:
 
 ```php
 <?php
@@ -71,23 +69,21 @@ use App\Models\Staff;
 use App\Models\User;
 
 return [
-    'auth' => [
-        'defaults' => ['guard' => 'web'],
-        'guards' => [
-            'web' => ['driver' => 'session', 'provider' => 'users'],
-            'staff' => ['driver' => 'session', 'provider' => 'staff'],
+    'defaults' => ['guard' => 'web'],
+    'guards' => [
+        'web' => ['driver' => 'session', 'provider' => 'users'],
+        'staff' => ['driver' => 'session', 'provider' => 'staff'],
+    ],
+    'providers' => [
+        'users' => [
+            'driver' => 'database',
+            'model' => User::class,
+            'password_field' => 'password',
         ],
-        'providers' => [
-            'users' => [
-                'driver' => 'database',
-                'model' => User::class,
-                'password_field' => 'password',
-            ],
-            'staff' => [
-                'driver' => 'database',
-                'model' => Staff::class,
-                'password_field' => 'password',
-            ],
+        'staff' => [
+            'driver' => 'database',
+            'model' => Staff::class,
+            'password_field' => 'password',
         ],
     ],
 ];

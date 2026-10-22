@@ -4,20 +4,20 @@ A database connection tells PixelFix which database server or database file to u
 
 ## 1. Configure the connection
 
-In this starter, the active configuration is in `config/config.php`. Environment variables are loaded before configuration, so credentials can live in `.env` rather than being committed to source code. A MySQL-style connection typically needs a host, port, database name, username, password, and driver.
+In this starter, database settings live in `config/database.php`. Environment variables are loaded before configuration, so credentials can live in `.env` rather than being committed to source code. A MySQL-style connection typically needs a host, port, database name, username, password, and driver.
 
 Example environment values (replace them with values for your own machine):
 
 ```dotenv
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=task_manager
-DB_USERNAME=task_manager_user
-DB_PASSWORD=replace-this-locally
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_DATABASE=my_application
+MYSQL_USER=my_application_user
+MYSQL_PASSWORD=replace-this-locally
 ```
 
-The active connection array must read the corresponding environment variables. Environment variable names alone do not create a connection; they must be consumed by `config/config.php`.
+The active connection array must read the corresponding environment variables. Environment variable names alone do not create a connection; they must be consumed by `config/database.php`.
 
 ## 2. Enable the matching PHP driver
 

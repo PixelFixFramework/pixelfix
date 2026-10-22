@@ -1,53 +1,68 @@
 # Configuration
 
-Configuration lets you change application behavior without rewriting PHP classes. For example, the database host can change between a developer's computer and production while the model classes stay the same.
+Configuration controls application behavior without requiring changes to framework classes. PixelFix loads environment values first, then loads the PHP files under `config/` into one configuration repository.
 
 ## Environment values and configuration are different
 
-The `.env` file contains values that vary by environment, such as credentials and the application URL. The active configuration is assembled in `config/config.php` after environment values are loaded.
+The `.env` file contains values that vary by environment, such as credentials and the application URL. The files under `config/` map those inputs to stable configuration keys used by application code.
 
 Example `.env` values:
 
 ```dotenv
-APP_NAME="Task Manager"
+APP_NAME="My Application"
 APP_ENV=local
 APP_DEBUG=true
 DB_CONNECTION=sqlite
 ```
 
-The exact variables used depend on the active `config/config.php`. Adding a line to `.env` has no effect unless the configuration reads it.
+Adding a line to `.env` has no effect unless a configuration file reads it. The current starter uses `config/app.php` for application settings and `config/database.php` for connection settings.
 
-## Read values in application code
+## Configuration files and keys
 
-Use `env()` when a configuration file needs to read an environment variable. For example, a simplified configuration file can return:
+Each top-level file under `config/` maps to a configuration group with the same name. For example:
+
+- `config/app.php` defines keys such as `app.name`, `app.env`, and `app.timezone`.
+- `config/auth.php` defines authentication guards, providers, password settings, and redirects.
+- `config/database.php` defines `database.default`, `database.connections`, and the root seeder.
+- `config/session.php` defines session driver, lifetime, cookies, and storage.
+- `config/providers.php` returns the list of application service providers.
+
+Other starter files are `cache.php`, `rate_limiting.php`, `security.php`, `view.php`, `ui.php`, `logging.php`, `mail.php`, `scheduling.php`, `notifications.php`, `broadcasting.php`, `websockets.php`, `redis.php`, `events.php`, `queue.php`, and `schedules.php`.
+
+A configuration file returns the contents of its own group, not a wrapper containing the group name. For example, `config/app.php` can contain:
 
 ```php
 <?php
 
 return [
-    'app' => [
-        'name' => env('APP_NAME', 'PixelFix'),
-    ],
+    'name' => env('APP_NAME', 'PixelFix'),
+    'env' => env('APP_ENV', 'production'),
+    'debug' => env('APP_DEBUG', false),
+    'timezone' => env('TIMEZONE', 'UTC'),
 ];
 ```
 
-The configuration loader reads the environment variable while assembling the configuration. In an application service or controller, read the resolved value with `config()`:
+After bootstrap, read the resolved values with `config()`:
 
 ```php
 $appName = config('app.name', 'PixelFix');
-$defaultConnection = config('database.default');
+$defaultConnection = config('database.default', 'sqlite');
 ```
 
-The second argument to `env()`/`config()` supplies a fallback when no value is configured. A fallback is not a substitute for requiring a production secret; validate mandatory deployment settings during setup.
+The filename supplies the first segment of the configuration key. A custom `config/services.php` file returning `['payments' => ['enabled' => true]]` makes that value available as `config('services.payments.enabled')`.
 
-## Current starter configuration
+## Environment variables belong in configuration files
 
-The reference application groups settings under areas including `app`, `auth`, `database`, `session`, `security`, `view`, `ui`, `logging`, and `providers`. Check `config/config.php` in your installed starter for the actual keys and defaults in use. Empty placeholder files do not necessarily contain the active values.
+Use `env()` inside configuration files to translate environment-specific input into typed settings. In controllers and services, prefer `config()` after bootstrap rather than calling `env()` throughout the application. The second argument to either helper supplies a fallback; it is not a substitute for validating required production secrets.
+
+## Backward compatibility
+
+New applications use separate files under `config/`. The framework also supports the older `config/config.php` format for existing applications during migration. When an individual group file and the legacy file both define the same group, the individual file takes precedence for that group.
 
 ## Keep secrets out of source control
 
-Do not commit `.env` values containing passwords, private keys, API tokens, or production credentials. Share a sanitized example file if teammates need to know which variable names to define.
+Do not commit `.env` values containing passwords, private keys, API tokens, or production credentials. Keep `.env.example` sanitized so teammates know which variable names to define.
 
 ## Troubleshooting
 
-If a changed value is not taking effect, verify the spelling of the config key, confirm that the application reads the matching environment variable, and check whether a long-running process needs to be restarted. For database settings, confirm the active connection and PHP driver before troubleshooting migrations.
+If a changed value is not taking effect, verify the dot-notated key, the corresponding file (for example, `config/database.php` for database values), and the environment variable read by that file. A long-running process may need to be restarted after configuration changes. For database problems, confirm the selected connection and PHP driver before troubleshooting migrations.

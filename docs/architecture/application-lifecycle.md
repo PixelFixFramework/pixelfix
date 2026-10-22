@@ -46,13 +46,9 @@ Environment values are therefore available to configuration code and the framewo
 
 ## 5. Configuration loading
 
-`LoadConfiguration` reads:
+`LoadConfiguration` reads the top-level PHP files in `config/`. For example, `config/app.php` returns the `app` group and `config/database.php` returns the `database` group. Each file must return an array; the filename (without `.php`) determines the group name. PixelFix assembles the groups into one `Repository` and shares the same repository instance under both `Repository::class` and `Config::class`.
 
-```text
-config/config.php
-```
-
-The configuration file must return an array. PixelFix places that array in a `Repository` and shares the same repository instance under both `Repository::class` and `Config::class`.
+For backward compatibility, an existing `config/config.php` array is loaded first when present. An individual group file then replaces the matching legacy group. New application scaffolds use individual files only.
 
 The configuration repository supports dotted keys such as:
 

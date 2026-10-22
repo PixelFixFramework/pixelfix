@@ -1,6 +1,6 @@
 # Environment and Configuration Reference
 
-The starter application loads `.env` values during bootstrap and maps them into namespaced values in `config/config.php`. Each application owns its own `.env` file; the same key name in two applications does not share the value. Application code should normally read `config()` after bootstrap rather than reading environment variables directly throughout the request lifecycle.
+The starter application loads `.env` values during bootstrap and maps them into namespaced values through the individual PHP files under `config/`. For example, `config/app.php` reads application environment values and `config/database.php` reads database connection values. Each application owns its own `.env` file; the same key name in two applications does not share the value. Application code should normally read `config()` after bootstrap rather than reading environment variables directly throughout the request lifecycle.
 
 ## Helpers and normalization
 
@@ -15,7 +15,7 @@ config('app.name');
 
 ## Configuration groups
 
-The current starter defines `app`, `auth`, `cache`, `rate_limiting`, `database`, `session`, `security`, `view`, `ui`, `logging`, `mail`, `scheduling`, `notifications`, `broadcasting`, `websockets`, `redis`, `events`, `queue`, `schedules`, and `providers`. Consult [Configuration Reference](configuration.md) for each group’s purpose. The application’s `config/config.php` is authoritative for its actual mapping and defaults.
+The current starter defines `app`, `auth`, `cache`, `rate_limiting`, `database`, `session`, `security`, `view`, `ui`, `logging`, `mail`, `scheduling`, `notifications`, `broadcasting`, `websockets`, `redis`, `events`, `queue`, `schedules`, and `providers`. Each group lives in the correspondingly named file, such as `config/auth.php` or `config/queue.php`. Consult [Configuration Reference](configuration.md) for each group’s purpose. The files in the installed application are authoritative for its actual mappings and defaults. Legacy applications may still use `config/config.php`.
 
 ## Environment key groups in the current starter
 

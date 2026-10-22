@@ -21,7 +21,7 @@ php -v
 composer install
 ```
 
-Review the first exception in the console output and the application logs under `storage/`. Check that `bootstrap/app.php`, `config/config.php`, and `public/index.php` exist in the expected locations.
+Review the first exception in the console output and the application logs under `storage/`. Check that `bootstrap/app.php`, the relevant files under `config/` (such as `config/app.php`), and `public/index.php` exist in the expected locations.
 
 ## A URL returns 404
 
@@ -36,7 +36,7 @@ If the live list contains the route but the cached list does not, clear or rebui
 
 ## Database connection or migration errors
 
-Confirm that the database server is running, the active `config/config.php` reads the expected `.env` values, the database/user exist, and the current PHP runtime has the matching PDO driver enabled. Review `migrate:status` before trying to migrate. Do not use a destructive rebuild to diagnose a production connection issue.
+Confirm that the database server is running, `config/database.php` reads the expected `.env` values, the database/user exist, and the current PHP runtime has the matching PDO driver enabled. Review `migrate:status` before trying to migrate. Do not use a destructive rebuild to diagnose a production connection issue.
 
 ## Validation or CSRF errors
 
