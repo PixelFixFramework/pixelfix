@@ -41,6 +41,12 @@ return new class extends Migration
 
 `up()` applies the change; `down()` reverses it.
 
+## Migration driver compatibility
+
+The migration repository now creates its ledger using driver-specific primary-key syntax for SQLite, MySQL, PostgreSQL and SQL Server rather than assuming MySQL's `AUTO_INCREMENT` syntax everywhere. This makes repository initialization more portable, but it does not mean every schema operation behaves identically across every database driver.
+
+Before selecting a less-common driver for a production migration workflow, verify migration-ledger creation, schema inspection, foreign keys, indexes, column alterations, and transactional DDL against that database. Keep a disposable test database for each supported deployment driver, and do not infer complete migration support solely from a driver being listed in `config/database.php`.
+
 ## Schema definitions
 
 Create a table with `Schema::create()`:

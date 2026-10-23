@@ -82,6 +82,17 @@ environment('local');
 
 `app()` without an argument gives access to the application container; passing a class/service name asks the container to resolve it. `config()` reads configuration, `env()` reads an environment value with a fallback, and `environment()` reports or checks the active environment. Use configuration values in application code and reserve direct environment reads for configuration/bootstrap decisions where appropriate.
 
+## PDF and spreadsheet exports
+
+The framework provides `exports()` as a central access point for the optional export adapters:
+
+```php
+$pdfBytes = exports()->pdf()->renderView('reports/statement', ['statement' => $statement]);
+$xlsxBytes = exports()->spreadsheet()->generate($rows, ['headers' => ['Name', 'Email']]);
+```
+
+Install `dompdf/dompdf` for PDF output and/or `phpoffice/phpspreadsheet` for spreadsheet output. Neither package is required during framework boot if your application does not use that export type. See [PDF and Spreadsheet Exports](../exports/overview.md) for supported formats, options and security boundaries.
+
 ## Database helpers
 
 ```php

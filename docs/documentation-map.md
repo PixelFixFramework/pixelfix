@@ -20,6 +20,7 @@ This is the central documentation set for PixelFix. The current framework source
 - [Events](events/overview.md)
 - [Mail](mail/overview.md)
 - [Notifications](notifications/overview.md)
+- [PDF and Spreadsheet Exports](exports/overview.md)
 - [Queues](queue/overview.md)
 - [Rate Limiting](rate-limiting/overview.md)
 - [Redis and Pub/Sub](redis/overview.md)
@@ -248,6 +249,7 @@ Browse the documentation by topic. Every link below points to an existing Markdo
 - [Events](events/overview.md)
 - [Mail](mail/overview.md)
 - [Notifications](notifications/overview.md)
+- [PDF and Spreadsheet Exports](exports/overview.md)
 - [Queues](queue/overview.md)
 - [Rate Limiting](rate-limiting/overview.md)
 - [Redis](redis/overview.md)
@@ -429,6 +431,8 @@ docs/
 │   ├── transactions.md
 │   └── upserts.md
 ├── events
+│   └── overview.md
+├── exports
 │   └── overview.md
 ├── getting-started
 │   ├── application-structure.md

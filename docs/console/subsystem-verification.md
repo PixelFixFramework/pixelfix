@@ -60,7 +60,7 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 .\scripts\PixelFixServices.ps1 setup -Queues "default,notifications"
 ```
 
-Replace the queue list with the application's actual job queues. You can also set `PIXELFIX_WORKER_QUEUES` in `.env`; its default is `default`. A worker is registered only for `database` or `redis` queue drivers. The scheduler service calls `schedule:run` once a minute. Windows Task Scheduler manages the background processes and the wrapper restarts a worker after it exits. The tasks run while the configured Windows user is logged on.
+Replace the queue list with the application's actual job queues. You can also set `WORKER_QUEUES` in `.env`; its default is `default`. A worker is registered only for `database` or `redis` queue drivers. The scheduler service calls `schedule:run` once a minute. Windows Task Scheduler manages the background processes and the wrapper restarts a worker after it exits. The tasks run while the configured Windows user is logged on.
 
 Useful commands:
 

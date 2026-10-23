@@ -4,12 +4,17 @@ return [
 
     'default' => env(
         'DB_CONNECTION',
-        'mysql'
+        'sqlite'
     ),
 
     'seeder' =>
         Database\Seeders\DatabaseSeeder::class,
 
+    // Add named connections as additional entries in this array. Each entry
+    // must define its driver and matching connection settings. Name the entry
+    // (for example 'reporting') and resolve it through the ORM's named-connection
+    // API or a model's configured connection name. The framework does not impose
+    // a fixed environment-variable prefix for additional connections.
     'connections' => [
 
         // =================================================
@@ -124,7 +129,7 @@ return [
 
             'database' => env(
                 'SQLITE_DATABASE',
-                ':memory:'
+                'database/database.sqlite'
             ),
         ],
 

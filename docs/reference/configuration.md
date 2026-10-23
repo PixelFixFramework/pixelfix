@@ -37,7 +37,9 @@ The starter bootstrap loads environment values and configuration before core ser
 | `config/cache.php` | Default cache store, file path, and lock store |
 | `config/rate_limiting.php` | Rate-limit prefix and authentication attempt limits/decay |
 | `config/database.php` | Default driver, named connection definitions, and root seeder |
-| `config/session.php` | Session driver, lifetime, cookie, storage, and encryption settings |
+| `config/filesystems.php` | Default storage disk, disk roots/URL prefixes, and public symbolic links |
+| `config/exports.php` | Optional PDF and spreadsheet renderer defaults and output formatting |
+| `config/session.php` | Session driver, lifetime, cookie attributes, storage path, and expire-on-close behavior |
 | `config/security.php` | CSRF settings |
 | `config/view.php` | Twig view settings |
 | `config/ui.php` | UI driver and Zebra Dialog theme |
@@ -49,7 +51,7 @@ The starter bootstrap loads environment values and configuration before core ser
 | `config/websockets.php` | WebSocket host/port, allowed origins, frame limits, and relay settings |
 | `config/redis.php` | Named Redis connections and Pub/Sub connection |
 | `config/events.php` | Event cache/manifest settings |
-| `config/queue.php` | Queue driver, retry, database/Redis tables, and connection settings |
+| `config/queue.php` | Queue driver, retry, database/Redis tables, connection settings, and worker queue list |
 | `config/schedules.php` | Settings for schedules registered by the starter example |
 | `config/providers.php` | Application provider classes to load |
 

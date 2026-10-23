@@ -2,6 +2,24 @@
 
 The filesystem helper gives application code a consistent way to store and retrieve files without scattering low-level `file_put_contents()` and path-concatenation logic throughout controllers.
 
+## Configure disks
+
+The starter ships `config/filesystems.php`. `FILESYSTEM_DISK` selects the default disk (`local` by default), while the `disks` array defines each disk's driver, root directory, and optional URL prefix.
+
+- `local` writes beneath `storage/app` and does not configure a public URL.
+- `public` writes beneath `storage/app/public` and uses the `/storage` URL prefix.
+- `links` maps a public path such as `public/storage` to the public disk directory.
+
+Create configured links during local setup/deployment with:
+
+```powershell
+php pixel storage:link
+```
+
+The command creates missing target directories and configured links; it does not replace an existing path. Inspect an existing `public/storage` path before attempting link creation.
+
+The local driver normalizes relative paths and rejects empty, absolute, null-byte, dot-segment and traversal paths; it also checks that existing filesystem ancestors remain inside the configured root. Continue to use application-level authorization and validate user-supplied names even with these checks.
+
 ## Store a file
 
 The `storage()` helper resolves the configured storage service. Use it for application files that should not be served directly by the web server:
@@ -31,6 +49,16 @@ Deleting a file is destructive. Validate that the path comes from a trusted appl
 ## Public files and private files
 
 Files placed beneath `public/` can be directly reachable by a browser according to the web server configuration. Sensitive exports, identity documents, reports, and internal uploads should be stored outside the public document root and served only through a controller that checks authorization.
+
+## Get a public URL
+
+A disk with a configured URL prefix can create a URL for a relative path:
+
+```php
+$url = storage()->url('avatars/user-42.png');
+```
+
+Use `url()` only when that disk is intended to be public and its configured symbolic link/web-server mapping is active. The default `local` disk does not advertise a public URL; asking for one is an error. Do not expose private documents by switching their URL prefix.
 
 ## URLs are different from storage paths
 

@@ -2,10 +2,12 @@
 
 return [
 
+    // This optional setting applies only when the application registers a
+    // schedule named "reminders". It is disabled unless opted into.
     'reminders' => [
 
         'enabled' => filter_var(
-            env('SCHEDULE_REMINDERS_ENABLED', true),
+            env('SCHEDULE_REMINDERS_ENABLED', false),
             FILTER_VALIDATE_BOOL
         ),
 

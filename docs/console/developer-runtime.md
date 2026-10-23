@@ -15,7 +15,7 @@ php pixelfix dev --no-worker
 php pixelfix dev --no-scheduler
 ```
 
-If the application sends jobs to named queues, list them using `PIXELFIX_WORKER_QUEUES` in `.env` or `--queues` on the command line. The default queue is `default`.
+If the application sends jobs to named queues, list them using `WORKER_QUEUES` in `.env` or `--queues` on the command line. The default queue is `default`.
 
 Run framework-wide checks without assuming application-specific models:
 

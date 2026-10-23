@@ -123,7 +123,7 @@ Production error pages should not display stack traces, SQL, source paths, or se
 - Consider concurrency when two requests may update the same record.
 - Use chunking for bulk work rather than loading everything into memory.
 - Test with the production database driver; an in-memory SQLite test can behave differently from MySQL/MariaDB.
-- Define external strategy for queues, caching, mail delivery, and scheduling if the application needs them; these are not built-in subsystems in this framework source version.
+- Choose a deployment strategy for queues, caching, mail delivery, and scheduling if the application needs them. PixelFix provides these subsystems, but production still requires the selected services, valid credentials, process supervision, retention and monitoring. See the subsystem guides for the requirements of each configured driver.
 
 ## 12. Pre-release verification checklist
 

@@ -13,6 +13,8 @@ The framework registers these aliases by default:
 | `auth` | `AuthMiddleware` |
 | `guest` | `GuestMiddleware` |
 | `can` | `CanMiddleware` |
+| `role` | `RoleMiddleware` |
+| `permission` | `PermissionMiddleware` |
 
 The default `web` group contains:
 
@@ -74,9 +76,28 @@ The middleware delegates the actual decision to the framework gate manager.
 
 ## Role middleware
 
-`RoleMiddleware` exists in the framework source and checks a user's `role` attribute against one or more allowed roles. It is **not** one of the default framework aliases in `FrameworkMiddleware::all()`.
+`role` checks the authenticated user's `role` attribute against one or more allowed role names. For example:
 
-Applications that need role middleware therefore need to register and use their own alias rather than assuming `role` is built in.
+```php
+Route::get('/admin', [AdminController::class, 'index'])
+    ->middleware('role:admin');
+
+Route::get('/reports/manage', [ReportController::class, 'manage'])
+    ->middleware('role:admin,manager');
+```
+
+The current built-in middleware reads a single role value from the user; it does not implement a many-to-many role table, role assignment UI, or organization-specific role hierarchy. Applications must define and secure those data and management rules themselves.
+
+## Permission middleware
+
+`permission` requires an explicit permission name and rejects guests or users who do not have the permission:
+
+```php
+Route::get('/reports/export', [ReportController::class, 'export'])
+    ->middleware('permission:reports.export');
+```
+
+The default `GatePermissionChecker` evaluates the permission name through PixelFix's gate system. Define the matching ability (for example with `Gate::define('reports.export', ...)`) or access is denied. Applications with a normalized role/permission database or an external authorization source can bind their own implementation of `PixelFix\Framework\Auth\Contracts\PermissionChecker`; PixelFix does not impose a permissions-table schema. See [Authorization](../authorization/overview.md).
 
 ## CSRF middleware
 

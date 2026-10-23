@@ -82,6 +82,8 @@ PixelFix registers these aliases:
 | `auth` | `AuthMiddleware` | Requires an authenticated user. |
 | `guest` | `GuestMiddleware` | Allows unauthenticated users and redirects authenticated users. |
 | `can` | `CanMiddleware` | Evaluates an authorization ability through the gate manager. |
+| `role` | `RoleMiddleware` | Checks the authenticated user's `role` attribute against allowed role names. |
+| `permission` | `PermissionMiddleware` | Checks a named permission using the configured permission checker. |
 
 ## Authentication middleware
 
@@ -116,6 +118,24 @@ Route::get('/login', [AuthController::class, 'showLogin'])
 `can` delegates authorization to the framework gate manager. The middleware accepts parameters, so its exact usage should be chosen to match the ability and arguments registered by the application.
 
 For operation-specific authorization inside a controller, the controller's `authorize()` method is often clearer because it can pass a concrete model instance directly to the policy.
+
+## Role and permission checks
+
+Use `role` when the application stores one role name on the authenticated user:
+
+```php
+Route::get('/admin', [AdminController::class, 'index'])
+    ->middleware('role:admin');
+```
+
+Use `permission` for a named capability:
+
+```php
+Route::get('/reports/export', [ReportController::class, 'export'])
+    ->middleware('permission:reports.export');
+```
+
+By default, the permission checker maps the permission name to a Gate ability. Define it with `Gate::define()` and return `true` only after verifying the user's actual access. An undefined or denied ability does not grant access. For a database-backed or external permission system, bind a custom `PixelFix\Framework\Auth\Contracts\PermissionChecker` implementation in an application provider. The framework supplies the authorization mechanism, not a normalized role/permission schema or its administration workflow.
 
 ## CSRF protection
 

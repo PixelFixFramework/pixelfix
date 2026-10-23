@@ -85,6 +85,11 @@ The complete developer documentation is available here:
 
 Start with the [Getting Started guides](https://github.com/PixelFixFramework/pixelfix/tree/main/docs/getting-started).
 
+## Feature guides
+
+- [PDF and Spreadsheet Exports](https://github.com/PixelFixFramework/pixelfix/blob/main/docs/exports/overview.md) — optional document generation, configuration, dependency setup and security guidance.
+- [Environment Reference](https://github.com/PixelFixFramework/pixelfix/blob/main/docs/reference/environment.md) — all starter environment options and their configuration files.
+
 ## License
 
 Proprietary.

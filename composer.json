@@ -3,9 +3,10 @@
     "description": "PixelFix application starter",
     "type": "project",
     "license": "proprietary",
+
     "require": {
         "php": "^8.2",
-        "pixelfix/framework": "^0.1.2",
+        "pixelfix/framework": "^0.1.34",
         "npm-asset/bootstrap": "^5.3.8",
         "npm-asset/bootstrap-icons": "^1.13.1",
         "npm-asset/jquery": "^3.7.1",
@@ -13,9 +14,17 @@
         "npm-asset/toastr": "^2.1.4",
         "npm-asset/zebra_dialog": "^3.1.0"
     },
+
     "require-dev": {
         "fakerphp/faker": "^1.24"
     },
+
+    "suggest": {
+        "mongodb/mongodb": "Required to use MongoDB database connections.",
+        "dompdf/dompdf": "Optional: enables PDF export through PixelFix exports(); requires the PHP extensions required by Dompdf.",
+        "phpoffice/phpspreadsheet": "Optional: enables XLSX, XLS, CSV and ODS spreadsheet exports through PixelFix exports(); requires the PHP extensions required by PhpSpreadsheet."
+    },
+
     "repositories": [
         {
             "type": "vcs",
@@ -26,6 +35,7 @@
             "url": "https://asset-packagist.org"
         }
     ],
+
     "autoload": {
         "psr-4": {
             "App\\": "app\\",
@@ -33,11 +43,13 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests\\"
         }
     },
+
     "scripts": {
         "serve": [
             "@php pixel serve"
@@ -56,10 +68,12 @@
             "@assets:publish"
         ]
     },
+
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true
     },
+
     "minimum-stability": "stable",
     "prefer-stable": true
 }

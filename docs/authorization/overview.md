@@ -215,6 +215,30 @@ Route::get('/admin', [AdminController::class, 'index'])
 
 Use it when the authorization rule naturally belongs at the route boundary. For resource-specific checks, a controller policy call can be clearer because it passes the concrete model instance directly.
 
+## Role and permission middleware
+
+PixelFix registers `role` and `permission` as built-in middleware aliases:
+
+```php
+Route::get('/admin', [AdminController::class, 'index'])
+    ->middleware('role:admin');
+
+Route::get('/reports/export', [ReportController::class, 'export'])
+    ->middleware('permission:reports.export');
+```
+
+`role` compares the user's `role` attribute with the allowed role names. It does not create a role table, support automatic role assignment, or implement multiple roles per user by itself.
+
+The default `PermissionChecker` uses the permission name as a Gate ability. Define the ability in an application provider:
+
+```php
+Gate::define('reports.export', function ($user): bool {
+    return $user->canExportReports();
+});
+```
+
+The example assumes that `canExportReports()` is application code that verifies real authorization; it is not a built-in user method. If permissions are stored in normalized role/permission tables or resolved by an external service, bind an implementation of `PixelFix\Framework\Auth\Contracts\PermissionChecker` in an application provider. Its `hasPermission($user, $permission)` method must return `true` only when permission is actually granted. Do not treat hidden UI controls as a security boundary.
+
 ## Task Manager example
 
 The Task Manager uses both authorization mechanisms.

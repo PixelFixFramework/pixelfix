@@ -50,6 +50,19 @@ php -m
 
 For a small local tutorial, SQLite can be convenient if `pdo_sqlite` is enabled. MySQL or MariaDB are common choices for shared development and production.
 
+## Optional document-export dependencies
+
+PDF and spreadsheet exports are optional framework integrations; they are not required to start a normal PixelFix application. Install only the package(s) needed by your application:
+
+```powershell
+composer require dompdf/dompdf
+composer require phpoffice/phpspreadsheet
+```
+
+Dompdf and PhpSpreadsheet have their own PHP extension requirements. Composer will report missing requirements when the package is installed. See [PDF and Spreadsheet Exports](../exports/overview.md) before enabling document generation in production.
+
+The default storage disks and public link are explained in [Filesystem](../application/filesystem.md).
+
 ## Before continuing
 
 You need a working PHP CLI, Composer, an application directory, and a configured database driver if your application uses a database. Continue to [Installation](installation.md) and then [Build Your First PixelFix Page](first-application.md).

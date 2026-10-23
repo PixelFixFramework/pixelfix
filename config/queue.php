@@ -1,11 +1,24 @@
 <?php
 
+// Queue names used by `php pixelfix dev` when it starts a persistent worker.
+// WORKER_QUEUES accepts a comma-separated list for the local development worker.
+$workerQueues = trim((string) env('WORKER_QUEUES', 'default')) ?: 'default';
+
 return [
 
     'default' => env(
         'QUEUE_CONNECTION',
         'sync'
     ) ?: 'sync',
+
+    // Queues started by the local development supervisor; the CLI --queues
+    // option overrides this list.
+    'worker_queues' => array_values(
+        array_filter(
+            array_map('trim', explode(',', $workerQueues)),
+            static fn (string $queue): bool => $queue !== ''
+        )
+    ),
 
     'after_commit' => filter_var(
         env('QUEUE_AFTER_COMMIT', false),

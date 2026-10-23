@@ -13,7 +13,7 @@ Authentication answers **who is making this request?** Authorization answers **m
 - **Middleware** can prevent a request from reaching a route when an ability is denied.
 - A **view condition** may hide a link, but it is not a security control. The route/controller must enforce the rule even if the link is hidden.
 
-PixelFix provides Gates, Policies, authorization responses, and the `auth` and `can` middleware aliases. It does **not** provide a prebuilt `Role` model, `Permission` model, roles table, permission table, or complete role-management package. You choose and implement the application's role/permission data model. The first example below uses one role column because it is a straightforward starting point.
+PixelFix provides Gates, Policies, authorization responses, and the built-in `auth`, `can`, `role`, and `permission` middleware aliases. The `role` alias checks a single `role` attribute on the authenticated user. The `permission` alias uses a Gate-backed checker by default and can be connected to an application-owned checker. The framework does **not** provide a prebuilt `Role` model, `Permission` model, roles table, permission table, or complete role-management package. You choose and implement the application's role/permission data model. The first example below uses one role column because it is a straightforward starting point.
 
 ## Part 1: Add a role column safely
 
@@ -226,16 +226,24 @@ This query keeps other users' tasks out of the result set. Use a policy when ope
 
 ### Route boundary
 
-Use middleware for broad route-level access:
+Use middleware for broad route-level access. `can` checks a named Gate ability; `role` checks a user's stored role name; `permission` checks a named permission through the configured `PermissionChecker`:
 
 ```php
 Route::get('/admin/reports', [ReportController::class, 'index'])
     ->middleware(['auth', 'can:manage-users']);
+
+Route::get('/admin', [AdminController::class, 'index'])
+    ->middleware('role:admin');
+
+Route::get('/reports/export', [ReportController::class, 'export'])
+    ->middleware('permission:reports.export');
 ```
 
 ### Controller boundary
 
 Use `$this->authorize()` for a specific model operation. This is where you have the concrete task, invoice, account, or other resource to check.
+
+The default `permission` checker treats `reports.export` as a Gate ability, so define that Gate before using the route. If the application stores permissions in normalized database tables or an external service, bind a custom `PixelFix\Framework\Auth\Contracts\PermissionChecker` implementation. The checker must return `true` only for a grant. These middleware checks do not create the role/permission schema or assignment workflows.
 
 ### Twig view
 

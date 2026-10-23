@@ -31,11 +31,39 @@ php -m
 
 The extensions used by the terminal may differ from those used by Apache, so verify both environments if only one of them can connect.
 
-## 3. Choose a connection
+## 3. Define and use a named connection
 
-The database manager resolves the default connection from the application's configuration. Models and query builders use that connection unless the application explicitly selects another configured connection. See [Connections Reference](connections-reference.md) for the APIs and configuration shape exposed by the current version.
+Add another named entry under `connections` in `config/database.php`. The connection name is an application-chosen key; its environment variables must be referenced by this configuration entry. This example demonstrates a second MySQL connection:
 
-## 4. Verify before migrating
+```php
+'reporting' => [
+    'driver' => 'mysql',
+    'host' => env('REPORTING_DB_HOST', '127.0.0.1'),
+    'port' => (int) env('REPORTING_DB_PORT', 3306),
+    'database' => env('REPORTING_DB_DATABASE', 'reporting'),
+    'user' => env('REPORTING_DB_USER', ''),
+    'password' => env('REPORTING_DB_PASSWORD', ''),
+],
+```
+
+The matching `REPORTING_DB_*` variables appear as commented examples in `.env.example`. Uncomment and configure them only after adding the named connection above. PixelFix does not require a fixed `REPORTING_` prefix; your app can choose another prefix as long as the names match.
+
+Use the scoped database manager for a query:
+
+```php
+$reports = db()
+    ->onConnection('reporting')
+    ->table('reports')
+    ->get();
+```
+
+The scoped manager uses the named connection without changing the default manager for unrelated queries. A model can also select a named connection by defining `protected static string $connectionName = 'reporting';`; see [Connections Reference](connections-reference.md).
+
+## 4. Choose and verify the active connection
+
+The database manager resolves the default connection from the application's configuration. Models and query builders use that connection unless the application explicitly selects another configured connection. A configured connection still needs an appropriate PHP extension and a reachable database service. See [Connections Reference](connections-reference.md) for the lower-level connection API.
+
+## 5. Verify before migrating
 
 Confirm the connection settings and driver first. Then inspect migration status:
 

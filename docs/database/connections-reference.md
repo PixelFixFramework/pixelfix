@@ -22,6 +22,33 @@ $connection->inTransaction();
 
 These methods inspect the connection; they do not reconnect or migrate your database.
 
+## Select a configured named connection
+
+The default manager uses `database.default`. To issue a query against another connection without changing the default manager, use `onConnection()`:
+
+```php
+$reports = db()
+    ->onConnection('reporting')
+    ->table('reports')
+    ->get();
+```
+
+The name must exist as a key under `config('database.connections')`. An unknown/unconfigured name fails rather than silently falling back to the default connection.
+
+A model can use a named connection for its ORM operations by setting its connection name:
+
+```php
+use PixelFix\Framework\Database\Models\Model;
+
+final class Report extends Model
+{
+    protected static string $table = 'reports';
+    protected static string $connectionName = 'reporting';
+}
+```
+
+An empty `$connectionName` (the default) keeps the model on the application's default connection. Configure the corresponding credentials through `config/database.php` and environment keys of your choosing; do not put secrets in version control.
+
 ## Health and diagnostics
 
 ```php

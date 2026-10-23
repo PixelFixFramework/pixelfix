@@ -44,7 +44,7 @@ $WorkerTaskName = "$TaskPrefix-Queue-Worker"
 $SchedulerTaskName = "$TaskPrefix-Scheduler"
 $QueueDriver = (Get-EnvValue 'QUEUE_CONNECTION' 'sync').ToLowerInvariant()
 if ([string]::IsNullOrWhiteSpace($Queues)) {
-    $Queues = Get-EnvValue 'PIXELFIX_WORKER_QUEUES' 'default'
+    $Queues = Get-EnvValue 'WORKER_QUEUES' 'default'
 }
 $Queues = (($Queues -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) -join ','
 if ([string]::IsNullOrWhiteSpace($Queues)) { $Queues = 'default' }

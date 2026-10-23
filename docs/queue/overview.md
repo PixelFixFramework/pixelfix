@@ -36,7 +36,7 @@ The `Job` contract includes `handle`, `middleware`, `maxAttempts`, `backoff`, `t
 
 ## Drivers and configuration
 
-The starter configuration supports `sync`, `database`, and `redis` queue drivers. `QUEUE_CONNECTION` selects `queue.default`; other settings include `QUEUE_AFTER_COMMIT`, `QUEUE_DATABASE_TABLE`, `QUEUE_FAILED_TABLE`, `QUEUE_DEAD_LETTER_TABLE`, `QUEUE_RETRY_AFTER`, `QUEUE_REDIS_CONNECTION`, and `QUEUE_REDIS_PREFIX`. Database-backed jobs need the queue and failed/dead-letter tables available through migrations. Redis queues require the PHP Redis extension and reachable Redis server. Use the driver selected by the application configuration; do not assume the database queue is active merely because a database is configured.
+The starter configuration supports `sync`, `database`, and `redis` queue drivers. `QUEUE_CONNECTION` selects `queue.default`; other settings include `QUEUE_AFTER_COMMIT`, `QUEUE_DATABASE_TABLE`, `QUEUE_FAILED_TABLE`, `QUEUE_DEAD_LETTER_TABLE`, `QUEUE_RETRY_AFTER`, `QUEUE_REDIS_CONNECTION`, `QUEUE_REDIS_PREFIX`, and `WORKER_QUEUES` (the comma-separated list used by the local development supervisor). Database-backed jobs need the queue and failed/dead-letter tables available through migrations. Redis queues require the PHP Redis extension and reachable Redis server. Use the driver selected by the application configuration; do not assume the database queue is active merely because a database is configured.
 
 ## Run a worker
 

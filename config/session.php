@@ -12,17 +12,10 @@ return [
         120
     ),
 
+    // When true, the browser receives a session cookie that expires on close.
     'expire_on_close' => filter_var(
         env(
             'SESSION_EXPIRE_ON_CLOSE',
-            false
-        ),
-        FILTER_VALIDATE_BOOL
-    ),
-
-    'encrypt' => filter_var(
-        env(
-            'SESSION_ENCRYPT',
             false
         ),
         FILTER_VALIDATE_BOOL

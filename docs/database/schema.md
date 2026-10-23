@@ -2,6 +2,10 @@
 
 A database schema is the structure of your database: tables, columns, indexes, and relationships between records. In PixelFix, schema changes belong in migrations so that the application can apply them consistently in development, testing, and production.
 
+## Driver compatibility
+
+Schema operations use driver-aware SQL, but database dialects are not interchangeable. The current framework explicitly implements table-existence checks for SQLite, MySQL, PostgreSQL and SQL Server. Other connection drivers may connect successfully without supporting every schema-inspection or DDL operation exposed by the schema API. Verify each migration against the actual database engine/version used in deployment.
+
 ## Create a table
 
 A migration can use the schema facade and a table blueprint:

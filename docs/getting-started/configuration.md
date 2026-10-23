@@ -23,8 +23,10 @@ Each top-level file under `config/` maps to a configuration group with the same 
 
 - `config/app.php` defines keys such as `app.name`, `app.env`, and `app.timezone`.
 - `config/auth.php` defines authentication guards, providers, password settings, and redirects.
-- `config/database.php` defines `database.default`, `database.connections`, and the root seeder.
-- `config/session.php` defines session driver, lifetime, cookies, and storage.
+- `config/database.php` defines `database.default`, named `database.connections`, and the root seeder.
+- `config/filesystems.php` defines the default storage disk, disk roots/URL prefixes, and public symbolic links.
+- `config/exports.php` defines optional PDF and spreadsheet output defaults.
+- `config/session.php` defines session driver, lifetime, cookie settings, and browser-close expiration.
 - `config/providers.php` returns the list of application service providers.
 
 Other starter files are `cache.php`, `rate_limiting.php`, `security.php`, `view.php`, `ui.php`, `logging.php`, `mail.php`, `scheduling.php`, `notifications.php`, `broadcasting.php`, `websockets.php`, `redis.php`, `events.php`, `queue.php`, and `schedules.php`.
@@ -49,7 +51,7 @@ $appName = config('app.name', 'PixelFix');
 $defaultConnection = config('database.default', 'sqlite');
 ```
 
-The filename supplies the first segment of the configuration key. A custom `config/services.php` file returning `['payments' => ['enabled' => true]]` makes that value available as `config('services.payments.enabled')`.
+The filename supplies the first segment of the configuration key. Use `config/filesystems.php` to set the default storage disk and `config/exports.php` to tune the optional PDF/spreadsheet exporters; see [Filesystem](../application/filesystem.md) and [PDF and Spreadsheet Exports](../exports/overview.md). A custom `config/services.php` file returning `['payments' => ['enabled' => true]]` makes that value available as `config('services.payments.enabled')`.
 
 ## Environment variables belong in configuration files
 

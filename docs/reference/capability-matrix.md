@@ -1,16 +1,16 @@
 # PixelFix Capability Matrix
 
-This matrix describes the framework source represented by PixelFix Framework v0.5.0. The public implementation and its tests define the contract. An API's existence does not mean application-specific domain behavior has been generated or configured for you.
+This matrix describes the framework APIs required by this starter, which now targets PixelFix Framework `^0.1.34`. The public implementation and its tests define the contract. An API's existence does not mean application-specific domain behavior has been generated or configured for you.
 
 | Subsystem | Built-in framework capability | Application responsibilities | Guide |
 |---|---|---|---|
 | Application lifecycle and container | Bootstrap, configuration repository, service providers, dependency resolution | Define application providers and bindings | [Architecture](../architecture/overview.md), [Lifecycle](../architecture/application-lifecycle.md) |
 | HTTP and routing | Named routes, route groups, middleware, controllers, requests, response factory, route cache and model binding | Define URLs, business logic, access rules and API contracts | [Routing](../http/routing.md), [Controllers](../http/controllers.md), [Responses](../http/responses.md) |
 | Views and components | Twig rendering, layouts and bundled reusable component templates; component generators/import pipeline | Compose page-specific content and pass explicit component data | [Views](../views/overview.md), [Components](../components/overview.md) |
-| Database and ORM | PDO-backed drivers, schema/migrations, models, relationships, query builder, factories, seeders, transactions, upserts, soft deletes and model observers | Design schema/indexes, business constraints and operational backups | [Database](../database/overview.md), [Models](../database/models.md) |
+| Database and ORM | PDO-backed connections, named-connection query/model support, schema/migrations, models, relationships, query builder, factories, seeders, transactions, upserts, soft deletes and model observers | Configure each named connection, design schema/indexes, test driver-specific DDL and manage backups | [Database](../database/overview.md), [Connections](../database/connections.md), [Migrations](../database/migrations.md) |
 | Validation | Built-in rule engine, validator, Form Requests and custom rules | Define rules for each application input | [Validation](../validation/overview.md) |
 | Authentication | Guards/providers, password verification, session auth, remember-me and password-reset token infrastructure | Configure user model/provider, auth routes/controllers, email delivery and user lifecycle | [Authentication](../authentication/overview.md) |
-| Authorization | Gates, policies and authorization middleware | Implement the role/permission model and assignment workflows | [Authorization](../authorization/overview.md) |
+| Authorization | Gates, policies, and built-in `can`, `role`, and `permission` middleware aliases with a replaceable permission-checker contract | Define abilities, implement any role/permission schema and assignment workflow, and authorize every sensitive action server-side | [Authorization](../authorization/overview.md), [Middleware](../http/middleware-reference.md) |
 | Sessions and CSRF | Session storage, flash/old-input and CSRF middleware/helpers | Configure cookie policy and correctly group browser routes | [Sessions](../application/sessions.md), [CSRF](../http/csrf.md) |
 | General application events | Synchronous dispatcher, listeners, subscribers, priorities, wildcard matching, contexts/envelopes and testing fake | Define event types, listeners and failure behavior | [Events](../events/overview.md) |
 | Model lifecycle events | Model observer/lifecycle hooks around persistence | Implement model-specific side effects and keep them safe on model operations | [Model Events & Observers](../database/model-events-observers.md) |
@@ -23,7 +23,8 @@ This matrix describes the framework source represented by PixelFix Framework v0.
 | Redis | Named connections and Redis Pub/Sub publisher/subscriber | Provision Redis, install `ext-redis`, handle reconnect/idempotency | [Redis](../redis/overview.md) |
 | Broadcasting | Channel/payload manager, `ShouldBroadcast` events, Redis broadcaster and fake | Select channels, payload shape, authorization and delivery strategy | [Broadcasting](../broadcasting/overview.md) |
 | WebSockets | Server/connection handling, public/private/presence channel APIs, handlers and authenticated Redis relay | Configure origins, channel authorization, payload rules and supervised processes | [WebSockets](../websockets/overview.md) |
-| Filesystem | Local storage manager and `storage()` helper | Set retention/permissions and add cloud object storage integration if needed | [Filesystem](../application/filesystem.md) |
+| Filesystem | Configurable disks, local storage driver, URL prefixes, path containment checks, `storage:link`, and `storage()` helper | Configure roots/links, choose public versus private files, set permissions/retention, and implement extra storage drivers if needed | [Filesystem](../application/filesystem.md) |
+| PDF and spreadsheet exports | Optional Dompdf and PhpSpreadsheet adapters, `exports()` API, configurable defaults and save-to-storage methods | Install optional packages/extensions, author application-specific views/data and protect access to sensitive generated files | [PDF and Spreadsheet Exports](../exports/overview.md) |
 | Logging and exceptions | Configured logger/reporting and centralized exception flow | Choose levels, retention, alerting and safe user-facing errors | [Logging](../application/logging.md), [Exceptions](../application/exceptions.md) |
 | Testing | Test runner, `TestCase`, assertion helpers, runtime/component and database test support | Write app-specific unit, integration, security and workflow tests | [Testing](../testing/overview.md) |
 | Console and generators | Public CLI commands and declarative, staged artifact-generation lifecycle | Review generated artifacts and implement domain behavior | [Command Reference](../console/command-reference.md), [Generators](../console/generators.md) |
@@ -38,7 +39,9 @@ This matrix describes the framework source represented by PixelFix Framework v0.
 - Mail supports SMTP in this version. Valid SMTP configuration is required for real delivery. Mail sending alone is synchronous; queue it explicitly for asynchronous delivery.
 - Notification channels do not remove the need to configure SMTP, run the database notification migration, configure broadcasting, or start a queue worker for queued notifications.
 - Broadcasting is immediately executed through its configured broadcaster. WebSocket serving and the Redis broadcast relay are separate long-running processes.
-- Gates and policies make authorization decisions but do not automatically create role/permission tables or administrative management workflows.
+- Gates and policies make authorization decisions; the `role` and `permission` aliases provide reusable route checks, but PixelFix does not impose role/permission tables or administrative management workflows.
+- Export adapters are optional: install the PDF/spreadsheet package only when the application calls that exporter. Generated reports, transcripts, financial calculations and certificate templates remain application code.
+- Migration repository setup is driver-aware for SQLite, MySQL, PostgreSQL and SQL Server, but schema features are not guaranteed identical across every database connection name. Test the actual application database driver.
 
 ## Public runtime commands
 
